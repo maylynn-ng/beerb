@@ -1,2 +1,2 @@
-# bieb
+# BeerB
 Beer in every Borough
