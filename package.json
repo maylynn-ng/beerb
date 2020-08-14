@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "commitmsg": "validate-commit-msg",
-    "postinstall": "(cd server && npm install); (cd client && npm install)"
+    "postinstall": "cd client && npm install"
   },
   "keywords": [],
   "author": "",
@@ -38,5 +38,9 @@
       "subjectPatternErrorMsg": "Subject must be in format 'CMS-123 - Commit message'",
       "helpMessage": ""
     }
+  },
+  "dependencies": {
+    "i": "^0.3.6",
+    "npm": "^6.14.7"
   }
 }
