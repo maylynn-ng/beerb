@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "commitmsg": "validate-commit-msg",
-    "postinstall": "(cd server && npm install); (cd client && npm install)"
+    "postinstall": "(cd client && npm install)"
   },
   "keywords": [],
   "author": "",
