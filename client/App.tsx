@@ -1,9 +1,11 @@
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
+
 import { StyleSheet, Platform, StatusBar as StatBar, SafeAreaView } from 'react-native';
 
 import boroughs from './assets/london_sport.json';
 import MapScreen from './Screens/MapScreen';
+
 
 export default function App() {
   const handlePress = (name: String): void => {
