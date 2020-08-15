@@ -38,8 +38,5 @@
       "subjectPatternErrorMsg": "Subject must be in format 'CMS-123 - Commit message'",
       "helpMessage": ""
     }
-  },
-  "dependencies": {
-    "react-native-maps": "^0.27.1"
   }
 }
