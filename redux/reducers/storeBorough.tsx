@@ -1,4 +1,4 @@
-import Action from '../actions/actions.tsx';
+import { Action } from '../actions/actions';
 
 type State = {
   currentBorough: string;
