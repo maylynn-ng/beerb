@@ -4,12 +4,12 @@ import { Provider } from 'react-redux';
 import { createStore } from 'redux';
 import { StyleSheet, Platform, Text, StatusBar as StatBar, SafeAreaView } from 'react-native';
 //import rootReducer from './redux/reducers';
-import storeBoroughReducer from './redux/reducers/storeBorough.tsx';
+import storeBoroughReducer from './redux/reducers/storeBorough';
 
 import boroughs from './assets/london_sport.json';
 import MapScreen from './Screens/MapScreen';
 import { useSelector, useDispatch } from 'react-redux';
-import { storeBorough } from './redux/actions/actions.tsx';
+import { storeBorough } from './redux/actions/actions';
 
 const store = createStore(storeBoroughReducer);
 store.subscribe(() => {
@@ -19,7 +19,7 @@ store.subscribe(() => {
 function Root() {
   const dispatch = useDispatch();
 
-  const handlePress = (name: String): void => {
+  const handlePress = (name: string): void => {
     console.info(name);
     dispatch(storeBorough(name));
   };
