@@ -11,9 +11,9 @@ import MapScreen from './Screens/MapScreen';
 import { storeBorough } from './redux/actions/actions';
 
 const store = createStore(reducer);
-store.subscribe(() => {
-  console.log(store.getState());
-});
+// store.subscribe(() => {
+//   console.log(store.getState());
+// });
 
 function Root({ currentBorough, setBorough }: any) {
   const handlePress = (name: string): void => {
