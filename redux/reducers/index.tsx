@@ -1,8 +1,22 @@
-import { combineReducers } from 'redux';
-import storeBorough from './storeBorough';
+import { Action } from '../actions/actions';
 
-const rootReducer = combineReducers({
-  storeBorough,
-});
+type State = {
+  currentBorough: string;
+};
 
-export default rootReducer;
+const initialState: State = {
+  currentBorough: '',
+};
+
+export default function reducer(state: State = initialState, action: Action) {
+  const { type } = action;
+  switch (type) {
+    case 'STORE_BOROUGH':
+      return {
+        ...state,
+        currentBorough: action.payload,
+      };
+    default:
+      return state;
+  }
+}

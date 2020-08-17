@@ -12,6 +12,7 @@
     "eject": "expo eject"
   },
   "dependencies": {
+    "@types/react-redux": "^7.1.9",
     "expo": "~38.0.8",
     "expo-status-bar": "^1.0.2",
     "react": "~16.11.0",
