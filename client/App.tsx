@@ -1,20 +1,22 @@
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
-import MapView from 'react-native-maps';
 
-type Props = {
-  latitude: number;
-  longitude: number;
-  latitudeDelta: number;
-  longitudeDelta: number;
-};
+import { StyleSheet, Platform, StatusBar as StatBar, SafeAreaView } from 'react-native';
+
+import boroughs from './assets/london_sport.json';
+import MapScreen from './Screens/MapScreen';
+
 
 export default function App() {
+  const handlePress = (name: String): void => {
+    console.info(name);
+  };
+
   return (
-    <View style={styles.container}>
-      <MapView />
-    </View>
+    <SafeAreaView style={styles.container}>
+      <MapScreen handlePress={handlePress} boroughs={boroughs} />
+      <StatusBar style="auto" />
+    </SafeAreaView>
   );
 }
 
@@ -24,5 +26,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
+    paddingTop: Platform.OS === 'android' ? StatBar.currentHeight : 0,
   },
 });
