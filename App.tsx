@@ -5,15 +5,13 @@ import { createStore } from 'redux';
 import { StyleSheet, Platform, Text, StatusBar as StatBar, SafeAreaView } from 'react-native';
 
 import reducer from './redux/reducers/storeBorough';
+import { storeBorough } from './redux/actions/actions';
 
 import boroughs from './assets/london_sport.json';
 import MapScreen from './Screens/MapScreen';
-import { storeBorough } from './redux/actions/actions';
+import Navbar from './Components/Navbar';
 
 const store = createStore(reducer);
-// store.subscribe(() => {
-//   console.log(store.getState());
-// });
 
 function Root({ currentBorough, setBorough }: any) {
   const handlePress = (name: string): void => {
@@ -24,6 +22,7 @@ function Root({ currentBorough, setBorough }: any) {
     <SafeAreaView style={styles.container}>
       <Text>You're in {currentBorough}</Text>
       <MapScreen handlePress={handlePress} boroughs={boroughs} />
+      <Navbar />
       <StatusBar style="auto" />
     </SafeAreaView>
   );
