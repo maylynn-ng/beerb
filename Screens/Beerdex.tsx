@@ -1,11 +1,19 @@
 import React from 'react';
-import { Text, View, StyleSheet } from 'react-native';
+import { Text, View, StyleSheet, SafeAreaView } from 'react-native';
+import BeerBadge from '../Components/BeerBadge';
 
-function Favorites() {
-  return <View style={styles.mainContainer}></View>;
+function Beerdex() {
+  return (
+    <SafeAreaView>
+      <View style={styles.mainContainer}>
+        <BeerBadge />
+        <Text>HELLO</Text>
+      </View>
+    </SafeAreaView>
+  );
 }
 
-export default Favorites;
+export default Beerdex;
 
 const styles = StyleSheet.create({
   mainContainer: {

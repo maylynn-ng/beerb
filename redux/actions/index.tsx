@@ -9,6 +9,7 @@ export type Action = {
 
 export type Beer = {
   beerId: number;
+  haveHad: boolean;
   beerName: string;
   beerLabel: string;
   beerIbu: number;
@@ -27,16 +28,16 @@ export function storeBorough(currentBorough: string): Action {
   };
 }
 
-// export function setSearchTerm(input: string) {
-//   return {
-//     type: 'SET_SEARCH_TERM',
-//     payload: input,
-//   };
-// }
+export function setSearchTerm(input: string) {
+  return {
+    type: 'SET_SEARCH_TERM',
+    payload: input,
+  };
+}
 
-export function fetchBeers(searchTerm: string) {
+export function fetchSearchBeers(searchTerm: string) {
   return function (dispatch: any) {
-    // dispatch(setSearchTerm(searchTerm));
+    dispatch(setSearchTerm(searchTerm));
     let results: Beer[] = [];
     fetch(
       `${EXPO_UNTAPPED_URL}${searchTerm}&client_id=${EXPO_UNTAPPED_CLIENT_ID}&client_secret=${EXPO_UNTAPPED_CLIENT_SECRET}`
@@ -47,6 +48,7 @@ export function fetchBeers(searchTerm: string) {
         for (let i = 0; i < beers.length; i++) {
           results.push({
             beerId: beers[i].beer.bid,
+            haveHad: beers[i].have_had,
             beerName: beers[i].beer.beer_name,
             beerLabel: beers[i].beer.beer_label,
             beerIbu: beers[i].beer.beer_ibu,
@@ -62,3 +64,9 @@ export function fetchBeers(searchTerm: string) {
       .then(dispatch({ type: 'SET_SEARCH_BEER_RESULTS', payload: results }));
   };
 }
+
+// export function fetchBeers() => {
+//   return function (dispatch: any) {
+// fetch('')
+//   }
+// }

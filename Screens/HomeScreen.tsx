@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import Map from '../Components/Map';
 import Navbar from '../Components/Navbar';
 import boroughs from '../assets/london_sport.json';
-import { storeBorough, fetchBeers } from '../redux/actions';
+import { storeBorough, fetchSearchBeers } from '../redux/actions';
 
 const HomeScreen = ({
   currentBorough,
@@ -17,7 +17,6 @@ const HomeScreen = ({
   const handlePress = (name: string): void => {
     setBorough(name);
   };
-  console.log('🎉', searchTerm, beerSearchResults);
   return (
     <View style={styles.homeScreen}>
       <Button
@@ -83,7 +82,7 @@ function mapStateToProps(state: any) {
 function mapDispatch(dispatch: any) {
   return {
     setBorough: (name: string) => dispatch(storeBorough(name)),
-    setSearch: (searchTerm: string) => dispatch(fetchBeers(searchTerm)),
+    setSearch: (searchTerm: string) => dispatch(fetchSearchBeers(searchTerm)),
   };
 }
 
