@@ -1,4 +1,5 @@
-import { Action, Beer } from '../actions';
+import { Action } from '../actions';
+import { Beer } from '../../Models/Beer.model';
 
 export type State = {
   beerSearchResults: Beer[];

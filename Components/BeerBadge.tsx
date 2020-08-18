@@ -1,20 +1,32 @@
 import React from 'react';
 import { mockData } from './MockBeerData';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Image, StyleSheet } from 'react-native';
+import { TouchableOpacity } from 'react-native-gesture-handler';
+import { Beer } from '../Models/Beer.model';
 
-const BeerBadge = () => {
-  console.log({ mockData });
-
+const BeerBadge = (beer: Beer) => {
+  const oneBeer = mockData[0];
   return (
-    <View>
-      <Text style={styles.text}>Hello</Text>
+    <View style={styles.container}>
+      <TouchableOpacity
+        onPress={() => {
+          console.log('SHOW MODAL', oneBeer.beerName);
+        }}
+      >
+        <Image style={styles.image} source={{ uri: oneBeer.beerLabel }} />
+      </TouchableOpacity>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  text: {
-    fontSize: 14,
+  container: {
+    marginVertical: 10,
+    marginHorizontal: 15,
+  },
+  image: {
+    height: 100,
+    width: 100,
   },
 });
 
