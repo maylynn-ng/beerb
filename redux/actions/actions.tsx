@@ -27,22 +27,17 @@ export function storeBorough(currentBorough: string): Action {
   };
 }
 
-export function setSearchTerm(input: string) {
-  return {
-    type: 'SET_SEARCH_TERM',
-    payload: input,
-  };
-}
+// export function setSearchTerm(input: string) {
+//   return {
+//     type: 'SET_SEARCH_TERM',
+//     payload: input,
+//   };
+// }
 
 export function fetchBeers(searchTerm: string) {
   return function (dispatch: any) {
-    dispatch(setSearchTerm(searchTerm));
-
+    // dispatch(setSearchTerm(searchTerm));
     let results: Beer[] = [];
-
-    const url = `${EXPO_UNTAPPED_URL}${searchTerm}&client_id=${EXPO_UNTAPPED_CLIENT_ID}&client_secret=${EXPO_UNTAPPED_CLIENT_SECRET}`;
-    console.log(url);
-
     fetch(
       `${EXPO_UNTAPPED_URL}${searchTerm}&client_id=${EXPO_UNTAPPED_CLIENT_ID}&client_secret=${EXPO_UNTAPPED_CLIENT_SECRET}`
     )
