@@ -9,8 +9,8 @@ const Map = ({ handlePress, boroughs }: any) => {
       initialRegion={{
         latitude: 51.509993,
         longitude: -0.104298,
-        latitudeDelta: 0.9,
-        longitudeDelta: 0.9,
+        latitudeDelta: 0.6,
+        longitudeDelta: 0.6,
       }}
       style={{ width: '100%', height: '50%' }}
     >
