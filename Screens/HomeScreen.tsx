@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, TextInput } from 'react-native';
+import { View, Text, Button, StyleSheet, TextInput } from 'react-native';
 import { connect } from 'react-redux';
 import Map from '../Components/Map';
 import Navbar from '../Components/Navbar';
@@ -12,6 +12,7 @@ const HomeScreen = ({
   searchTerm,
   beerSearchResults,
   setSearch,
+  navigation,
 }: any) => {
   const handlePress = (name: string): void => {
     setBorough(name);
@@ -19,7 +20,13 @@ const HomeScreen = ({
   console.log('🎉', searchTerm, beerSearchResults);
   return (
     <View style={styles.homeScreen}>
-      {/* Buerger Menu */}
+      <Button
+        style={styles.burgerMenu}
+        title="menu"
+        onPress={() => {
+          navigation.navigate('Modal');
+        }}
+      />
       <Text>You're in {currentBorough}</Text>
       <Map handlePress={handlePress} boroughs={boroughs} style={styles.map} />
       <View style={styles.lastBeer}>
@@ -44,17 +51,24 @@ const HomeScreen = ({
 
 const styles = StyleSheet.create({
   homeScreen: {
-    height: '100%',
-    width: '100%',
+    // height: '100%',
+    // width: '100%',
+    marginTop: 30,
     alignItems: 'center',
     justifyContent: 'center',
   },
   map: {
-    height: '50%',
-    width: '100%',
+    // height: '50%',
+    // width: '100%',
   },
   lastBeer: {
     height: '50%',
+  },
+  burgerMenu: {
+    position: 'absolute',
+    top: 30,
+    left: 0,
+    zIndex: 2,
   },
 });
 
