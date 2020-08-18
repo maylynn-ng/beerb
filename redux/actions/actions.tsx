@@ -1,6 +1,6 @@
-const API_URL = process.env.EXPO_UNTAPPED_URL;
-const CLIENT_ID = process.env.EXPO_CLIENT_ID;
-const CLIENT_SECRET = process.env.EXPO_CLIENT_SECRET;
+const EXPO_UNTAPPED_URL: string = 'https://api.untappd.com/v4/search/beer?q=';
+const EXPO_UNTAPPED_CLIENT_ID: string = 'BB560E63A24CD50E77E5217743C6AE5FD687C569';
+const EXPO_UNTAPPED_CLIENT_SECRET: string = '7B011532D27B030405018E603FF8783D9E60C130';
 
 export type Action = {
   type: string;
@@ -8,6 +8,7 @@ export type Action = {
 };
 
 export type Beer = {
+  beerId: number;
   beerName: string;
   beerLabel: string;
   beerIbu: number;
@@ -39,15 +40,18 @@ export function fetchBeers(searchTerm: string) {
 
     let results: Beer[] = [];
 
-    const url = `${API_URL}${searchTerm}&client_id=${CLIENT_ID}&client_secret=${CLIENT_SECRET}`;
+    const url = `${EXPO_UNTAPPED_URL}${searchTerm}&client_id=${EXPO_UNTAPPED_CLIENT_ID}&client_secret=${EXPO_UNTAPPED_CLIENT_SECRET}`;
     console.log(url);
 
-    fetch(`${API_URL}${searchTerm}&client_id=${CLIENT_ID}&client_secret=${CLIENT_SECRET}`)
+    fetch(
+      `${EXPO_UNTAPPED_URL}${searchTerm}&client_id=${EXPO_UNTAPPED_CLIENT_ID}&client_secret=${EXPO_UNTAPPED_CLIENT_SECRET}`
+    )
       .then(res => res.json())
       .then(res => {
         let beers = res.response.beers.items;
         for (let i = 0; i < beers.length; i++) {
           results.push({
+            beerId: beers[i].beer.bid,
             beerName: beers[i].beer.beer_name,
             beerLabel: beers[i].beer.beer_label,
             beerIbu: beers[i].beer.beer_ibu,
