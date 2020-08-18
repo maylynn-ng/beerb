@@ -12,7 +12,7 @@ const Map = ({ handlePress, boroughs }: any) => {
         latitudeDelta: 0.6,
         longitudeDelta: 0.6,
       }}
-      style={{ width: '100%', height: '50%' }}
+      style={{ flex: 2, width: '100%', height: '50%' }}
     >
       {boroughs.features.map((borough: Borough) => {
         return (

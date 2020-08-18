@@ -1,15 +1,17 @@
-import { Action, Beer } from '../actions';
+import { Action, Beer, Pub } from '../actions';
 
 export type State = {
   beerSearchResults: Beer[];
   currentBorough: string;
   searchTerm: string;
+  locationsNearby: [];
 };
 
 const initialState: State = {
   beerSearchResults: [],
   currentBorough: '',
   searchTerm: '',
+  locationsNearby: [],
 };
 
 export default function reducer(state: State = initialState, action: Action): State {
@@ -29,6 +31,11 @@ export default function reducer(state: State = initialState, action: Action): St
       return {
         ...state,
         searchTerm: action.payload,
+      };
+    case 'SET_LOCATIONS_NEARBY':
+      return {
+        ...state,
+        locationsNearby: action.payload,
       };
     default:
       return state;

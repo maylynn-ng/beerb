@@ -37,20 +37,3 @@ export default function App() {
     </Provider>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    marginTop: 50,
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingTop: Platform.OS === 'android' ? StatBar.currentHeight : 0,
-  },
-  fullDisplay: {
-    height: '100%',
-    width: '100%',
-    margin: 0,
-    padding: 0,
-  },
-});

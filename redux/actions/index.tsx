@@ -1,6 +1,12 @@
 const EXPO_UNTAPPED_URL: string = 'https://api.untappd.com/v4/search/beer?q=';
 const EXPO_UNTAPPED_CLIENT_ID: string = 'BB560E63A24CD50E77E5217743C6AE5FD687C569';
 const EXPO_UNTAPPED_CLIENT_SECRET: string = '7B011532D27B030405018E603FF8783D9E60C130';
+const PLACES_NEARBY_URL: string =
+  'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=';
+
+//lat 51.529500, lng-0.069374'
+const PLACES_NEARBY_PARAMS: string = '&radius=200&type=bar&keyword=pub&';
+const PLACES_KEY: string = 'key=';
 
 export type Action = {
   type: string;
@@ -20,6 +26,8 @@ export type Beer = {
   breweryUrl: string;
 };
 
+export type Pub = {};
+
 export function storeBorough(currentBorough: string): Action {
   return {
     type: 'STORE_BOROUGH',
@@ -34,14 +42,18 @@ export function setSearchTerm(input: string) {
   };
 }
 
+export function setLocationsNearby(locations: []) {
+  return {
+    type: 'SET_LOCATIONS_NEARBY',
+    payload: locations,
+  };
+}
+
 export function fetchBeers(searchTerm: string) {
   return function (dispatch: any) {
     dispatch(setSearchTerm(searchTerm));
 
     let results: Beer[] = [];
-
-    const url = `${EXPO_UNTAPPED_URL}${searchTerm}&client_id=${EXPO_UNTAPPED_CLIENT_ID}&client_secret=${EXPO_UNTAPPED_CLIENT_SECRET}`;
-    console.log(url);
 
     fetch(
       `${EXPO_UNTAPPED_URL}${searchTerm}&client_id=${EXPO_UNTAPPED_CLIENT_ID}&client_secret=${EXPO_UNTAPPED_CLIENT_SECRET}`
@@ -65,5 +77,15 @@ export function fetchBeers(searchTerm: string) {
         }
       })
       .then(dispatch({ type: 'SET_SEARCH_BEER_RESULTS', payload: results }));
+  };
+}
+
+export function fetchPlacesNearby(lat: number, lng: number) {
+  return dispatch => {
+    fetch(`${PLACES_NEARBY_URL}${lat},${lng}${PLACES_NEARBY_PARAMS}${PLACES_KEY}`)
+      .then(res => res.json())
+      .then(locations => {
+        dispatch(setLocationsNearby(locations.results));
+      });
   };
 }
