@@ -5,6 +5,7 @@ import Map from '../Components/Map';
 import Navbar from '../Components/Navbar';
 import boroughs from '../assets/london_sport.json';
 import { storeBorough, fetchBeers } from '../redux/actions';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 const HomeScreen = ({
   currentBorough,
@@ -17,17 +18,21 @@ const HomeScreen = ({
   const handlePress = (name: string): void => {
     setBorough(name);
   };
+
   console.log('🎉', searchTerm, beerSearchResults);
   return (
     <View style={styles.homeScreen}>
-      <Button
-        style={styles.burgerMenu}
-        title="menu"
+      <TouchableOpacity
         onPress={() => {
           navigation.navigate('Modal');
         }}
-      />
+      >
+        <Text>Menu!</Text>
+      </TouchableOpacity>
+
       <Text>You're in {currentBorough}</Text>
+      {console.log('hellooo!!')}
+      {/* <View style={styles.map}></View> */}
       <Map handlePress={handlePress} boroughs={boroughs} style={styles.map} />
       <View style={styles.lastBeer}>
         <TextInput
@@ -51,17 +56,17 @@ const HomeScreen = ({
 
 const styles = StyleSheet.create({
   homeScreen: {
-    // height: '100%',
-    // width: '100%',
-    marginTop: 30,
+    flex: 1,
+    width: '100%',
     alignItems: 'center',
     justifyContent: 'center',
   },
-  map: {
-    // height: '50%',
-    // width: '100%',
-  },
   lastBeer: {
+    flex: 1,
+    height: '50%',
+  },
+  map: {
+    width: '100%',
     height: '50%',
   },
   burgerMenu: {

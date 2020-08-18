@@ -1,7 +1,16 @@
 import React from 'react';
-import { Text, StyleSheet, View, TouchableOpacity, Modal, Image } from 'react-native';
+import { Text, StyleSheet, View, TouchableOpacity, Image } from 'react-native';
+import { connect } from 'react-redux';
+import AsyncStorage from '@react-native-community/async-storage';
+import { setUserInfo } from '../redux/actions';
 
-function Menu({ navigation }: any) {
+function Menu({ navigation, setUser }: any) {
+  const logOut = () => {
+    AsyncStorage.setItem('@session_token', '').then(data => {
+      setUser({});
+    });
+  };
+
   return (
     <>
       <TouchableOpacity
@@ -38,12 +47,21 @@ function Menu({ navigation }: any) {
         >
           <Text style={styles.menuText}>Favorites</Text>
         </TouchableOpacity>
+        <TouchableOpacity style={styles.menuRoutes} onPress={() => logOut()}>
+          <Text style={styles.menuText}>Logout</Text>
+        </TouchableOpacity>
       </View>
     </>
   );
 }
 
-export default Menu;
+function mapDispatch(dispatch: any) {
+  return {
+    setUser: (user: object) => dispatch(setUserInfo(user)),
+  };
+}
+
+export default connect(() => ({}), mapDispatch)(Menu);
 
 const styles = StyleSheet.create({
   mainContainer: {

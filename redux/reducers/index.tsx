@@ -4,12 +4,14 @@ export type State = {
   beerSearchResults: Beer[];
   currentBorough: string;
   searchTerm: string;
+  user: object;
 };
 
 const initialState: State = {
   beerSearchResults: [],
   currentBorough: '',
   searchTerm: '',
+  user: {},
 };
 
 export default function reducer(state: State = initialState, action: Action): State {
@@ -29,6 +31,12 @@ export default function reducer(state: State = initialState, action: Action): St
       return {
         ...state,
         searchTerm: action.payload,
+      };
+
+    case 'SET_USER_INFO':
+      return {
+        ...state,
+        user: action.payload,
       };
     default:
       return state;

@@ -67,3 +67,10 @@ export function fetchBeers(searchTerm: string) {
       .then(dispatch({ type: 'SET_SEARCH_BEER_RESULTS', payload: results }));
   };
 }
+
+export function setUserInfo(user: object) {
+  return {
+    type: 'SET_USER_INFO',
+    payload: user,
+  };
+}
