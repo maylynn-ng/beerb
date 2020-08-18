@@ -1,25 +1,50 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Text, View, StyleSheet, SafeAreaView } from 'react-native';
+import LottieView from 'lottie-react-native';
+import { connect } from 'react-redux';
+
+import { State } from '../redux/reducers';
+import { Beer } from '../Models/Beer.model';
+import { fetchTrending } from '../redux/actions';
+
 import BeerBadge from '../Components/BeerBadge';
-import { mockData } from '../Components/MockBeerData';
-// import list and map through to render each label as a <BeerBadge>
+// import sixPackLoading from '../Animations/sixPackLoading.json'
 
-const beers = mockData;
+function Beerdex({ trendingBeersList, setTrending }: any) {
+  console.log('HI RICH 🌵🌵🌵🌵', trendingBeersList);
 
-function Beerdex() {
   return (
     <SafeAreaView>
       <View style={styles.screen}>
         <Text style={styles.heading}>BEERDEX</Text>
-        {mockData.map(beer => {
-          <BeerBadge beer={beer} />;
-        })}
+        <View style={styles.logoContainer}>
+          {trendingBeersList && trendingBeersList.length ? (
+            trendingBeersList.map((beer: Beer, index: number) => (
+              <BeerBadge key={index} beer={beer} />
+            ))
+          ) : (
+            // <LottieView />
+            <Text>JUST WAIT I'M LOADING</Text>
+          )}
+        </View>
       </View>
     </SafeAreaView>
   );
 }
 
-export default Beerdex;
+function mapStateToProps(state: State) {
+  return {
+    trendingBeersList: state.trendingBeers,
+  };
+}
+
+function mapDispatch(dispatch: any) {
+  return {
+    setTrending: () => dispatch(fetchTrending()),
+  };
+}
+
+export default connect(mapStateToProps, mapDispatch)(Beerdex);
 
 const styles = StyleSheet.create({
   screen: {
@@ -32,5 +57,9 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     textAlign: 'center',
     marginTop: 10,
+  },
+  logoContainer: {
+    flexDirection: 'row',
+    marginHorizontal: 10,
   },
 });

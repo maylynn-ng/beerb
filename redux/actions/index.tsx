@@ -1,6 +1,7 @@
-import { Beer } from '../../Models/Beer.model';
+import { Beer, TrendingBeer } from '../../Models/Beer.model';
 
-const API_URL = process.env.EXPO_UNTAPPED_URL;
+const SEARCH_API_URL = process.env.REACT_NATIVE_UNTAPPED_SEARCH_URL;
+const TRENDING_URL = process.env.REACT_NATIVE_UNTAPPED_TRENDING_URL;
 const CLIENT_ID = process.env.EXPO_UNTAPPED_CLIENT_ID;
 const CLIENT_SECRET = process.env.EXPO_UNTAPPED_CLIENT_SECRET;
 
@@ -28,7 +29,7 @@ export function fetchSearchBeers(searchTerm: string) {
     dispatch(setSearchTerm(searchTerm));
 
     let results: Beer[] = [];
-    fetch(`${API_URL}${searchTerm}&client_id=${CLIENT_ID}&client_secret=${CLIENT_SECRET}`)
+    fetch(`${SEARCH_API_URL}${searchTerm}&client_id=${CLIENT_ID}&client_secret=${CLIENT_SECRET}`)
       .then(res => res.json())
       .then(res => {
         let beers = res.response.beers.items;
@@ -52,8 +53,31 @@ export function fetchSearchBeers(searchTerm: string) {
   };
 }
 
-// export function fetchBeers() => {
-//   return function (dispatch: any) {
-// fetch('')
-//   }
-// }
+export function fetchTrending() {
+  return function (dispatch: any) {
+    let results: TrendingBeer[] = [];
+    fetch(`${TRENDING_URL}&client_id=${CLIENT_ID}&client_secret=${CLIENT_SECRET}`)
+      .then(res => res.json())
+      .then(res => {
+        console.log('YO YO IN FETCH');
+        return res;
+      })
+      .then(res => {
+        let beers = res.response.macro.items;
+        for (let i = 0; i < beers.length; i++) {
+          results.push({
+            beerId: beers[i].beer.bid,
+            haveHad: false,
+            beerName: beers[i].beer.beer_name,
+            beerLabel: beers[i].beer.beer_label,
+            beerStyle: beers[i].beer.beer_style,
+            breweryName: beers[i].brewery.brewery_name,
+            breweryCountry: beers[i].brewery.country_name,
+            breweryLabel: beers[i].brewery.brewery_label,
+            breweryUrl: beers[i].brewery.contact.url,
+          });
+        }
+      })
+      .then(dispatch({ type: 'SET_TRENDING_BEER_RESULTS', payload: results }));
+  };
+}

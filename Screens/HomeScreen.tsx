@@ -17,6 +17,7 @@ const HomeScreen = ({
   const handlePress = (name: string): void => {
     setBorough(name);
   };
+
   return (
     <View style={styles.homeScreen}>
       <Button

@@ -1,20 +1,29 @@
-import React from 'react';
-import { mockData } from './MockBeerData';
+import React, { useState } from 'react';
 import { View, Image, StyleSheet } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import { Beer } from '../Models/Beer.model';
+import Modal from 'react-native-modal';
+import BeerModal from '../Components/BeerModal';
 
-const BeerBadge = (beer: Beer) => {
-  const oneBeer = mockData[0];
+const BeerBadge = ({ beer }: any) => {
+  const [displayModal, setDisplayModal] = useState(false);
+
   return (
     <View style={styles.container}>
       <TouchableOpacity
         onPress={() => {
-          console.log('SHOW MODAL', oneBeer.beerName);
+          setDisplayModal(true);
         }}
       >
-        <Image style={styles.image} source={{ uri: oneBeer.beerLabel }} />
+        <Image style={styles.image} source={{ uri: beer.beerLabel }} />
       </TouchableOpacity>
+      <Modal
+        isVisible={displayModal}
+        onBackdropPress={() => {
+          setDisplayModal(false);
+        }}
+      >
+        <BeerModal beer={beer} />
+      </Modal>
     </View>
   );
 };
@@ -22,7 +31,7 @@ const BeerBadge = (beer: Beer) => {
 const styles = StyleSheet.create({
   container: {
     marginVertical: 10,
-    marginHorizontal: 15,
+    marginHorizontal: 10,
   },
   image: {
     height: 100,

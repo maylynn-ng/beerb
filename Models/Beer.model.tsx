@@ -11,3 +11,15 @@ export type Beer = {
   breweryLabel: string;
   breweryUrl: string;
 };
+
+export type TrendingBeer = {
+  beerId: number;
+  haveHad: boolean;
+  beerName: string;
+  beerLabel: string;
+  beerStyle: string;
+  breweryName: string;
+  breweryCountry: string;
+  breweryLabel: string;
+  breweryUrl: string;
+};
