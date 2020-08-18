@@ -1,13 +1,5 @@
 import React from 'react';
-import {
-  Dimensions,
-  View,
-  Text,
-  StyleSheet,
-  Image,
-  TouchableOpacity,
-  TouchableHighlight,
-} from 'react-native';
+import { Dimensions, View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
 
 const Navbar = () => {
   return (

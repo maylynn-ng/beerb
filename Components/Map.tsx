@@ -3,7 +3,7 @@ import MapView, { Polygon } from 'react-native-maps';
 import { Borough } from '../Models/Borough.model';
 import { Coordinates } from '../Models/Coordinates.model';
 
-const MapScreen = ({ handlePress, boroughs }: any) => {
+const Map = ({ handlePress, boroughs }: any) => {
   return (
     <MapView
       initialRegion={{
@@ -12,7 +12,7 @@ const MapScreen = ({ handlePress, boroughs }: any) => {
         latitudeDelta: 0.9,
         longitudeDelta: 0.9,
       }}
-      style={{ width: '100%', height: '100%' }}
+      style={{ width: '100%', height: '50%' }}
     >
       {boroughs.features.map((borough: Borough) => {
         return (
@@ -35,4 +35,4 @@ const MapScreen = ({ handlePress, boroughs }: any) => {
   );
 };
 
-export default MapScreen;
+export default Map;
