@@ -4,7 +4,7 @@ import { Provider } from 'react-redux';
 import { createStore } from 'redux';
 import { StyleSheet, Platform, StatusBar as StatBar, SafeAreaView } from 'react-native';
 
-import reducer from './redux/reducers/storeBorough';
+import reducer from './redux/reducers';
 
 import HomeScreen from './Screens/HomeScreen';
 
