@@ -1,26 +1,22 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, StyleSheet } from 'react-native';
+import React from 'react';
+import { View, Text, StyleSheet, TextInput } from 'react-native';
 import { connect } from 'react-redux';
 import Map from '../Components/Map';
 import Navbar from '../Components/Navbar';
 import boroughs from '../assets/london_sport.json';
-import { storeBorough, fetchBeers } from '../redux/actions/actions';
+import { storeBorough, fetchBeers } from '../redux/actions';
 
 const HomeScreen = ({
   currentBorough,
   setBorough,
+  searchTerm,
   beerSearchResults,
-  // searchTerm,
-  fetchBeers,
+  setSearch,
 }: any) => {
   const handlePress = (name: string): void => {
     setBorough(name);
   };
-
-  const [searchTerm, setSearchTerm] = useState('');
-
-  console.log('🌵🌵🌵🌵🌵SEARCH RESULTS', beerSearchResults);
-
+  console.log('🎉', searchTerm, beerSearchResults);
   return (
     <View style={styles.homeScreen}>
       {/* Buerger Menu */}
@@ -31,13 +27,15 @@ const HomeScreen = ({
           placeholder="Search Beer"
           enablesReturnKeyAutomatically={true}
           autoCapitalize="words"
-          onChangeText={input => {
-            setSearchTerm(input);
-            fetchBeers(input);
+          onChangeText={searchTerm => {
+            setSearch(searchTerm);
           }}
           returnKeyLabel="done"
           value={searchTerm}
         />
+        {beerSearchResults.map(beer => (
+          <Text>{beer.beerName}</Text>
+        ))}
       </View>
       <Navbar />
     </View>
@@ -63,7 +61,7 @@ const styles = StyleSheet.create({
 function mapStateToProps(state: any) {
   return {
     currentBorough: state.currentBorough,
-    // searchTerm: state.searchTerm,
+    searchTerm: state.searchTerm,
     beerSearchResults: state.beerSearchResults,
   };
 }
@@ -71,7 +69,7 @@ function mapStateToProps(state: any) {
 function mapDispatch(dispatch: any) {
   return {
     setBorough: (name: string) => dispatch(storeBorough(name)),
-    fetchBeers: (searchTerm: string) => dispatch(fetchBeers(searchTerm)),
+    setSearch: (searchTerm: string) => dispatch(fetchBeers(searchTerm)),
   };
 }
 
