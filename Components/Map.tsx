@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import MapView, { Polygon, AnimatedRegion, MapViewAnimated, Marker } from 'react-native-maps';
-import { getCenter, getCenterOfBounds } from 'geolib';
+import MapView, { Polygon } from 'react-native-maps';
+import { getCenterOfBounds } from 'geolib';
 import { Borough } from '../Models/Borough.model';
 import { Coordinates } from '../Models/Coordinates.model';
 

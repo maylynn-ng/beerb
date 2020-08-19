@@ -27,7 +27,6 @@ const Navbar = ({ setPlacesNearby, navigation }: any) => {
         style={styles.addBtn}
         onPress={() => {
           toggleAddBeer();
-
           (async () => {
             let { status } = await Location.requestPermissionsAsync();
             if (status !== 'granted') {

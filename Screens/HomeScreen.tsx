@@ -6,17 +6,22 @@ import Navbar from '../Components/Navbar';
 import boroughs from '../assets/london_sport.json';
 import { storeBorough } from '../redux/actions';
 
+<<<<<<< HEAD
 const HomeScreen = ({ currentBorough, searchTerm, beerSearchResults, navigation }: any) => {
   // const handlePress = borough => {
 
   // };
 
+=======
+const HomeScreen = ({ currentBorough, navigation, simpleBoroughs }: any) => {
+>>>>>>> origin/submit
   return (
     <SafeAreaView style={styles.homeScreen}>
       <View style={styles.topBar}>
         <TouchableOpacity
           style={styles.burgerMenuTouch}
           onPress={() => {
+            console.log('🦝 ', simpleBoroughs);
             navigation.navigate('Modal');
           }}
         >
@@ -80,6 +85,7 @@ function mapStateToProps(state: any) {
     currentBorough: state.currentBorough,
     searchTerm: state.searchTerm,
     beerSearchResults: state.beerSearchResults,
+    simpleBoroughs: state.boroughs,
   };
 }
 

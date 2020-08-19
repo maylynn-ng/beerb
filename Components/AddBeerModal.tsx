@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
-import { Picker, TouchableOpacity, Text, View, StyleSheet, TextInput } from 'react-native';
+import { Picker, TouchableOpacity, Text, View, StyleSheet, TextInput, Alert } from 'react-native';
 import Modal from 'react-native-modal';
-import { fetchSearchBeers } from '../redux/actions';
+import { fetchSearchBeers, postEntry } from '../redux/actions';
 import { connect } from 'react-redux';
+import boroughs from '../assets/london_sport.json';
 import { ScrollView } from 'react-native-gesture-handler';
+import { isPointInPolygon } from 'geolib';
 
 function AddBeer({
   isShownAddBeer,
@@ -13,11 +15,46 @@ function AddBeer({
   setSearch,
   pubLocations,
   location,
+  postNewEntry,
 }: any) {
   const [pub, setPub] = useState({});
   const [beer, setBeer] = useState('');
 
-  const onSubmitBeerNLoc = () => {};
+  const simpleArrayOfBoroughs = boroughs.features.map(borough => {
+    return {
+      boroughName: borough.properties.name,
+      boroughId: borough.id,
+      boroughCoords: borough.geometry.coordinates[0].map(coords => {
+        return {
+          latitude: coords[1],
+          longitude: coords[0],
+        };
+      }),
+    };
+  });
+
+  const submitBeerNLoc = (pub, beer) => {
+    const { lat, lng } = pub.geometry.location;
+
+    simpleArrayOfBoroughs.forEach(borough => {
+      if (isPointInPolygon({ lat, lng }, borough.boroughCoords)) {
+        let locBorough = borough;
+        const newEntry = {
+          beerName: beer.beerName,
+          beerId: beer.beerId,
+          placeName: pub.name,
+          placeId: pub.place_id,
+          placeCoord: pub.geometry.location,
+          boroughName: locBorough.boroughName,
+          boroughId: locBorough.boroughId,
+        };
+        postNewEntry(newEntry);
+        Alert.alert('Operation success');
+      }
+      toggleAddBeer();
+    });
+  };
+
   return (
     isShownAddBeer && (
       <Modal
@@ -76,7 +113,12 @@ function AddBeer({
             </ScrollView>
           </View>
 
-          <TouchableOpacity style={styles.create}>
+          <TouchableOpacity
+            style={styles.create}
+            onPress={() => {
+              submitBeerNLoc(pub, beer);
+            }}
+          >
             <Text style={styles.createText}>I choose my beer</Text>
           </TouchableOpacity>
         </View>
@@ -96,6 +138,7 @@ function mapStateToProps(state: any) {
 function mapDispatch(dispatch: any) {
   return {
     setSearch: (searchTerm: string) => dispatch(fetchSearchBeers(searchTerm)),
+    postNewEntry: (newEntry: object) => dispatch(postEntry(newEntry)),
   };
 }
 
