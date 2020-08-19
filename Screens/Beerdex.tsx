@@ -10,9 +10,8 @@ import { fetchTrending } from '../redux/actions';
 import BeerBadge from '../Components/BeerBadge';
 // import sixPackLoading from '../Animations/sixPackLoading.json'
 
-function Beerdex({ trendingBeersList, setTrending }: any) {
-  console.log('HI RICH 🌵🌵🌵🌵', trendingBeersList);
-
+function Beerdex({ trendingBeersList, setTrendingBeers }: any) {
+  console.log({ trendingBeersList });
   return (
     <SafeAreaView>
       <View style={styles.screen}>
@@ -40,7 +39,7 @@ function mapStateToProps(state: State) {
 
 function mapDispatch(dispatch: any) {
   return {
-    setTrending: () => dispatch(fetchTrending()),
+    setTrendingBeers: () => dispatch(fetchTrending()),
   };
 }
 
