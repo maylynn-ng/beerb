@@ -1,8 +1,12 @@
 import React from 'react';
-import { Text } from 'react-native';
+import { Text, SafeAreaView } from 'react-native';
 
 function Profile() {
-  return <Text>how the hell is this supposed to work</Text>;
+  return (
+    <SafeAreaView>
+      <Text>how the hell is this supposed to work</Text>
+    </SafeAreaView>
+  );
 }
 
 export default Profile;

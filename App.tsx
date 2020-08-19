@@ -47,10 +47,4 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingTop: Platform.OS === 'android' ? StatBar.currentHeight : 0,
   },
-  fullDisplay: {
-    height: '100%',
-    width: '100%',
-    margin: 0,
-    padding: 0,
-  },
 });

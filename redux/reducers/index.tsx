@@ -1,15 +1,18 @@
-import { Action, Beer } from '../actions';
+import { Action } from '../actions';
+import { Beer } from '../../Models/Beer.model';
 
 export type State = {
   beerSearchResults: Beer[];
   currentBorough: string;
   searchTerm: string;
+  trendingBeers: Beer[];
 };
 
 const initialState: State = {
   beerSearchResults: [],
   currentBorough: '',
   searchTerm: '',
+  trendingBeers: [],
 };
 
 export default function reducer(state: State = initialState, action: Action): State {
@@ -29,6 +32,11 @@ export default function reducer(state: State = initialState, action: Action): St
       return {
         ...state,
         searchTerm: action.payload,
+      };
+    case 'SET_TRENDING_BEER_RESULTS':
+      return {
+        ...state,
+        trendingBeers: action.payload,
       };
     default:
       return state;
