@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Picker, TouchableOpacity, Text, View, StyleSheet, TextInput } from 'react-native';
+import { Picker, TouchableOpacity, Button, Text, View, StyleSheet, TextInput } from 'react-native';
 import Modal from 'react-native-modal';
 import { fetchSearchBeers } from '../redux/actions';
 import { connect } from 'react-redux';
@@ -8,7 +8,6 @@ import { ScrollView } from 'react-native-gesture-handler';
 function AddBeer({
   isShownAddBeer,
   toggleAddBeer,
-  searchTerm,
   beerSearchResults,
   setSearch,
   pubLocations,
@@ -16,6 +15,7 @@ function AddBeer({
 }: any) {
   const [pub, setPub] = useState({});
   const [beer, setBeer] = useState('');
+  const [tempSearchTerm, setTempSearchTerm] = useState('');
 
   const onSubmitBeerNLoc = () => {};
   return (
@@ -51,11 +51,18 @@ function AddBeer({
               placeholder={'Search Beer'}
               enablesReturnKeyAutomatically={true}
               autoCapitalize="words"
-              onChangeText={searchTerm => {
-                setSearch(searchTerm);
+              onChangeText={input => {
+                setTempSearchTerm(input);
               }}
               returnKeyLabel="done"
-              value={searchTerm}
+              value={tempSearchTerm}
+            />
+            <Button
+              title="SEARCH"
+              onPress={() => {
+                setSearch(tempSearchTerm);
+                setTempSearchTerm('');
+              }}
             />
 
             <ScrollView
@@ -68,7 +75,7 @@ function AddBeer({
                 flexWrap: 'wrap',
               }}
             >
-              {beerSearchResults.map(beer => (
+              {beerSearchResults.map((beer: any) => (
                 <TouchableOpacity style={styles.beerItem} onPress={() => setBeer(beer.beerName)}>
                   <Text style={styles.beerName}>{beer.beerName}</Text>
                   <Text style={styles.beerBrewery}>{beer.breweryName}</Text>

@@ -1,4 +1,4 @@
-import { Beer } from '../redux/actions';
+import { Beer } from '../Models/Beer.model';
 
 export const mockData: Beer[] = [
   {
