@@ -67,7 +67,7 @@ const HomeScreen = ({
           <Image source={require('../assets/menu.png')} style={styles.burgerMenu} />
         </TouchableOpacity>
         <View style={styles.currentView}>
-          <Text>You're in {currentBorough}</Text>
+          <Text>You're in {currentBorough.boroughName}</Text>
         </View>
       </View>
       <Map boroughs={simpleArrayOfBoroughs} />
