@@ -1,5 +1,14 @@
 import React, { useState } from 'react';
-import { Picker, TouchableOpacity, Text, View, StyleSheet, TextInput, Alert } from 'react-native';
+import {
+  Picker,
+  TouchableOpacity,
+  Text,
+  View,
+  StyleSheet,
+  TextInput,
+  Alert,
+  Button,
+} from 'react-native';
 import Modal from 'react-native-modal';
 import { fetchSearchBeers, postEntry } from '../redux/actions';
 import { connect } from 'react-redux';
@@ -10,7 +19,6 @@ import { isPointInPolygon } from 'geolib';
 function AddBeer({
   isShownAddBeer,
   toggleAddBeer,
-  searchTerm,
   beerSearchResults,
   setSearch,
   pubLocations,
@@ -19,6 +27,7 @@ function AddBeer({
 }: any) {
   const [pub, setPub] = useState({});
   const [beer, setBeer] = useState('');
+  const [tempSearchTerm, setTempSearchTerm] = useState('');
 
   const simpleArrayOfBoroughs = boroughs.features.map(borough => {
     return {
@@ -90,11 +99,18 @@ function AddBeer({
               placeholder={'Search Beer'}
               enablesReturnKeyAutomatically={true}
               autoCapitalize="words"
-              onChangeText={searchTerm => {
-                setSearch(searchTerm);
+              onChangeText={input => {
+                setTempSearchTerm(input);
               }}
               returnKeyLabel="done"
-              value={searchTerm}
+              value={tempSearchTerm}
+            />
+            <Button
+              title="SEARCH"
+              onPress={() => {
+                setSearch(tempSearchTerm);
+                setTempSearchTerm('');
+              }}
             />
 
             <ScrollView
@@ -107,7 +123,7 @@ function AddBeer({
                 flexWrap: 'wrap',
               }}
             >
-              {beerSearchResults.map(beer => (
+              {beerSearchResults.map((beer: any) => (
                 <TouchableOpacity style={styles.beerItem} onPress={() => setBeer(beer.beerName)}>
                   <Text style={styles.beerName}>{beer.beerName}</Text>
                   <Text style={styles.beerBrewery}>{beer.breweryName}</Text>

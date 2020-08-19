@@ -1,13 +1,17 @@
 import { Action } from '../actions';
+<<<<<<< HEAD
 import { Beer } from '../../Models/Beer.model';
 import { userInfo } from 'os';
+=======
+import { Beer, TrendingBeer } from '../../Models/Beer.model';
+>>>>>>> origin/beerdex
 
 export type State = {
   boroughs: [];
   beerSearchResults: Beer[];
   currentBorough: string;
   searchTerm: string;
-  trendingBeers: Beer[];
+  trendingBeers: TrendingBeer[];
   locationsNearby: [];
   user: {
     locations: any[];

@@ -1,6 +1,6 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect } from 'react';
 import { Text, View, StyleSheet, SafeAreaView } from 'react-native';
-import LottieView from 'lottie-react-native';
+import Loading from '../Components/Loading';
 import { connect } from 'react-redux';
 
 import { State } from '../redux/reducers';
@@ -8,10 +8,14 @@ import { Beer } from '../Models/Beer.model';
 import { fetchTrending } from '../redux/actions';
 
 import BeerBadge from '../Components/BeerBadge';
-// import sixPackLoading from '../Animations/sixPackLoading.json'
 
-function Beerdex({ trendingBeersList, setTrendingBeers }: any) {
-  console.log({ trendingBeersList });
+function Beerdex({ setTrendingBeers, trendingBeersList }: any) {
+  useEffect(() => {
+    if (!trendingBeersList.length) {
+      setTrendingBeers();
+    }
+  }, []);
+
   return (
     <SafeAreaView>
       <View style={styles.screen}>
@@ -19,11 +23,10 @@ function Beerdex({ trendingBeersList, setTrendingBeers }: any) {
         <View style={styles.logoContainer}>
           {trendingBeersList && trendingBeersList.length ? (
             trendingBeersList.map((beer: Beer, index: number) => (
-              <BeerBadge key={index} beer={beer} />
+              <BeerBadge style={styles.badge} key={index} beer={beer} />
             ))
           ) : (
-            // <LottieView />
-            <Text>JUST WAIT I'M LOADING</Text>
+            <Loading />
           )}
         </View>
       </View>
@@ -59,6 +62,11 @@ const styles = StyleSheet.create({
   },
   logoContainer: {
     flexDirection: 'row',
-    marginHorizontal: 10,
+    flexWrap: 'wrap',
+    marginHorizontal: 5,
+  },
+  badge: {
+    height: 90,
+    width: 90,
   },
 });
