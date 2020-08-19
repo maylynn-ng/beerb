@@ -1,13 +1,5 @@
 import React, { useState } from 'react';
-import {
-  SafeAreaView,
-  Picker,
-  TouchableOpacity,
-  Text,
-  View,
-  StyleSheet,
-  TextInput,
-} from 'react-native';
+import { Picker, TouchableOpacity, Text, View, StyleSheet, TextInput } from 'react-native';
 import Modal from 'react-native-modal';
 import { fetchBeers } from '../redux/actions';
 import { connect } from 'react-redux';
@@ -23,7 +15,9 @@ function AddBeer({
   location,
 }: any) {
   const [pub, setPub] = useState({});
+  const [beer, setBeer] = useState('');
 
+  const onSubmitBeerNLoc = () => {};
   return (
     isShownAddBeer && (
       <Modal
@@ -37,15 +31,12 @@ function AddBeer({
       >
         <View style={styles.addBeerModal}>
           <View style={styles.lastBeer}>
-            <Text style={styles.header}>add location</Text>
+            <Text style={styles.header}>Your location:</Text>
             <Picker
               selectedValue={pub}
               onValueChange={pub => setPub(pub)}
               itemStyle={{
-                backgroundColor: 'red',
-                color: 'red',
-                fontFamily: 'Ebrima',
-                fontSize: 17,
+                fontSize: 5,
               }}
             >
               <Picker.Item label="Current Location" value={location} />
@@ -53,10 +44,11 @@ function AddBeer({
                 <Picker.Item label={`${pub.name} - ${pub.vicinity}`} value={pub} />
               ))}
             </Picker>
-            <Text style={styles.header}>add beer</Text>
+            <Text style={styles.header}>Your beer:</Text>
+            <Text style={styles.beerSelected}>{beer}</Text>
             <TextInput
               style={styles.input}
-              placeholder="Search Beer"
+              placeholder={'Search Beer'}
               enablesReturnKeyAutomatically={true}
               autoCapitalize="words"
               onChangeText={searchTerm => {
@@ -77,8 +69,9 @@ function AddBeer({
               }}
             >
               {beerSearchResults.map(beer => (
-                <TouchableOpacity style={styles.pubItem}>
-                  <Text>{beer.beerName}</Text>
+                <TouchableOpacity style={styles.beerItem} onPress={() => setBeer(beer.beerName)}>
+                  <Text style={styles.beerName}>{beer.beerName}</Text>
+                  <Text style={styles.beerBrewery}>{beer.breweryName}</Text>
                 </TouchableOpacity>
               ))}
             </ScrollView>
@@ -123,7 +116,7 @@ const styles = StyleSheet.create({
   header: {
     fontSize: 20,
     fontWeight: 'bold',
-    marginBottom: 30,
+    marginBottom: 10,
   },
   input: {
     height: 40,
@@ -153,13 +146,17 @@ const styles = StyleSheet.create({
   lastBeer: {
     flex: 1,
   },
-  pubItem: {
+  beerItem: {
     margin: 5,
   },
-  pubName: {
+  beerName: {
     fontWeight: 'bold',
   },
-  pubVicinity: {
+  beerBrewery: {
     color: 'grey',
+  },
+  beerSelected: {
+    backgroundColor: 'grey',
+    padding: 8,
   },
 });

@@ -21,9 +21,9 @@ const HomeScreen = ({
   beerSearchResults,
   navigation,
 }: any) => {
-  const handlePress = (name: string): void => {
-    setBorough(name);
-  };
+  // const handlePress = borough => {
+
+  // };
 
   console.log('🎉', searchTerm, beerSearchResults);
   return (
@@ -41,7 +41,7 @@ const HomeScreen = ({
           <Text>You're in {currentBorough}</Text>
         </View>
       </View>
-      <Map handlePress={handlePress} boroughs={boroughs} />
+      <Map boroughs={boroughs} />
       <Navbar navigation={navigation} />
     </SafeAreaView>
   );

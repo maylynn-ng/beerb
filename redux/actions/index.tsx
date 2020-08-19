@@ -6,7 +6,6 @@ const PLACES_NEARBY_URL: string =
 
 //lat 51.529500, lng-0.069374'
 const PLACES_NEARBY_PARAMS: string = '&radius=200&type=bar&keyword=pub&';
-const PLACES_KEY: string = 'key=';
 
 export type Action = {
   type: string;
