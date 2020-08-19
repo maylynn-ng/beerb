@@ -2,7 +2,7 @@ import 'react-native-gesture-handler';
 import React from 'react';
 import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
-import { StyleSheet, Platform, StatusBar as StatBar, View } from 'react-native';
+import { StyleSheet, Platform, StatusBar as StatBar, View, SafeAreaView } from 'react-native';
 
 import reducer from './redux/reducers';
 import ReduxThunk from 'redux-thunk';
@@ -13,9 +13,9 @@ const store = createStore(reducer, applyMiddleware(ReduxThunk));
 export default function App() {
   return (
     <Provider store={store}>
-      <View style={styles.container}>
+      <SafeAreaView style={styles.container}>
         <Login />
-      </View>
+      </SafeAreaView>
     </Provider>
   );
 }
@@ -26,6 +26,5 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
-    paddingTop: Platform.OS === 'android' ? StatBar.currentHeight : 0,
   },
 });
