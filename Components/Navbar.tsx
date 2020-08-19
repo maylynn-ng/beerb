@@ -1,13 +1,24 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Dimensions, View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import AddBeer from './AddBeerModal';
+import * as Location from 'expo-location';
+import { connect } from 'react-redux';
+import { fetchPlacesNearby } from '../redux/actions';
 
-const Navbar = () => {
+const Navbar = ({ setPlacesNearby, navigation }: any) => {
+  const [isShownAddBeer, setIsShownAddBeer] = useState(false);
+  const toggleAddBeer = () => {
+    setIsShownAddBeer(!isShownAddBeer);
+  };
+
+  const [location, setLocation] = useState({});
+
   return (
     <View style={styles.navbar}>
       <TouchableOpacity
         style={styles.navbarBtn}
         onPress={() => {
-          console.info('link to user profile');
+          navigation.navigate('Profile');
         }}
       >
         <Image source={require('../assets/user.png')} style={styles.navbarPic} />
@@ -15,11 +26,24 @@ const Navbar = () => {
       <TouchableOpacity
         style={styles.addBtn}
         onPress={() => {
-          console.info('register new location');
+          toggleAddBeer();
+
+          (async () => {
+            let { status } = await Location.requestPermissionsAsync();
+            if (status !== 'granted') {
+              console.log('Permission to access location was denied');
+            }
+
+            let location = await Location.getCurrentPositionAsync({});
+            console.log('location', location);
+            setLocation(location);
+            setPlacesNearby(location.coords.latitude, location.coords.longitude);
+          })();
         }}
       >
         <Text style={styles.plusSign}>+</Text>
       </TouchableOpacity>
+      <AddBeer location={location} isShownAddBeer={isShownAddBeer} toggleAddBeer={toggleAddBeer} />
       <TouchableOpacity
         style={styles.navbarBtn}
         onPress={() => {
@@ -31,6 +55,21 @@ const Navbar = () => {
     </View>
   );
 };
+
+function mapStateToProps(state: any) {
+  return {
+    searchTerm: state.searchTerm,
+    beerSearchResults: state.beerSearchResults,
+  };
+}
+
+function mapDispatch(dispatch: any) {
+  return {
+    setPlacesNearby: (lat: number, lng: number) => dispatch(fetchPlacesNearby(lat, lng)),
+  };
+}
+
+export default connect(mapStateToProps, mapDispatch)(Navbar);
 
 const windowHeight = Dimensions.get('window').height;
 const styles = StyleSheet.create({
@@ -70,5 +109,3 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
 });
-
-export default Navbar;

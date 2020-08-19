@@ -1,19 +1,39 @@
-import React from 'react';
-import MapView, { Polygon } from 'react-native-maps';
+import React, { useState } from 'react';
+import MapView, { Polygon, AnimatedRegion, MapViewAnimated, Marker } from 'react-native-maps';
+import { getCenter, getCenterOfBounds } from 'geolib';
 import { Borough } from '../Models/Borough.model';
 import { Coordinates } from '../Models/Coordinates.model';
 
-const Map = ({ handlePress, boroughs }: any) => {
+const Map = ({ boroughs }: any) => {
+  const initialRegion = {
+    latitude: 51.509993,
+    longitude: -0.104298,
+    latitudeDelta: 0.7,
+    longitudeDelta: 0.7,
+  };
+
+  const [region, setRegion] = useState(initialRegion);
+  //pass handlepress in l 6
+
+  const handlePress = borough => {
+    const coords = borough.geometry.coordinates[0].map((coords: Coordinates) => {
+      return {
+        latitude: coords[1],
+        longitude: coords[0],
+      };
+    });
+    const centerOfBorough = getCenterOfBounds(coords);
+    const { longitude, latitude } = centerOfBorough;
+    setRegion({
+      latitudeDelta: 0.2,
+      longitudeDelta: 0.2,
+      latitude: latitude,
+      longitude: longitude,
+    });
+  };
+
   return (
-    <MapView
-      initialRegion={{
-        latitude: 51.509993,
-        longitude: -0.104298,
-        latitudeDelta: 0.6,
-        longitudeDelta: 0.6,
-      }}
-      style={{ width: '100%', height: '50%' }}
-    >
+    <MapView region={region} style={{ flex: 2, width: '100%', height: '50%' }}>
       {boroughs.features.map((borough: Borough) => {
         return (
           <Polygon
@@ -25,10 +45,12 @@ const Map = ({ handlePress, boroughs }: any) => {
               };
             })}
             strokeWidth={1}
-            fillColor="rgba(0, 250, 70, 0.6)"
+            fillColor="rgba(0, 220, 70, 0.6)"
             tappable={true}
-            onPress={() => handlePress(borough.properties.name)}
-          />
+            onPress={() => handlePress(borough)}
+          >
+            {/* <Marker></Marker> */}
+          </Polygon>
         );
       })}
     </MapView>
