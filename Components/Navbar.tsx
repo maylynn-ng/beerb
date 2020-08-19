@@ -35,6 +35,7 @@ const Navbar = ({ setPlacesNearby, navigation }: any) => {
             }
 
             let location = await Location.getCurrentPositionAsync({});
+            console.log('location', location);
             setLocation(location);
             setPlacesNearby(location.coords.latitude, location.coords.longitude);
           })();
