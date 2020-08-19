@@ -48,6 +48,7 @@ const HomeScreen = ({
 const styles = StyleSheet.create({
   homeScreen: {
     flex: 1,
+    width: '100%',
     alignItems: 'center',
     justifyContent: 'center',
     marginTop: 30,
@@ -62,6 +63,14 @@ const styles = StyleSheet.create({
     height: 40,
     justifyContent: 'center',
     marginHorizontal: 10,
+  },
+  lastBeer: {
+    flex: 1,
+    height: '50%',
+  },
+  map: {
+    width: '100%',
+    height: '50%',
   },
   topBar: {
     flexDirection: 'row',

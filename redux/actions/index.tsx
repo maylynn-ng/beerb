@@ -100,5 +100,12 @@ export function fetchPlacesNearby(lat: number, lng: number) {
       .then(locations => {
         dispatch(setLocationsNearby(locations.results));
       });
+  }
+};
+
+export function setUserInfo(user: object) {
+  return {
+    type: 'SET_USER_INFO',
+    payload: user,
   };
 }
