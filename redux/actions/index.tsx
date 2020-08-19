@@ -2,10 +2,10 @@ import { Beer, TrendingBeer } from '../../Models/Beer.model';
 
 const SEARCH_API_URL = process.env.REACT_NATIVE_UNTAPPED_SEARCH_URL;
 const TRENDING_URL = process.env.REACT_NATIVE_UNTAPPED_TRENDING_URL;
-const CLIENT_ID = process.env.EXPO_UNTAPPED_CLIENT_ID;
-const CLIENT_SECRET = process.env.EXPO_UNTAPPED_CLIENT_SECRET;
-const PLACES_NEARBY_URL = process.env.EXPO_PLACES_NEARBY_URL;
-const PLACES_KEY = process.env.EXPO_PLACES_KEY;
+const CLIENT_ID = process.env.REACT_NATIVE_UNTAPPED_CLIENT_ID;
+const CLIENT_SECRET = process.env.REACT_NATIVE_UNTAPPED_CLIENT_SECRET;
+const PLACES_NEARBY_URL = process.env.REACT_NATIVE_PLACES_NEARBY_URL;
+const PLACES_KEY = process.env.REACT_NATIVE_PLACES_KEY;
 const PLACES_NEARBY_PARAMS: string = '&radius=2000&type=bar&keyword=pub&';
 
 export type Action = {

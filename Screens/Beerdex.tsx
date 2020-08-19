@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { Text, View, StyleSheet, SafeAreaView } from 'react-native';
-import LottieView from 'lottie-react-native';
+import Loading from '../Components/Loading';
 import { connect } from 'react-redux';
 
 import { State } from '../redux/reducers';
@@ -8,10 +8,10 @@ import { Beer } from '../Models/Beer.model';
 import { fetchTrending } from '../redux/actions';
 
 import BeerBadge from '../Components/BeerBadge';
-// import sixPackLoading from '../Animations/sixPackLoading.json'
 
 function Beerdex({ trendingBeersList, setTrendingBeers }: any) {
   console.log({ trendingBeersList });
+
   return (
     <SafeAreaView>
       <View style={styles.screen}>
@@ -22,8 +22,7 @@ function Beerdex({ trendingBeersList, setTrendingBeers }: any) {
               <BeerBadge key={index} beer={beer} />
             ))
           ) : (
-            // <LottieView />
-            <Text>JUST WAIT I'M LOADING</Text>
+            <Loading />
           )}
         </View>
       </View>
