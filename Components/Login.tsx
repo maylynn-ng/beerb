@@ -53,8 +53,6 @@ const Login = ({ user, setUser }: any) => {
         // Retrieve the JWT token and decode it
         const jwtToken = result.params.id_token;
         const decoded: any = jwtDecode(jwtToken);
-        console.log('🍎', decoded);
-        console.log('👃🏼', jwtToken);
         setUser(decoded);
         AsyncStorage.setItem('@session_token', JSON.stringify(decoded));
       }
@@ -65,7 +63,6 @@ const Login = ({ user, setUser }: any) => {
     <View style={{ width: '100%', height: '100%' }}>
       {Object.keys(user).length === 0 ? (
         <View>
-          {console.log('app rendered', process.env.EXPO_AUTH_ENDPOINT)}
           <Image source={require('../assets/logo.png')} style={{ height: 200, width: 200 }} />
           <Button title="Login" onPress={() => promptAsync({ useProxy })} />
         </View>

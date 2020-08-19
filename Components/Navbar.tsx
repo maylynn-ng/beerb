@@ -31,13 +31,17 @@ const Navbar = ({ setPlacesNearby, navigation }: any) => {
           (async () => {
             let { status } = await Location.requestPermissionsAsync();
             if (status !== 'granted') {
-              console.log('Permission to access location was denied');
+              console.info('Permission to access location was denied');
             }
 
-            let location = await Location.getCurrentPositionAsync({});
-            console.log('location', location);
-            setLocation(location);
-            setPlacesNearby(location.coords.latitude, location.coords.longitude);
+            let newLocation = await Location.getCurrentPositionAsync({
+              accuracy: Location.Accuracy.Highest,
+              maximumAge: 1,
+            });
+            console.log('🎉 location', [newLocation.coords.longitude, newLocation.coords.latitude]);
+
+            setLocation(newLocation);
+            setPlacesNearby(newLocation.coords.latitude, newLocation.coords.longitude);
           })();
         }}
       >

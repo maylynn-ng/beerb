@@ -26,7 +26,6 @@ function AddBeer({
         visible={true}
         onBackdropPress={() => {
           toggleAddBeer();
-          console.log(pub);
         }}
       >
         <View style={styles.addBeerModal}>
@@ -41,7 +40,7 @@ function AddBeer({
             >
               <Picker.Item label="Current Location" value={location} />
               {pubLocations.map(pub => (
-                <Picker.Item label={`${pub.name} - ${pub.vicinity}`} value={pub} />
+                <Picker.Item key={pub.name} label={`${pub.name} - ${pub.vicinity}`} value={pub} />
               ))}
             </Picker>
             <Text style={styles.header}>Your beer:</Text>

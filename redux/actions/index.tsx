@@ -69,7 +69,6 @@ export function fetchTrending() {
     fetch(`${TRENDING_URL}&client_id=${CLIENT_ID}&client_secret=${CLIENT_SECRET}`)
       .then(res => res.json())
       .then(res => {
-        console.log('YO YO IN FETCH');
         return res;
       })
       .then(res => {
@@ -94,11 +93,9 @@ export function fetchTrending() {
 
 export function fetchPlacesNearby(lat: number, lng: number) {
   return (dispatch: any) => {
-    console.log('😂', `${PLACES_NEARBY_URL}${lat},${lng}${PLACES_NEARBY_PARAMS}${PLACES_KEY}`);
     fetch(`${PLACES_NEARBY_URL}${lat},${lng}${PLACES_NEARBY_PARAMS}${PLACES_KEY}`)
       .then(res => res.json())
       .then(locations => {
-        console.log('locations', locations);
         dispatch(setLocationsNearby(locations.results));
       });
   };

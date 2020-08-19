@@ -1,29 +1,16 @@
 import React from 'react';
-import {
-  SafeAreaView,
-  View,
-  Image,
-  Text,
-  TouchableOpacity,
-  StyleSheet,
-} from 'react-native';
+import { SafeAreaView, View, Image, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
 import Map from '../Components/Map';
 import Navbar from '../Components/Navbar';
 import boroughs from '../assets/london_sport.json';
 import { storeBorough } from '../redux/actions';
 
-const HomeScreen = ({
-  currentBorough,
-  searchTerm,
-  beerSearchResults,
-  navigation,
-}: any) => {
+const HomeScreen = ({ currentBorough, searchTerm, beerSearchResults, navigation }: any) => {
   // const handlePress = borough => {
 
   // };
 
-  console.log('🎉', searchTerm, beerSearchResults);
   return (
     <SafeAreaView style={styles.homeScreen}>
       <View style={styles.topBar}>
