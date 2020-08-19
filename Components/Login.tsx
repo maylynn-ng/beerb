@@ -63,10 +63,6 @@ const Login = ({ user, setUser }: any) => {
     <View style={{ width: '100%', height: '100%' }}>
       {Object.keys(user).length === 0 ? (
         <View>
-<<<<<<< HEAD
-=======
-          {console.log('app rendered', process.env.REACT_NATIVE_AUTH_ENDPOINT)}
->>>>>>> origin/submit
           <Image source={require('../assets/logo.png')} style={{ height: 200, width: 200 }} />
           <Button title="Login" onPress={() => promptAsync({ useProxy })} />
         </View>

@@ -100,6 +100,10 @@ export function fetchTrending() {
 
 export function fetchPlacesNearby(lat: number, lng: number) {
   return (dispatch: any) => {
+    console.log(
+      '🍎 index.tsx, line 103: ',
+      `${PLACES_NEARBY_URL}${lat},${lng}${PLACES_NEARBY_PARAMS}${PLACES_KEY}`
+    );
     fetch(`${PLACES_NEARBY_URL}${lat},${lng}${PLACES_NEARBY_PARAMS}${PLACES_KEY}`)
       .then(res => res.json())
       .then(locations => {
@@ -110,7 +114,8 @@ export function fetchPlacesNearby(lat: number, lng: number) {
 
 export function postEntry(newEntry: object) {
   return (dispatch: any) => {
-    fetch('/location', {
+    console.log('😩 index.tsx, line 117 before fetch newEntry: ', newEntry);
+    fetch(`${process.env.EXPO_API_LOCALHOST}/location`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -122,7 +127,7 @@ export function postEntry(newEntry: object) {
         console.log('🦝 ', 'somewhere in postEntry action', data);
         dispatch({ type: 'ADD_ENTRY', payload: data });
       })
-      .catch(err => console.log(err));
+      .catch(err => console.log('🌞', err));
   };
 }
 

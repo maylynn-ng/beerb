@@ -6,15 +6,7 @@ import Navbar from '../Components/Navbar';
 import boroughs from '../assets/london_sport.json';
 import { storeBorough } from '../redux/actions';
 
-<<<<<<< HEAD
-const HomeScreen = ({ currentBorough, searchTerm, beerSearchResults, navigation }: any) => {
-  // const handlePress = borough => {
-
-  // };
-
-=======
 const HomeScreen = ({ currentBorough, navigation, simpleBoroughs }: any) => {
->>>>>>> origin/submit
   return (
     <SafeAreaView style={styles.homeScreen}>
       <View style={styles.topBar}>

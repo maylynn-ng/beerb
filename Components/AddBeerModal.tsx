@@ -40,13 +40,16 @@ function AddBeer({
       if (isPointInPolygon({ lat, lng }, borough.boroughCoords)) {
         let locBorough = borough;
         const newEntry = {
-          beerName: beer.beerName,
-          beerId: beer.beerId,
-          placeName: pub.name,
+          // beerName: beer.beerName,
+          // beerId: beer.beerId,
+          // placeName: pub.name,
           placeId: pub.place_id,
-          placeCoord: pub.geometry.location,
-          boroughName: locBorough.boroughName,
+          // placeCoord: pub.geometry.location,
+          // boroughName: locBorough.boroughName,
           boroughId: locBorough.boroughId,
+          longitude: lng,
+          latitude: lat,
+          UserId: 1,
         };
         postNewEntry(newEntry);
         Alert.alert('Operation success');
