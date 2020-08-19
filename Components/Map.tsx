@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import MapView, { Polygon } from 'react-native-maps';
 import { getCenterOfBounds } from 'geolib';
 import { Borough } from '../Models/Borough.model';
-import { Coordinates } from '../Models/Coordinates.model';
 
 const Map = ({ boroughs }: any) => {
   const initialRegion = {
@@ -13,16 +12,9 @@ const Map = ({ boroughs }: any) => {
   };
 
   const [region, setRegion] = useState(initialRegion);
-  //pass handlepress in l 6
 
-  const handlePress = borough => {
-    const coords = borough.geometry.coordinates[0].map((coords: Coordinates) => {
-      return {
-        latitude: coords[1],
-        longitude: coords[0],
-      };
-    });
-    const centerOfBorough = getCenterOfBounds(coords);
+  const handlePress = (borough: Borough) => {
+    const centerOfBorough = getCenterOfBounds(borough.boroughCoords);
     const { longitude, latitude } = centerOfBorough;
     setRegion({
       latitudeDelta: 0.2,
@@ -34,16 +26,11 @@ const Map = ({ boroughs }: any) => {
 
   return (
     <MapView region={region} style={{ flex: 2, width: '100%', height: '50%' }}>
-      {boroughs.features.map((borough: Borough) => {
+      {boroughs.map((borough: Borough) => {
         return (
           <Polygon
-            key={borough.id}
-            coordinates={borough.geometry.coordinates[0].map((coords: Coordinates) => {
-              return {
-                latitude: coords[1],
-                longitude: coords[0],
-              };
-            })}
+            key={borough.boroughId}
+            coordinates={borough.boroughCoords}
             strokeWidth={1}
             fillColor="rgba(0, 220, 70, 0.6)"
             tappable={true}

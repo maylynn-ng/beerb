@@ -1,10 +1,5 @@
 import { Action } from '../actions';
-<<<<<<< HEAD
-import { Beer } from '../../Models/Beer.model';
-import { userInfo } from 'os';
-=======
 import { Beer, TrendingBeer } from '../../Models/Beer.model';
->>>>>>> origin/beerdex
 
 export type State = {
   boroughs: [];
@@ -15,6 +10,10 @@ export type State = {
   locationsNearby: [];
   user: {
     locations: any[];
+  };
+  location: {
+    latitude: number;
+    longitude: number;
   };
 };
 
@@ -27,6 +26,10 @@ const initialState: State = {
   locationsNearby: [],
   user: {
     locations: [],
+  },
+  location: {
+    latitude: 51.507388,
+    longitude: -0.12789,
   },
 };
 
@@ -72,6 +75,11 @@ export default function reducer(state: State = initialState, action: Action): St
       return {
         ...state,
         user: { ...state.user, locations: [...state.user.locations, action.payload] },
+      };
+    case 'STORE_LOCATION':
+      return {
+        ...state,
+        location: action.payload,
       };
     default:
       return state;

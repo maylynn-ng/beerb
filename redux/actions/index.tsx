@@ -13,6 +13,13 @@ export type Action = {
   payload: any;
 };
 
+export function storeLocation(location) {
+  return {
+    type: 'STORE_LOCATION',
+    payload: location,
+  };
+}
+
 export function setArrayOfBoroughs(boroughs) {
   return {
     type: 'SIMPLE_ARRAY_BOROUGHS',
@@ -97,10 +104,10 @@ export function fetchTrending() {
 
 export function fetchPlacesNearby(lat: number, lng: number) {
   return (dispatch: any) => {
-    console.log(
-      '🍎 index.tsx, line 103: ',
-      `${PLACES_NEARBY_URL}${lat},${lng}${PLACES_NEARBY_PARAMS}${PLACES_KEY}`
-    );
+    // console.log(
+    //   '🍎 index.tsx, line 103: ',
+    //   `${PLACES_NEARBY_URL}${lat},${lng}${PLACES_NEARBY_PARAMS}${PLACES_KEY}`
+    // );
     fetch(`${PLACES_NEARBY_URL}${lat},${lng}${PLACES_NEARBY_PARAMS}${PLACES_KEY}`)
       .then(res => res.json())
       .then(locations => {

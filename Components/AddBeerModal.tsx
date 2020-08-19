@@ -19,6 +19,7 @@ import { isPointInPolygon } from 'geolib';
 function AddBeer({
   isShownAddBeer,
   toggleAddBeer,
+  currentBorough,
   beerSearchResults,
   setSearch,
   pubLocations,
@@ -29,42 +30,33 @@ function AddBeer({
   const [beer, setBeer] = useState('');
   const [tempSearchTerm, setTempSearchTerm] = useState('');
 
-  const simpleArrayOfBoroughs = boroughs.features.map(borough => {
-    return {
-      boroughName: borough.properties.name,
-      boroughId: borough.id,
-      boroughCoords: borough.geometry.coordinates[0].map(coords => {
-        return {
-          latitude: coords[1],
-          longitude: coords[0],
-        };
-      }),
+  const submitBeerNLoc = () => {
+    let lat: number = 0;
+    let lng: number = 0;
+
+    if (Object.keys(pub).length !== 0) {
+      lat = pub.geometry.location.lat;
+      lng = pub.geometry.location.lng;
+    } else {
+      lat = location.latitude;
+      lng = location.longitude;
+    }
+
+    const newEntry = {
+      // beerName: beer.beerName,
+      // beerId: beer.beerId,
+      // placeName: pub.name || 'unknow pub',
+      placeId: pub.place_id || 'unknown pub',
+      // boroughName: currentBorough.boroughName
+      boroughId: currentBorough.boroughId,
+      longitude: lng,
+      latitude: lat,
+      UserId: 1,
     };
-  });
 
-  const submitBeerNLoc = (pub, beer) => {
-    const { lat, lng } = pub.geometry.location;
-
-    simpleArrayOfBoroughs.forEach(borough => {
-      if (isPointInPolygon({ lat, lng }, borough.boroughCoords)) {
-        let locBorough = borough;
-        const newEntry = {
-          // beerName: beer.beerName,
-          // beerId: beer.beerId,
-          // placeName: pub.name,
-          placeId: pub.place_id,
-          // placeCoord: pub.geometry.location,
-          // boroughName: locBorough.boroughName,
-          boroughId: locBorough.boroughId,
-          longitude: lng,
-          latitude: lat,
-          UserId: 1,
-        };
-        postNewEntry(newEntry);
-        Alert.alert('Operation success');
-      }
-      toggleAddBeer();
-    });
+    postNewEntry(newEntry);
+    Alert.alert('Operation success');
+    toggleAddBeer();
   };
 
   return (
@@ -81,7 +73,7 @@ function AddBeer({
           <View style={styles.lastBeer}>
             <Text style={styles.header}>Your location:</Text>
             <Picker
-              selectedValue={pub}
+              selectedValue={location}
               onValueChange={pub => setPub(pub)}
               itemStyle={{
                 fontSize: 5,
@@ -89,7 +81,11 @@ function AddBeer({
             >
               <Picker.Item label="Current Location" value={location} />
               {pubLocations.map(pub => (
-                <Picker.Item key={pub.name} label={`${pub.name} - ${pub.vicinity}`} value={pub} />
+                <Picker.Item
+                  key={pub.place_id}
+                  label={`${pub.name} - ${pub.vicinity}`}
+                  value={pub}
+                />
               ))}
             </Picker>
             <Text style={styles.header}>Your beer:</Text>
@@ -124,7 +120,11 @@ function AddBeer({
               }}
             >
               {beerSearchResults.map((beer: any) => (
-                <TouchableOpacity style={styles.beerItem} onPress={() => setBeer(beer.beerName)}>
+                <TouchableOpacity
+                  key={beer.beerId}
+                  style={styles.beerItem}
+                  onPress={() => setBeer(beer.beerName)}
+                >
                   <Text style={styles.beerName}>{beer.beerName}</Text>
                   <Text style={styles.beerBrewery}>{beer.breweryName}</Text>
                 </TouchableOpacity>
@@ -135,7 +135,7 @@ function AddBeer({
           <TouchableOpacity
             style={styles.create}
             onPress={() => {
-              submitBeerNLoc(pub, beer);
+              submitBeerNLoc();
             }}
           >
             <Text style={styles.createText}>I choose my beer</Text>
@@ -151,6 +151,8 @@ function mapStateToProps(state: any) {
     searchTerm: state.searchTerm,
     beerSearchResults: state.beerSearchResults,
     pubLocations: state.locationsNearby,
+    location: state.location,
+    currentBorough: state.currentBorough,
   };
 }
 

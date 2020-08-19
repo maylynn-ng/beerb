@@ -10,9 +10,9 @@ import Login from './Components/Login';
 
 const store = createStore(reducer, applyMiddleware(ReduxThunk));
 
-store.subscribe(() => {
-  console.log('💮💮💮💮💮💮', store.getState());
-});
+// store.subscribe(() => {
+//   console.log('💮💮💮💮💮💮', store.getState());
+// });
 
 export default function App() {
   return (
