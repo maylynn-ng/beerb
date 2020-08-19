@@ -69,7 +69,6 @@ export function fetchTrending() {
     fetch(`${TRENDING_URL}&client_id=${CLIENT_ID}&client_secret=${CLIENT_SECRET}`)
       .then(res => res.json())
       .then(res => {
-        console.log('YO YO IN FETCH');
         return res;
       })
       .then(res => {

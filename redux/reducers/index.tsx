@@ -1,11 +1,11 @@
 import { Action } from '../actions';
-import { Beer } from '../../Models/Beer.model';
+import { Beer, TrendingBeer } from '../../Models/Beer.model';
 
 export type State = {
   beerSearchResults: Beer[];
   currentBorough: string;
   searchTerm: string;
-  trendingBeers: Beer[];
+  trendingBeers: TrendingBeer[];
   locationsNearby: [];
   user: object;
 };

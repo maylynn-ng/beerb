@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect } from 'react';
 import { Text, View, StyleSheet, SafeAreaView } from 'react-native';
 import Loading from '../Components/Loading';
 import { connect } from 'react-redux';
@@ -9,8 +9,12 @@ import { fetchTrending } from '../redux/actions';
 
 import BeerBadge from '../Components/BeerBadge';
 
-function Beerdex({ trendingBeersList, setTrendingBeers }: any) {
-  console.log({ trendingBeersList });
+function Beerdex({ setTrendingBeers, trendingBeersList }: any) {
+  useEffect(() => {
+    if (!trendingBeersList.length) {
+      setTrendingBeers();
+    }
+  }, []);
 
   return (
     <SafeAreaView>
@@ -19,7 +23,7 @@ function Beerdex({ trendingBeersList, setTrendingBeers }: any) {
         <View style={styles.logoContainer}>
           {trendingBeersList && trendingBeersList.length ? (
             trendingBeersList.map((beer: Beer, index: number) => (
-              <BeerBadge key={index} beer={beer} />
+              <BeerBadge style={styles.badge} key={index} beer={beer} />
             ))
           ) : (
             <Loading />
@@ -58,6 +62,11 @@ const styles = StyleSheet.create({
   },
   logoContainer: {
     flexDirection: 'row',
-    marginHorizontal: 10,
+    flexWrap: 'wrap',
+    marginHorizontal: 5,
+  },
+  badge: {
+    height: 90,
+    width: 90,
   },
 });
