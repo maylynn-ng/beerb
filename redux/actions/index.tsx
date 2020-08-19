@@ -1,9 +1,13 @@
+
 import { Beer, TrendingBeer } from '../../Models/Beer.model';
 
 const SEARCH_API_URL = process.env.REACT_NATIVE_UNTAPPED_SEARCH_URL;
 const TRENDING_URL = process.env.REACT_NATIVE_UNTAPPED_TRENDING_URL;
 const CLIENT_ID = process.env.EXPO_UNTAPPED_CLIENT_ID;
 const CLIENT_SECRET = process.env.EXPO_UNTAPPED_CLIENT_SECRET;
+const PLACES_NEARBY_URL = process.env.EXPO_PLACES_NEARBY_URL;
+const PLACES_KEY = process.env.EXPO_PLACES_KEY;
+const PLACES_NEARBY_PARAMS: string = '&radius=200&type=bar&keyword=pub&';
 
 export type Action = {
   type: string;
@@ -21,6 +25,13 @@ export function setSearchTerm(input: string) {
   return {
     type: 'SET_SEARCH_TERM',
     payload: input,
+  };
+}
+
+export function setLocationsNearby(locations: []) {
+  return {
+    type: 'SET_LOCATIONS_NEARBY',
+    payload: locations,
   };
 }
 
@@ -79,5 +90,15 @@ export function fetchTrending() {
         }
       })
       .then(dispatch({ type: 'SET_TRENDING_BEER_RESULTS', payload: results }));
+  }
+}
+
+export function fetchPlacesNearby(lat: number, lng: number) {
+  return (dispatch: any) => {
+    fetch(`${PLACES_NEARBY_URL}${lat},${lng}${PLACES_NEARBY_PARAMS}${PLACES_KEY}`)
+      .then(res => res.json())
+      .then(locations => {
+        dispatch(setLocationsNearby(locations.results));
+      });
   };
 }

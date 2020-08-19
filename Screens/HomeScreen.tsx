@@ -1,74 +1,81 @@
 import React from 'react';
-import { View, Text, Button, StyleSheet, TextInput } from 'react-native';
+import {
+  SafeAreaView,
+  View,
+  Image,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+} from 'react-native';
 import { connect } from 'react-redux';
 import Map from '../Components/Map';
 import Navbar from '../Components/Navbar';
 import boroughs from '../assets/london_sport.json';
-import { storeBorough, fetchSearchBeers } from '../redux/actions';
+import { storeBorough } from '../redux/actions';
 
 const HomeScreen = ({
   currentBorough,
-  setBorough,
   searchTerm,
   beerSearchResults,
-  setSearch,
   navigation,
 }: any) => {
-  const handlePress = (name: string): void => {
-    setBorough(name);
-  };
+  // const handlePress = borough => {
 
+  // };
+
+  console.log('🎉', searchTerm, beerSearchResults);
   return (
-    <View style={styles.homeScreen}>
-      <Button
-        style={styles.burgerMenu}
-        title="menu"
-        onPress={() => {
-          navigation.navigate('Modal');
-        }}
-      />
-      <Text>You're in {currentBorough}</Text>
-      <Map handlePress={handlePress} boroughs={boroughs} style={styles.map} />
-      <View style={styles.lastBeer}>
-        <TextInput
-          placeholder="Search Beer"
-          enablesReturnKeyAutomatically={true}
-          autoCapitalize="words"
-          onChangeText={searchTerm => {
-            setSearch(searchTerm);
+    <SafeAreaView style={styles.homeScreen}>
+      <View style={styles.topBar}>
+        <TouchableOpacity
+          style={styles.burgerMenuTouch}
+          onPress={() => {
+            navigation.navigate('Modal');
           }}
-          returnKeyLabel="done"
-          value={searchTerm}
-        />
-        {beerSearchResults.map(beer => (
-          <Text>{beer.beerName}</Text>
-        ))}
+        >
+          <Image source={require('../assets/menu.png')} style={styles.burgerMenu} />
+        </TouchableOpacity>
+        <View style={styles.currentView}>
+          <Text>You're in {currentBorough}</Text>
+        </View>
       </View>
-      <Navbar />
-    </View>
+      <Map boroughs={boroughs} />
+      <Navbar navigation={navigation} />
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
   homeScreen: {
-    // height: '100%',
-    // width: '100%',
-    marginTop: 30,
+    flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  map: {
-    // height: '50%',
-    // width: '100%',
-  },
-  lastBeer: {
-    height: '50%',
+    marginTop: 30,
   },
   burgerMenu: {
-    position: 'absolute',
-    top: 30,
-    left: 0,
-    zIndex: 2,
+    width: 30,
+    height: 30,
+  },
+  burgerMenuTouch: {
+    flex: 1,
+    width: 30,
+    height: 40,
+    justifyContent: 'center',
+    marginHorizontal: 10,
+  },
+  topBar: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-around',
+    padding: 8,
+    height: 'auto',
+    paddingHorizontal: 10,
+    backgroundColor: 'gold',
+  },
+  currentView: {
+    width: 'auto',
+    height: 25,
+    opacity: 0.7,
   },
 });
 
@@ -83,7 +90,6 @@ function mapStateToProps(state: any) {
 function mapDispatch(dispatch: any) {
   return {
     setBorough: (name: string) => dispatch(storeBorough(name)),
-    setSearch: (searchTerm: string) => dispatch(fetchSearchBeers(searchTerm)),
   };
 }
 

@@ -2,7 +2,6 @@ import 'react-native-gesture-handler';
 import React from 'react';
 import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
-import { StyleSheet, Platform, StatusBar as StatBar, SafeAreaView } from 'react-native';
 
 import reducer from './redux/reducers';
 import ReduxThunk from 'redux-thunk';
@@ -37,14 +36,3 @@ export default function App() {
     </Provider>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    marginTop: 50,
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingTop: Platform.OS === 'android' ? StatBar.currentHeight : 0,
-  },
-});

@@ -1,11 +1,13 @@
 import { Action } from '../actions';
 import { Beer } from '../../Models/Beer.model';
+import { Pub } from '../../Models/Pub.model'
 
 export type State = {
   beerSearchResults: Beer[];
   currentBorough: string;
   searchTerm: string;
   trendingBeers: Beer[];
+  locationsNearby: [];
 };
 
 const initialState: State = {
@@ -13,6 +15,7 @@ const initialState: State = {
   currentBorough: '',
   searchTerm: '',
   trendingBeers: [],
+  locationsNearby: [],
 };
 
 export default function reducer(state: State = initialState, action: Action): State {
@@ -37,6 +40,11 @@ export default function reducer(state: State = initialState, action: Action): St
       return {
         ...state,
         trendingBeers: action.payload,
+      };
+    case 'SET_LOCATIONS_NEARBY':
+      return {
+        ...state,
+        locationsNearby: action.payload,
       };
     default:
       return state;

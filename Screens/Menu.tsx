@@ -4,12 +4,7 @@ import { Text, StyleSheet, View, TouchableOpacity, Modal, Image } from 'react-na
 function Menu({ navigation }: any) {
   return (
     <>
-      <TouchableOpacity
-        style={styles.closeMenu}
-        onPress={() => {
-          navigation.goBack();
-        }}
-      >
+      <TouchableOpacity onPress={() => navigation.goBack()}>
         <Image source={require('../assets/close.png')} style={styles.closeMenu} />
       </TouchableOpacity>
 
