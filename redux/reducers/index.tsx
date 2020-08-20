@@ -9,7 +9,7 @@ export type State = {
   trendingBeers: TrendingBeer[];
   locationsNearby: [];
   user: {
-    locations: any[];
+    Locations: any[];
   };
   location: {
     latitude: number;
@@ -25,7 +25,7 @@ const initialState: State = {
   trendingBeers: [],
   locationsNearby: [],
   user: {
-    locations: [],
+    Locations: [],
   },
   location: {
     latitude: 51.507388,
@@ -69,12 +69,13 @@ export default function reducer(state: State = initialState, action: Action): St
     case 'SET_USER_INFO':
       return {
         ...state,
-        user: action.payload,
+        user: { ...state.user, ...action.payload },
       };
     case 'ADD_ENTRY':
+      const newLocations = [...state.user.Locations, action.payload];
       return {
         ...state,
-        user: { ...state.user, locations: [...state.user.locations, action.payload] },
+        user: { ...state.user, Locations: newLocations },
       };
     case 'STORE_LOCATION':
       return {
