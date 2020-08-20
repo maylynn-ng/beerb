@@ -1,27 +1,46 @@
 import { Action } from '../actions';
-import { Beer } from '../../Models/Beer.model';
+import { Beer, TrendingBeer } from '../../Models/Beer.model';
 
 export type State = {
+  boroughs: [];
   beerSearchResults: Beer[];
   currentBorough: string;
   searchTerm: string;
-  trendingBeers: Beer[];
+  trendingBeers: TrendingBeer[];
   locationsNearby: [];
-  user: object;
+  user: {
+    locations: any[];
+  };
+  location: {
+    latitude: number;
+    longitude: number;
+  };
 };
 
 const initialState: State = {
+  boroughs: [],
   beerSearchResults: [],
   currentBorough: '',
   searchTerm: '',
   trendingBeers: [],
   locationsNearby: [],
-  user: {},
+  user: {
+    locations: [],
+  },
+  location: {
+    latitude: 51.507388,
+    longitude: -0.12789,
+  },
 };
 
 export default function reducer(state: State = initialState, action: Action): State {
   const { type } = action;
   switch (type) {
+    case 'SIMPLE_ARRAY_BOROUGHS':
+      return {
+        ...state,
+        boroughs: action.payload,
+      };
     case 'STORE_BOROUGH':
       return {
         ...state,
@@ -51,6 +70,16 @@ export default function reducer(state: State = initialState, action: Action): St
       return {
         ...state,
         user: action.payload,
+      };
+    case 'ADD_ENTRY':
+      return {
+        ...state,
+        user: { ...state.user, locations: [...state.user.locations, action.payload] },
+      };
+    case 'STORE_LOCATION':
+      return {
+        ...state,
+        location: action.payload,
       };
     default:
       return state;

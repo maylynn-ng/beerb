@@ -1,49 +1,99 @@
-import React from 'react';
-import {
-  SafeAreaView,
-  View,
-  Image,
-  Text,
-  TouchableOpacity,
-  StyleSheet,
-} from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { SafeAreaView, View, Image, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
+import * as Location from 'expo-location';
 import Map from '../Components/Map';
+import { isPointInPolygon } from 'geolib';
 import Navbar from '../Components/Navbar';
 import boroughs from '../assets/london_sport.json';
-import { storeBorough } from '../redux/actions';
+import { storeBorough, fetchPlacesNearby, storeLocation } from '../redux/actions';
+
+const simpleArrayOfBoroughs = boroughs.features.map(borough => {
+  return {
+    boroughName: borough.properties.name,
+    boroughId: borough.id,
+    boroughCoords: borough.geometry.coordinates[0].map(coords => {
+      return {
+        latitude: coords[1],
+        longitude: coords[0],
+      };
+    }),
+  };
+});
 
 const HomeScreen = ({
   currentBorough,
-  searchTerm,
-  beerSearchResults,
   navigation,
+  simpleBoroughs,
+  setBorough,
+  setPlacesNearby,
+  setLocation,
 }: any) => {
-  // const handlePress = borough => {
+  //const [location, setLocation] = useState({});
 
-  // };
+  useEffect(() => {
+    (async () => {
+      let { status } = await Location.requestPermissionsAsync();
+      if (status !== 'granted') {
+        console.info('Permission to access location was denied');
+      }
 
-  console.log('🎉', searchTerm, beerSearchResults);
+      let newLocation = await Location.getCurrentPositionAsync({
+        accuracy: Location.Accuracy.Highest,
+        maximumAge: 1,
+      });
+      const { latitude, longitude } = newLocation.coords;
+      setLocation({ latitude, longitude });
+
+      simpleArrayOfBoroughs.some(
+        borough =>
+          isPointInPolygon({ latitude, longitude }, borough.boroughCoords) && setBorough(borough)
+      );
+
+      setPlacesNearby(newLocation.coords.latitude, newLocation.coords.longitude);
+    })();
+  }, []);
+
   return (
     <SafeAreaView style={styles.homeScreen}>
       <View style={styles.topBar}>
         <TouchableOpacity
           style={styles.burgerMenuTouch}
           onPress={() => {
+            console.log('🦝 ', simpleBoroughs);
             navigation.navigate('Modal');
           }}
         >
           <Image source={require('../assets/menu.png')} style={styles.burgerMenu} />
         </TouchableOpacity>
         <View style={styles.currentView}>
-          <Text>You're in {currentBorough}</Text>
+          <Text>You're in {currentBorough.boroughName}</Text>
         </View>
       </View>
-      <Map boroughs={boroughs} />
+      <Map boroughs={simpleArrayOfBoroughs} />
       <Navbar navigation={navigation} />
     </SafeAreaView>
   );
 };
+
+function mapStateToProps(state: any) {
+  return {
+    currentBorough: state.currentBorough,
+    searchTerm: state.searchTerm,
+    beerSearchResults: state.beerSearchResults,
+    simpleBoroughs: state.boroughs,
+  };
+}
+
+function mapDispatch(dispatch: any) {
+  return {
+    setLocation: (location: object) => dispatch(storeLocation(location)),
+    setBorough: (name: string) => dispatch(storeBorough(name)),
+    setPlacesNearby: (lat: number, lng: number) => dispatch(fetchPlacesNearby(lat, lng)),
+  };
+}
+
+export default connect(mapStateToProps, mapDispatch)(HomeScreen);
 
 const styles = StyleSheet.create({
   homeScreen: {
@@ -87,19 +137,3 @@ const styles = StyleSheet.create({
     opacity: 0.7,
   },
 });
-
-function mapStateToProps(state: any) {
-  return {
-    currentBorough: state.currentBorough,
-    searchTerm: state.searchTerm,
-    beerSearchResults: state.beerSearchResults,
-  };
-}
-
-function mapDispatch(dispatch: any) {
-  return {
-    setBorough: (name: string) => dispatch(storeBorough(name)),
-  };
-}
-
-export default connect(mapStateToProps, mapDispatch)(HomeScreen);

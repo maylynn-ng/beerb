@@ -1,23 +1,64 @@
 import React, { useState } from 'react';
-import { Picker, TouchableOpacity, Text, View, StyleSheet, TextInput } from 'react-native';
+import {
+  Picker,
+  TouchableOpacity,
+  Text,
+  View,
+  StyleSheet,
+  TextInput,
+  Alert,
+  Button,
+} from 'react-native';
 import Modal from 'react-native-modal';
-import { fetchSearchBeers } from '../redux/actions';
+import { fetchSearchBeers, postEntry } from '../redux/actions';
 import { connect } from 'react-redux';
+import boroughs from '../assets/london_sport.json';
 import { ScrollView } from 'react-native-gesture-handler';
+import { isPointInPolygon } from 'geolib';
 
 function AddBeer({
   isShownAddBeer,
   toggleAddBeer,
-  searchTerm,
+  currentBorough,
   beerSearchResults,
   setSearch,
   pubLocations,
   location,
+  postNewEntry,
 }: any) {
   const [pub, setPub] = useState({});
   const [beer, setBeer] = useState('');
+  const [tempSearchTerm, setTempSearchTerm] = useState('');
 
-  const onSubmitBeerNLoc = () => {};
+  const submitBeerNLoc = () => {
+    let lat: number = 0;
+    let lng: number = 0;
+
+    if (Object.keys(pub).length !== 0) {
+      lat = pub.geometry.location.lat;
+      lng = pub.geometry.location.lng;
+    } else {
+      lat = location.latitude;
+      lng = location.longitude;
+    }
+
+    const newEntry = {
+      // beerName: beer.beerName,
+      // beerId: beer.beerId,
+      // placeName: pub.name || 'unknow pub',
+      placeId: pub.place_id || 'unknown pub',
+      // boroughName: currentBorough.boroughName
+      boroughId: currentBorough.boroughId,
+      longitude: lng,
+      latitude: lat,
+      UserId: 1,
+    };
+
+    postNewEntry(newEntry);
+    Alert.alert('Operation success');
+    toggleAddBeer();
+  };
+
   return (
     isShownAddBeer && (
       <Modal
@@ -26,14 +67,13 @@ function AddBeer({
         visible={true}
         onBackdropPress={() => {
           toggleAddBeer();
-          console.log(pub);
         }}
       >
         <View style={styles.addBeerModal}>
           <View style={styles.lastBeer}>
             <Text style={styles.header}>Your location:</Text>
             <Picker
-              selectedValue={pub}
+              selectedValue={location}
               onValueChange={pub => setPub(pub)}
               itemStyle={{
                 fontSize: 5,
@@ -41,7 +81,11 @@ function AddBeer({
             >
               <Picker.Item label="Current Location" value={location} />
               {pubLocations.map(pub => (
-                <Picker.Item label={`${pub.name} - ${pub.vicinity}`} value={pub} />
+                <Picker.Item
+                  key={pub.place_id}
+                  label={`${pub.name} - ${pub.vicinity}`}
+                  value={pub}
+                />
               ))}
             </Picker>
             <Text style={styles.header}>Your beer:</Text>
@@ -51,11 +95,18 @@ function AddBeer({
               placeholder={'Search Beer'}
               enablesReturnKeyAutomatically={true}
               autoCapitalize="words"
-              onChangeText={searchTerm => {
-                setSearch(searchTerm);
+              onChangeText={input => {
+                setTempSearchTerm(input);
               }}
               returnKeyLabel="done"
-              value={searchTerm}
+              value={tempSearchTerm}
+            />
+            <Button
+              title="SEARCH"
+              onPress={() => {
+                setSearch(tempSearchTerm);
+                setTempSearchTerm('');
+              }}
             />
 
             <ScrollView
@@ -68,8 +119,12 @@ function AddBeer({
                 flexWrap: 'wrap',
               }}
             >
-              {beerSearchResults.map(beer => (
-                <TouchableOpacity style={styles.beerItem} onPress={() => setBeer(beer.beerName)}>
+              {beerSearchResults.map((beer: any) => (
+                <TouchableOpacity
+                  key={beer.beerId}
+                  style={styles.beerItem}
+                  onPress={() => setBeer(beer.beerName)}
+                >
                   <Text style={styles.beerName}>{beer.beerName}</Text>
                   <Text style={styles.beerBrewery}>{beer.breweryName}</Text>
                 </TouchableOpacity>
@@ -77,7 +132,12 @@ function AddBeer({
             </ScrollView>
           </View>
 
-          <TouchableOpacity style={styles.create}>
+          <TouchableOpacity
+            style={styles.create}
+            onPress={() => {
+              submitBeerNLoc();
+            }}
+          >
             <Text style={styles.createText}>I choose my beer</Text>
           </TouchableOpacity>
         </View>
@@ -91,12 +151,15 @@ function mapStateToProps(state: any) {
     searchTerm: state.searchTerm,
     beerSearchResults: state.beerSearchResults,
     pubLocations: state.locationsNearby,
+    location: state.location,
+    currentBorough: state.currentBorough,
   };
 }
 
 function mapDispatch(dispatch: any) {
   return {
     setSearch: (searchTerm: string) => dispatch(fetchSearchBeers(searchTerm)),
+    postNewEntry: (newEntry: object) => dispatch(postEntry(newEntry)),
   };
 }
 

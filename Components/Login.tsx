@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { View, Image, Button, Platform } from 'react-native';
+import { View, Image, Button, Platform, Alert } from 'react-native';
 import { connect } from 'react-redux';
 
 import { setUserInfo } from '../redux/actions';
@@ -10,8 +10,8 @@ import Navigation from '../Components/Navigation';
 
 const useProxy = Platform.select({ web: false, default: true });
 const redirectUri = AuthSession.makeRedirectUri({ useProxy });
-const auth0ClientId: any = process.env.EXPO_AUTH0_CLIENT_ID;
-const authorizationEndpoint: any = process.env.EXPO_AUTH_ENDPOINT;
+const auth0ClientId: any = process.env.REACT_NATIVE_AUTH0_CLIENT_ID;
+const authorizationEndpoint: any = process.env.REACT_NATIVE_AUTH_ENDPOINT;
 
 const Login = ({ user, setUser }: any) => {
   const [request, result, promptAsync] = AuthSession.useAuthRequest(
@@ -53,8 +53,6 @@ const Login = ({ user, setUser }: any) => {
         // Retrieve the JWT token and decode it
         const jwtToken = result.params.id_token;
         const decoded: any = jwtDecode(jwtToken);
-        console.log('🍎', decoded);
-        console.log('👃🏼', jwtToken);
         setUser(decoded);
         AsyncStorage.setItem('@session_token', JSON.stringify(decoded));
       }
@@ -65,7 +63,6 @@ const Login = ({ user, setUser }: any) => {
     <View style={{ width: '100%', height: '100%' }}>
       {Object.keys(user).length === 0 ? (
         <View>
-          {console.log('app rendered', process.env.EXPO_AUTH_ENDPOINT)}
           <Image source={require('../assets/logo.png')} style={{ height: 200, width: 200 }} />
           <Button title="Login" onPress={() => promptAsync({ useProxy })} />
         </View>
