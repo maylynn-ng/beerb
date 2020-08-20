@@ -227,7 +227,7 @@ const styles = StyleSheet.create({
   },
   beerHighlight: {
     padding: 5,
-    backgroundColor: '#fff000',
+    backgroundColor: 'gold',
     width: 250,
   },
   beerName: {
