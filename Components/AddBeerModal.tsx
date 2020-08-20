@@ -43,11 +43,11 @@ function AddBeer({
     }
 
     const newEntry = {
-      // beerName: beer.beerName,
-      // beerId: beer.beerId,
-      // placeName: pub.name || 'unknow pub',
+      beerName: beer.beerName,
+      beerId: beer.beerId,
+      placeName: pub.name || 'unknow pub',
       placeId: pub.place_id || 'unknown pub',
-      // boroughName: currentBorough.boroughName
+      boroughName: currentBorough.boroughName,
       boroughId: currentBorough.boroughId,
       longitude: lng,
       latitude: lat,
