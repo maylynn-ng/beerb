@@ -12,9 +12,23 @@ import {
 import Modal from 'react-native-modal';
 import { fetchSearchBeers, postEntry } from '../redux/actions';
 import { connect } from 'react-redux';
-import boroughs from '../assets/london_sport.json';
 import { ScrollView } from 'react-native-gesture-handler';
-import { isPointInPolygon } from 'geolib';
+import { Beer } from '../Models/Beer.model';
+import { userInfo } from 'os';
+
+const initialBeer: Beer = {
+  beerId: 0,
+  haveHad: false,
+  beerName: '',
+  beerLabel: '',
+  beerIbu: 0,
+  beerDescription: '',
+  beerStyle: '',
+  breweryName: '',
+  breweryCountry: '',
+  breweryLabel: '',
+  breweryUrl: '',
+};
 
 function AddBeer({
   isShownAddBeer,
@@ -27,7 +41,7 @@ function AddBeer({
   postNewEntry,
 }: any) {
   const [pub, setPub] = useState({});
-  const [beer, setBeer] = useState('');
+  const [beer, setBeer] = useState(initialBeer);
   const [tempSearchTerm, setTempSearchTerm] = useState('');
 
   const submitBeerNLoc = () => {
@@ -45,13 +59,13 @@ function AddBeer({
     const newEntry = {
       beerName: beer.beerName,
       beerId: beer.beerId,
-      placeName: pub.name || 'unknow pub',
+      placeName: pub.name || 'unknown pub',
       placeId: pub.place_id || 'unknown pub',
       boroughName: currentBorough.boroughName,
       boroughId: currentBorough.boroughId,
       longitude: lng,
       latitude: lat,
-      UserId: 1,
+      UserId: 1, //CHANGE TO UserId from the state when the DB is linked
     };
 
     postNewEntry(newEntry);
@@ -89,7 +103,7 @@ function AddBeer({
               ))}
             </Picker>
             <Text style={styles.header}>Your beer:</Text>
-            <Text style={styles.beerSelected}>{beer}</Text>
+            <Text style={styles.beerSelected}>{beer.beerName}</Text>
             <TextInput
               style={styles.input}
               placeholder={'Search Beer'}
@@ -123,7 +137,7 @@ function AddBeer({
                 <TouchableOpacity
                   key={beer.beerId}
                   style={styles.beerItem}
-                  onPress={() => setBeer(beer.beerName)}
+                  onPress={() => setBeer(beer)}
                 >
                   <Text style={styles.beerName}>{beer.beerName}</Text>
                   <Text style={styles.beerBrewery}>{beer.breweryName}</Text>
@@ -131,7 +145,7 @@ function AddBeer({
               ))}
             </ScrollView>
           </View>
-
+          {console.log()}
           <TouchableOpacity
             style={styles.create}
             onPress={() => {
