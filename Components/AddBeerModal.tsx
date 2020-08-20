@@ -146,7 +146,6 @@ function AddBeer({
               ))}
             </ScrollView>
           </View>
-          {console.log()}
           <TouchableOpacity
             style={styles.create}
             onPress={() => {

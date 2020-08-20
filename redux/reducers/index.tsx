@@ -77,7 +77,16 @@ export default function reducer(state: State = initialState, action: Action): St
       const newLocations = [...state.user.Locations, action.payload];
       return {
         ...state,
-        user: { ...state.user, Locations: newLocations },
+        user: {
+          ...state.user,
+          Locations: newLocations,
+          boroughCounter: {
+            ...state.user.boroughCounter,
+            [action.payload.boroughName]: state.user.boroughCounter[action.payload.boroughName]
+              ? state.user.boroughCounter[action.payload.boroughName] + 1
+              : 1,
+          },
+        },
       };
     case 'STORE_LOCATION':
       return {

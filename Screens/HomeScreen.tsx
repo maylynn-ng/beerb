@@ -78,7 +78,7 @@ const HomeScreen = ({
           <Text>You're in {currentBorough.boroughName}</Text>
         </View>
       </View>
-      <Map boroughs={simpleArrayOfBoroughs} />
+      <Map boroughs={simpleArrayOfBoroughs} boroughCounter={user.boroughCounter} />
       <Navbar navigation={navigation} />
     </SafeAreaView>
   );

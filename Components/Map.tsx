@@ -4,12 +4,12 @@ import { getCenterOfBounds } from 'geolib';
 import { Borough } from '../Models/Borough.model';
 import mapStyle from '../assets/mapStyle.js';
 
-const Map = ({ boroughs }: any) => {
+const Map = ({ boroughs, boroughCounter }: any) => {
   const initialRegion = {
     latitude: 51.509993,
     longitude: -0.104298,
-    latitudeDelta: 0.7,
-    longitudeDelta: 0.7,
+    latitudeDelta: 0.8,
+    longitudeDelta: 0.8,
   };
 
   const [region, setRegion] = useState(initialRegion);
@@ -26,17 +26,20 @@ const Map = ({ boroughs }: any) => {
   };
 
   const colors = [
-    '#615e5c99',
-    '#4d3c2c99',
-    '#60321899',
-    '#80464299',
-    '#984b3199',
-    '#ca673099',
-    '#d7805a99',
-    '#e9925299',
-    '#ffa84799',
-    '#ffd40099',
+    '#615e5cbb',
+    '#4d3c2cbb',
+    '#603218bb',
+    '#804642bb',
+    '#984b31bb',
+    '#ca6730bb',
+    '#d7805abb',
+    '#e99252bb',
+    '#ffa847bb',
+    '#ffd400bb',
+    '#ffd400',
   ];
+
+  const color10 = (counter: number): number => (counter >= 10 ? 10 : counter);
 
   return (
     <MapView
@@ -51,8 +54,8 @@ const Map = ({ boroughs }: any) => {
             coordinates={borough.boroughCoords}
             strokeWidth={2}
             strokeColor="whitesmoke"
-            fillColor="#615e5c99"
-            // fillColor={color[counterState[borough.boroughName]]}
+            //fillColor="#ffd400bb"
+            fillColor={colors[color10([boroughCounter[borough.boroughName]])] || colors[0]}
             tappable={true}
             onPress={() => handlePress(borough)}
           >
