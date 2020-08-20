@@ -53,10 +53,14 @@ const HomeScreen = ({
       );
 
       setPlacesNearby(newLocation.coords.latitude, newLocation.coords.longitude);
-
-      setLocations(user);
     })();
   }, []);
+
+  useEffect(() => {
+    if (user.sub) {
+      setLocations(user);
+    }
+  }, [user.sub]);
 
   return (
     <SafeAreaView style={styles.homeScreen}>
@@ -64,11 +68,10 @@ const HomeScreen = ({
         <TouchableOpacity
           style={styles.burgerMenuTouch}
           onPress={() => {
-            console.log('🦝 ', simpleBoroughs);
             navigation.navigate('Modal');
           }}
         >
-          {console.log('🌵🌵🌵🌵🌵', user)}
+          {console.log('🎉🎉🎉🎉', user)}
           <Image source={require('../assets/menu.png')} style={styles.burgerMenu} />
         </TouchableOpacity>
         <View style={styles.currentView}>

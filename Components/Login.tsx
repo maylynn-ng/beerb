@@ -31,7 +31,6 @@ const Login = ({ user, setUser }: any) => {
     try {
       AsyncStorage.getItem('@session_token').then(value => {
         if (value) {
-          console.log('IN LOGIN', JSON.parse(value));
           setUser(JSON.parse(value));
         }
       });

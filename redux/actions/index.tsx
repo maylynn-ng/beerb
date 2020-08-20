@@ -140,17 +140,14 @@ export function setUserInfo(user: object) {
 export function getLocations(user: any) {
   const { sub, name } = user;
   let counter = {};
+  const fetchBody = { sub, name };
   return (dispatch: any) => {
-    console.log('🔮🔮🔮🔮🔮');
     fetch(`${DB_LOCALHOST}/locations`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ sub, name }),
+      body: JSON.stringify(fetchBody),
     })
-      .then(res => {
-        console.log('GET LOCATIONS', res);
-        return res.json();
-      })
+      .then(res => res.json())
       .then(res => {
         res.Locations.map((entry: any) => {
           if (counter[entry.boroughName]) {

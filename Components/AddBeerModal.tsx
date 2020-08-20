@@ -14,7 +14,6 @@ import { fetchSearchBeers, postEntry } from '../redux/actions';
 import { connect } from 'react-redux';
 import { ScrollView } from 'react-native-gesture-handler';
 import { Beer } from '../Models/Beer.model';
-import { userInfo } from 'os';
 
 const initialBeer: Beer = {
   beerId: 0,
@@ -39,6 +38,7 @@ function AddBeer({
   pubLocations,
   location,
   postNewEntry,
+  user,
 }: any) {
   const [pub, setPub] = useState({});
   const [beer, setBeer] = useState(initialBeer);
@@ -65,7 +65,7 @@ function AddBeer({
       boroughId: currentBorough.boroughId,
       longitude: lng,
       latitude: lat,
-      UserId: 1, //CHANGE TO UserId from the state when the DB is linked
+      UserId: user.id,
     };
 
     postNewEntry(newEntry);
@@ -167,6 +167,7 @@ function mapStateToProps(state: any) {
     pubLocations: state.locationsNearby,
     location: state.location,
     currentBorough: state.currentBorough,
+    user: state.user,
   };
 }
 

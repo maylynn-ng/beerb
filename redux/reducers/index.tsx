@@ -84,6 +84,11 @@ export default function reducer(state: State = initialState, action: Action): St
         ...state,
         location: action.payload,
       };
+    case 'GET_LOCATIONS':
+      return {
+        ...state,
+        user: { ...state.user, boroughCounter: action.payload },
+      };
     default:
       return state;
   }
