@@ -10,6 +10,7 @@ import { fetchTrending } from '../redux/actions';
 import BeerBadge from '../Components/BeerBadge';
 
 function Beerdex({ setTrendingBeers, trendingBeersList }: any) {
+  console.log('😍 Beerdex.tsx, line 13 hi!!!!!: ');
   useEffect(() => {
     if (!trendingBeersList.length) {
       setTrendingBeers();
@@ -26,7 +27,8 @@ function Beerdex({ setTrendingBeers, trendingBeersList }: any) {
               <BeerBadge style={styles.badge} key={index} beer={beer} />
             ))
           ) : (
-            <Loading />
+            // <Loading />
+            <Text>Loading</Text>
           )}
         </View>
       </View>
