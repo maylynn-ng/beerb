@@ -6,7 +6,7 @@ import Map from '../Components/Map';
 import { isPointInPolygon } from 'geolib';
 import Navbar from '../Components/Navbar';
 import boroughs from '../assets/london_sport.json';
-import { storeBorough, fetchPlacesNearby, storeLocation } from '../redux/actions';
+import { storeBorough, fetchPlacesNearby, storeLocation, getLocations } from '../redux/actions';
 
 const simpleArrayOfBoroughs = boroughs.features.map(borough => {
   return {
@@ -28,6 +28,8 @@ const HomeScreen = ({
   setBorough,
   setPlacesNearby,
   setLocation,
+  setLocations,
+  user,
 }: any) => {
   //const [location, setLocation] = useState({});
 
@@ -51,6 +53,8 @@ const HomeScreen = ({
       );
 
       setPlacesNearby(newLocation.coords.latitude, newLocation.coords.longitude);
+
+      setLocations(user);
     })();
   }, []);
 
@@ -64,6 +68,7 @@ const HomeScreen = ({
             navigation.navigate('Modal');
           }}
         >
+          {console.log('🌵🌵🌵🌵🌵', user)}
           <Image source={require('../assets/menu.png')} style={styles.burgerMenu} />
         </TouchableOpacity>
         <View style={styles.currentView}>
@@ -82,6 +87,7 @@ function mapStateToProps(state: any) {
     searchTerm: state.searchTerm,
     beerSearchResults: state.beerSearchResults,
     simpleBoroughs: state.boroughs,
+    user: state.user,
   };
 }
 
@@ -90,6 +96,7 @@ function mapDispatch(dispatch: any) {
     setLocation: (location: object) => dispatch(storeLocation(location)),
     setBorough: (name: string) => dispatch(storeBorough(name)),
     setPlacesNearby: (lat: number, lng: number) => dispatch(fetchPlacesNearby(lat, lng)),
+    setLocations: (user: any) => dispatch(getLocations(user)),
   };
 }
 

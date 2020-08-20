@@ -7,6 +7,7 @@ const CLIENT_SECRET = process.env.REACT_NATIVE_UNTAPPED_CLIENT_SECRET;
 const PLACES_NEARBY_URL = process.env.REACT_NATIVE_PLACES_NEARBY_URL;
 const PLACES_KEY = process.env.REACT_NATIVE_PLACES_KEY;
 const PLACES_NEARBY_PARAMS: string = '&radius=2000&type=bar&keyword=pub&key=';
+const DB_LOCALHOST = process.env.EXPO_API_LOCALHOST;
 
 export type Action = {
   type: string;
@@ -114,7 +115,7 @@ export function fetchPlacesNearby(lat: number, lng: number) {
 
 export function postEntry(newEntry: object) {
   return (dispatch: any) => {
-    fetch(`${process.env.EXPO_API_LOCALHOST}/location`, {
+    fetch(`${DB_LOCALHOST}/location`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -136,8 +137,31 @@ export function setUserInfo(user: object) {
   };
 }
 
-export function getLocations(user: object) {
+export function getLocations(user: any) {
+  const { sub, name } = user;
+  let counter = {};
   return (dispatch: any) => {
-    fetch(``);
+    console.log('🔮🔮🔮🔮🔮');
+    fetch(`${DB_LOCALHOST}/locations`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ sub, name }),
+    })
+      .then(res => {
+        console.log('GET LOCATIONS', res);
+        return res.json();
+      })
+      .then(res => {
+        res.Locations.map((entry: any) => {
+          if (counter[entry.boroughName]) {
+            counter[entry.boroughName]++;
+          } else {
+            counter[entry.boroughName] = 1;
+          }
+        });
+        dispatch({ type: 'GET_LOCATIONS', payload: counter });
+        dispatch({ type: 'SET_USER_INFO', payload: { id: res.id, Locations: res.Locations } });
+      })
+      .catch(error => console.log('SORRY: ', error));
   };
 }

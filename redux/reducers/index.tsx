@@ -10,6 +10,7 @@ export type State = {
   locationsNearby: [];
   user: {
     Locations: any[];
+    boroughCounter: {};
   };
   location: {
     latitude: number;
@@ -26,6 +27,7 @@ const initialState: State = {
   locationsNearby: [],
   user: {
     Locations: [],
+    boroughCounter: {},
   },
   location: {
     latitude: 51.507388,
