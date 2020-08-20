@@ -65,10 +65,11 @@ const styles = StyleSheet.create({
   logoContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
+    justifyContent: 'center',
     marginHorizontal: 5,
   },
   badge: {
-    height: 90,
-    width: 90,
+    height: 200,
+    width: 200,
   },
 });

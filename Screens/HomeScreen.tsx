@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { SafeAreaView, View, Image, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
 import * as Location from 'expo-location';
@@ -76,7 +76,7 @@ const HomeScreen = ({
           <Text>You're in {currentBorough.boroughName}</Text>
         </View>
       </View>
-      <Map boroughs={simpleArrayOfBoroughs} />
+      <Map boroughs={simpleArrayOfBoroughs} boroughCounter={user.boroughCounter} />
       <Navbar navigation={navigation} />
     </SafeAreaView>
   );

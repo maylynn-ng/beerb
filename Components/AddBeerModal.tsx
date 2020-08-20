@@ -65,6 +65,7 @@ function AddBeer({
       boroughId: currentBorough.boroughId,
       longitude: lng,
       latitude: lat,
+      //UserId: 1, //CHANGE TO UserId from the state when the DB is linked
       UserId: user.id,
     };
 
@@ -145,7 +146,6 @@ function AddBeer({
               ))}
             </ScrollView>
           </View>
-          {console.log()}
           <TouchableOpacity
             style={styles.create}
             onPress={() => {
