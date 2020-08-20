@@ -31,8 +31,6 @@ const HomeScreen = ({
   setLocations,
   user,
 }: any) => {
-  //const [location, setLocation] = useState({});
-
   useEffect(() => {
     (async () => {
       let { status } = await Location.requestPermissionsAsync();

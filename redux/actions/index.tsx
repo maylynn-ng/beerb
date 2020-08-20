@@ -115,7 +115,7 @@ export function fetchPlacesNearby(lat: number, lng: number) {
 
 export function postEntry(newEntry: object) {
   return (dispatch: any) => {
-    fetch(`${DB_LOCALHOST}/location`, {
+    fetch(`http://localhost:3001/location`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -142,7 +142,7 @@ export function getLocations(user: any) {
   let counter = {};
   const fetchBody = { sub, name };
   return (dispatch: any) => {
-    fetch(`${DB_LOCALHOST}/locations`, {
+    fetch(`http://localhost:3001/locations`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(fetchBody),
