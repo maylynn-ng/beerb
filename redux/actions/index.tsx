@@ -6,7 +6,7 @@ const CLIENT_ID = process.env.REACT_NATIVE_UNTAPPED_CLIENT_ID;
 const CLIENT_SECRET = process.env.REACT_NATIVE_UNTAPPED_CLIENT_SECRET;
 const PLACES_NEARBY_URL = process.env.REACT_NATIVE_PLACES_NEARBY_URL;
 const PLACES_KEY = process.env.REACT_NATIVE_PLACES_KEY;
-const PLACES_NEARBY_PARAMS: string = '&radius=2000&type=bar&keyword=pub&key=';
+const PLACES_NEARBY_PARAMS: string = '&radius=150&type=bar&keyword=pub&key=';
 const DB_LOCALHOST = process.env.REACT_NATIVE_LOCALHOST;
 
 export type Action = {

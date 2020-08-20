@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
-import MapView, { Polygon } from 'react-native-maps';
+import { View, Image } from 'react-native';
+import MapView, { Polygon, Marker } from 'react-native-maps';
 import { getCenterOfBounds } from 'geolib';
 import { Borough } from '../Models/Borough.model';
 import mapStyle from '../assets/mapStyle.js';
 
-const Map = ({ boroughs, boroughCounter }: any) => {
+const Map = ({ boroughs, boroughCounter, location, user }: any) => {
   const initialRegion = {
-    latitude: 51.509993,
+    latitude: 51.36, //51.509993,
     longitude: -0.104298,
     latitudeDelta: 0.8,
     longitudeDelta: 0.8,
@@ -23,6 +24,11 @@ const Map = ({ boroughs, boroughCounter }: any) => {
       latitude: latitude,
       longitude: longitude,
     });
+  };
+
+  const [showMarkers, setShowMarkers] = useState(false);
+  const toggleMarkers = () => {
+    setShowMarkers(!showMarkers);
   };
 
   const colors = [
@@ -44,7 +50,7 @@ const Map = ({ boroughs, boroughCounter }: any) => {
   return (
     <MapView
       region={region}
-      style={{ flex: 2, width: '100%', height: '50%' }}
+      style={{ flex: 3, width: '100%', height: '50%' }}
       customMapStyle={mapStyle}
     >
       {boroughs.map((borough: Borough) => {
@@ -54,15 +60,32 @@ const Map = ({ boroughs, boroughCounter }: any) => {
             coordinates={borough.boroughCoords}
             strokeWidth={2}
             strokeColor="whitesmoke"
-            //fillColor="#ffd400bb"
             fillColor={colors[color10([boroughCounter[borough.boroughName]])] || colors[0]}
             tappable={true}
-            onPress={() => handlePress(borough)}
-          >
-            {/* <Marker></Marker> */}
-          </Polygon>
+            onPress={() => {
+              handlePress(borough);
+              toggleMarkers();
+            }}
+          ></Polygon>
         );
       })}
+      {showMarkers &&
+        user.Locations.map((loc: object) => {
+          return (
+            <Marker
+              coordinate={{ latitude: +loc.latitude, longitude: +loc.longitude }}
+              title={loc.placeName}
+            >
+              <Image
+                source={require('../assets/pintMarker.png')}
+                style={{ height: 30, width: 30 }}
+              />
+            </Marker>
+          );
+        })}
+      <Marker coordinate={location} title="Your location">
+        <Image source={require('../assets/pinRed.png')} style={{ height: 30, width: 30 }} />
+      </Marker>
     </MapView>
   );
 };
