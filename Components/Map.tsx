@@ -33,7 +33,11 @@ const Map = ({ boroughs }: any) => {
   };
 
   return (
-    <MapView region={region} style={{ flex: 2, width: '100%', height: '50%' }}>
+    <MapView
+      region={region}
+      mapType={'mutedStandard'}
+      style={{ flex: 2, width: '100%', height: '50%' }}
+    >
       {boroughs.features.map((borough: Borough) => {
         return (
           <Polygon
@@ -45,7 +49,7 @@ const Map = ({ boroughs }: any) => {
               };
             })}
             strokeWidth={1}
-            fillColor="rgba(0, 220, 70, 0.6)"
+            fillColor="#202020aa"
             tappable={true}
             onPress={() => handlePress(borough)}
           >
