@@ -61,6 +61,7 @@ const styles = StyleSheet.create({
     height: 100,
     borderRadius: 50,
     backgroundColor: 'white',
+    elevation: 10,
   },
   navbarPic: {
     width: 50,

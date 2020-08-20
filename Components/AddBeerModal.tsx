@@ -1,5 +1,14 @@
 import React, { useState, useCallback } from 'react';
-import { Picker, TouchableOpacity, Text, View, StyleSheet, TextInput, Button } from 'react-native';
+import {
+  Picker,
+  TouchableOpacity,
+  Text,
+  View,
+  StyleSheet,
+  TextInput,
+  Button,
+  Image,
+} from 'react-native';
 import Modal from 'react-native-modal';
 import { fetchSearchBeers, postEntry } from '../redux/actions';
 import { connect } from 'react-redux';
@@ -128,8 +137,14 @@ function AddBeer({
                   style={beer.beerId === curBeer.beerId ? styles.beerHighlight : styles.beerItem}
                   onPress={() => setBeer(curBeer)}
                 >
-                  <Text style={styles.beerName}>{curBeer.beerName}</Text>
-                  <Text style={styles.beerBrewery}>{curBeer.breweryName}</Text>
+                  <Image
+                    source={{ uri: curBeer.beerLabel }}
+                    style={{ width: 30, height: 30, marginRight: 10, alignSelf: 'center' }}
+                  />
+                  <View>
+                    <Text style={styles.beerName}>{curBeer.beerName}</Text>
+                    <Text style={styles.beerBrewery}>{curBeer.breweryName}</Text>
+                  </View>
                 </TouchableOpacity>
               ))}
             </ScrollView>
@@ -170,7 +185,6 @@ export default connect(mapStateToProps, mapDispatch)(AddBeer);
 
 const styles = StyleSheet.create({
   addBeerModal: {
-    // flex: 1,
     justifyContent: 'flex-start',
     alignItems: 'center',
     backgroundColor: 'white',
@@ -188,7 +202,6 @@ const styles = StyleSheet.create({
   input: {
     borderColor: 'transparent',
     paddingHorizontal: 15,
-    // paddingVertical: 10,
     borderRadius: 10,
     textDecorationLine: 'none',
     fontSize: 18,
@@ -224,11 +237,14 @@ const styles = StyleSheet.create({
   },
   beerItem: {
     padding: 5,
+    flexDirection: 'row',
+    width: 250,
   },
   beerHighlight: {
     padding: 5,
     backgroundColor: 'gold',
     width: 250,
+    flexDirection: 'row',
   },
   beerName: {
     fontWeight: 'bold',

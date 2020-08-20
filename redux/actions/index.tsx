@@ -159,6 +159,7 @@ export function setUserInfo(user: object) {
 }
 
 export function getLocations(user: any) {
+  console.log('party hard in fetch locations');
   const { sub, name } = user;
   let counter = {};
   const fetchBody = { sub, name };
