@@ -10,6 +10,7 @@ export type State = {
   locationsNearby: [];
   user: {
     Locations: any[];
+    boroughCounter: {};
   };
   location: {
     latitude: number;
@@ -26,6 +27,7 @@ const initialState: State = {
   locationsNearby: [],
   user: {
     Locations: [],
+    boroughCounter: {},
   },
   location: {
     latitude: 51.507388,
@@ -81,6 +83,11 @@ export default function reducer(state: State = initialState, action: Action): St
       return {
         ...state,
         location: action.payload,
+      };
+    case 'GET_LOCATIONS':
+      return {
+        ...state,
+        user: { ...state.user, boroughCounter: action.payload },
       };
     default:
       return state;
