@@ -141,3 +141,9 @@ export function setUserInfo(user: object) {
     payload: user,
   };
 }
+
+export function getLocations(user: object) {
+  return (dispatch: any) => {
+    fetch(``);
+  };
+}
