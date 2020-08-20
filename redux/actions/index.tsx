@@ -8,6 +8,7 @@ const PLACES_NEARBY_URL = process.env.REACT_NATIVE_PLACES_NEARBY_URL;
 const PLACES_KEY = process.env.REACT_NATIVE_PLACES_KEY;
 const PLACES_NEARBY_PARAMS: string = '&radius=2000&type=bar&keyword=pub&key=';
 const DB_LOCALHOST = process.env.REACT_NATIVE_LOCALHOST;
+const DRUNK_API = process.env.REACT_NATIVE_UNTAPPED_DRUNK_URL;
 
 export type Action = {
   type: string;
@@ -115,7 +116,7 @@ export function fetchPlacesNearby(lat: number, lng: number) {
 
 export function postEntry(newEntry: object) {
   return (dispatch: any) => {
-    fetch(`http://localhost:3001/location`, {
+    fetch(`${DB_LOCALHOST}/location`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -142,7 +143,7 @@ export function getLocations(user: any) {
   let counter = {};
   const fetchBody = { sub, name };
   return (dispatch: any) => {
-    fetch(`http://localhost:3001/locations`, {
+    fetch(`${DB_LOCALHOST}/locations`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(fetchBody),
@@ -160,5 +161,31 @@ export function getLocations(user: any) {
         dispatch({ type: 'SET_USER_INFO', payload: { id: res.id, Locations: res.Locations } });
       })
       .catch(error => console.log('SORRY: ', error));
+  };
+}
+
+export function fetchDrunkBeers(id: number) {
+  return function (dispatch: any) {
+    fetch(`${DRUNK_API}/${id}?client_id=${CLIENT_ID}&client_secret=${CLIENT_SECRET}`)
+      .then(res => res.json())
+      .then(res => {
+        console.log('FETCH DRUNK', res);
+        const beer = res.response.beer;
+        return {
+          beerId: beer.bid,
+          haveHad: true,
+          beerName: beer.beer_name,
+          beerLabel: beer.beer_label,
+          beerIbu: beer.beer_ibu,
+          beerDescription: beer.beer_description,
+          beerStyle: beer.beer_style,
+          breweryName: beer.brewery.brewery_name,
+          breweryCountry: beer.brewery.country_name,
+          breweryLabel: beer.brewery.brewery_label,
+          breweryUrl: beer.brewery.contact.url,
+        };
+      })
+      .then(res => dispatch({ type: 'SET_DRUNK_RESULTS', payload: res }))
+      .catch(error => console.error('FETCH DRUNK BEERS SAYS NO: ', error));
   };
 }

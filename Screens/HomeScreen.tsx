@@ -69,7 +69,6 @@ const HomeScreen = ({
             navigation.navigate('Modal');
           }}
         >
-          {console.log('🎉🎉🎉🎉', user)}
           <Image source={require('../assets/menu.png')} style={styles.burgerMenu} />
         </TouchableOpacity>
         <View style={styles.currentView}>
