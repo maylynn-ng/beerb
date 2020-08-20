@@ -1,19 +1,11 @@
-import React, { useState } from 'react';
-import {
-  Picker,
-  TouchableOpacity,
-  Text,
-  View,
-  StyleSheet,
-  TextInput,
-  Alert,
-  Button,
-} from 'react-native';
+import React, { useState, useCallback } from 'react';
+import { Picker, TouchableOpacity, Text, View, StyleSheet, TextInput, Button } from 'react-native';
 import Modal from 'react-native-modal';
 import { fetchSearchBeers, postEntry } from '../redux/actions';
 import { connect } from 'react-redux';
 import { ScrollView } from 'react-native-gesture-handler';
 import { Beer } from '../Models/Beer.model';
+import _ from 'lodash';
 
 const initialBeer: Beer = {
   beerId: 0,
@@ -65,13 +57,21 @@ function AddBeer({
       boroughId: currentBorough.boroughId,
       longitude: lng,
       latitude: lat,
-      //UserId: 1, //CHANGE TO UserId from the state when the DB is linked
       UserId: user.id,
     };
 
     postNewEntry(newEntry);
-    Alert.alert('Operation success');
     toggleAddBeer();
+  };
+
+  const delayedQuery = useCallback(
+    _.debounce((tempSearchTerm: string) => setSearch(tempSearchTerm), 400),
+    []
+  );
+
+  const onChange = (input: string) => {
+    setTempSearchTerm(input);
+    delayedQuery(input);
   };
 
   return (
@@ -87,61 +87,49 @@ function AddBeer({
         <View style={styles.addBeerModal}>
           <View style={styles.lastBeer}>
             <Text style={styles.header}>Your location:</Text>
-            <Picker
-              selectedValue={location}
-              onValueChange={pub => setPub(pub)}
-              itemStyle={{
-                fontSize: 5,
-              }}
-            >
-              <Picker.Item label="Current Location" value={location} />
-              {pubLocations.map(pub => (
-                <Picker.Item
-                  key={pub.place_id}
-                  label={`${pub.name} - ${pub.vicinity}`}
-                  value={pub}
-                />
-              ))}
-            </Picker>
+            <View style={styles.input}>
+              <Picker
+                selectedValue={location}
+                onValueChange={pub => setPub(pub)}
+                itemStyle={{
+                  fontSize: 5,
+                }}
+              >
+                <Picker.Item label="Current Location" value={location} />
+                {pubLocations.map(pub => (
+                  <Picker.Item
+                    key={pub.place_id}
+                    label={`${pub.name} - ${pub.vicinity}`}
+                    value={pub}
+                  />
+                ))}
+              </Picker>
+            </View>
             <Text style={styles.header}>Your beer:</Text>
-            <Text style={styles.beerSelected}>{beer.beerName}</Text>
             <TextInput
-              style={styles.input}
+              style={styles.input2}
               placeholder={'Search Beer'}
               enablesReturnKeyAutomatically={true}
               autoCapitalize="words"
-              onChangeText={input => {
-                setTempSearchTerm(input);
-              }}
+              onChangeText={onChange}
               returnKeyLabel="done"
               value={tempSearchTerm}
             />
-            <Button
-              title="SEARCH"
-              onPress={() => {
-                setSearch(tempSearchTerm);
-                setTempSearchTerm('');
-              }}
-            />
-
             <ScrollView
               style={{
                 flex: 1,
-                height: 200,
-                borderWidth: 1,
-                borderColor: 'red',
                 overflow: 'hidden',
                 flexWrap: 'wrap',
               }}
             >
-              {beerSearchResults.map((beer: any) => (
+              {beerSearchResults.map((curBeer: any) => (
                 <TouchableOpacity
-                  key={beer.beerId}
-                  style={styles.beerItem}
-                  onPress={() => setBeer(beer)}
+                  key={curBeer.beerId}
+                  style={beer.beerId === curBeer.beerId ? styles.beerHighlight : styles.beerItem}
+                  onPress={() => setBeer(curBeer)}
                 >
-                  <Text style={styles.beerName}>{beer.beerName}</Text>
-                  <Text style={styles.beerBrewery}>{beer.breweryName}</Text>
+                  <Text style={styles.beerName}>{curBeer.beerName}</Text>
+                  <Text style={styles.beerBrewery}>{curBeer.breweryName}</Text>
                 </TouchableOpacity>
               ))}
             </ScrollView>
@@ -182,39 +170,49 @@ export default connect(mapStateToProps, mapDispatch)(AddBeer);
 
 const styles = StyleSheet.create({
   addBeerModal: {
-    flex: 1,
+    // flex: 1,
     justifyContent: 'flex-start',
     alignItems: 'center',
     backgroundColor: 'white',
     marginHorizontal: 30,
     marginVertical: 60,
-    padding: 10,
+    padding: 30,
     borderRadius: 15,
+    height: 570,
   },
   header: {
     fontSize: 20,
     fontWeight: 'bold',
-    marginBottom: 10,
+    marginVertical: 10,
   },
   input: {
-    height: 40,
     borderColor: 'transparent',
-    borderBottomWidth: 4,
-    paddingHorizontal: 8,
-    paddingVertical: 1,
-    borderRadius: 5,
-    borderBottomColor: 'black',
+    paddingHorizontal: 15,
+    // paddingVertical: 10,
+    borderRadius: 10,
     textDecorationLine: 'none',
     fontSize: 18,
     width: 250,
-    marginHorizontal: 10,
+    marginVertical: 10,
+    backgroundColor: '#eeeeee',
+  },
+  input2: {
+    borderColor: 'transparent',
+    paddingHorizontal: 15,
+    paddingVertical: 12,
+    borderRadius: 10,
+    textDecorationLine: 'none',
+    fontSize: 18,
+    width: 250,
+    marginVertical: 10,
+    backgroundColor: '#eeeeee',
   },
   create: {
     backgroundColor: '#37897c',
     width: 200,
     justifyContent: 'center',
     alignItems: 'center',
-    padding: 7,
+    padding: 12,
     borderRadius: 3,
   },
   createText: {
@@ -225,7 +223,12 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   beerItem: {
-    margin: 5,
+    padding: 5,
+  },
+  beerHighlight: {
+    padding: 5,
+    backgroundColor: '#fff000',
+    width: 250,
   },
   beerName: {
     fontWeight: 'bold',
