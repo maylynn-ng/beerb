@@ -10,6 +10,7 @@ const PLACES_NEARBY_URL = process.env.REACT_NATIVE_PLACES_NEARBY_URL;
 const PLACES_KEY = process.env.REACT_NATIVE_PLACES_KEY;
 const PLACES_NEARBY_PARAMS: string = '&radius=200&type=bar&keyword=pub&key=';
 const DB_LOCALHOST = process.env.EXPO_LOCALHOST;
+const DRUNK_API = process.env.REACT_NATIVE_UNTAPPED_DRUNK_URL;
 
 export type Action = {
   type: string;
@@ -166,7 +167,6 @@ export function setUserInfo(user: object) {
 }
 
 export function getLocations(user: any) {
-  console.log('party hard in fetch locations');
   const { sub, name } = user;
   let counter = {};
   const fetchBody = { sub, name };
@@ -192,5 +192,31 @@ export function getLocations(user: any) {
         ToastAndroid.show("Couldn't retreive your data 😢", ToastAndroid.SHORT);
         console.log('SORRY: ', error);
       });
+  };
+}
+
+export function fetchDrunkBeers(id: number) {
+  return function (dispatch: any) {
+    fetch(`${DRUNK_API}/${id}?client_id=${CLIENT_ID}&client_secret=${CLIENT_SECRET}`)
+      .then(res => res.json())
+      .then(res => {
+        console.log('FETCH DRUNK', res);
+        const beer = res.response.beer;
+        return {
+          beerId: beer.bid,
+          haveHad: true,
+          beerName: beer.beer_name,
+          beerLabel: beer.beer_label,
+          beerIbu: beer.beer_ibu,
+          beerDescription: beer.beer_description,
+          beerStyle: beer.beer_style,
+          breweryName: beer.brewery.brewery_name,
+          breweryCountry: beer.brewery.country_name,
+          breweryLabel: beer.brewery.brewery_label,
+          breweryUrl: beer.brewery.contact.url,
+        };
+      })
+      .then(res => dispatch({ type: 'SET_DRUNK_RESULTS', payload: res }))
+      .catch(error => console.error('FETCH DRUNK BEERS SAYS NO: ', error));
   };
 }

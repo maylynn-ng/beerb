@@ -84,9 +84,7 @@ const HomeScreen = ({
           {console.log('🎉🎉🎉🎉', user.sub)}
           <Image source={require('../assets/menu.png')} style={styles.burgerMenu} />
         </TouchableOpacity>
-        <Text style={[styles.currentBoroughName, { opacity: 0.6 }]}>
-          {currentBorough.boroughName}
-        </Text>
+        <Text style={{ opacity: 0.6, fontSize: 20 }}>{currentBorough.boroughName}</Text>
         <View style={styles.currentView}>
           <Text style={styles.currentBoroughName}>
             {Object.keys(user.boroughCounter).length}/33
@@ -166,15 +164,17 @@ const styles = StyleSheet.create({
     elevation: 22,
     justifyContent: 'center',
     alignItems: 'center',
+    paddingVertical: 12,
+    paddingHorizontal: 12,
   },
   lastBeerName: {
     fontSize: 25,
-    marginVertical: 7,
     fontWeight: 'bold',
+    textAlign: 'center',
   },
   lastBeerDate: {
     fontSize: 15,
-    marginVertical: 7,
+    marginTop: 5,
   },
   map: {
     width: '100%',

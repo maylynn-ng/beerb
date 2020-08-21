@@ -11,6 +11,7 @@ export type State = {
   user: {
     Locations: any[];
     boroughCounter: {};
+    drunkBeers: Beer[];
   };
   location: {
     latitude: number;
@@ -28,6 +29,7 @@ const initialState: State = {
   user: {
     Locations: [],
     boroughCounter: {},
+    drunkBeers: [],
   },
   location: {
     latitude: 51.507388,
@@ -100,6 +102,11 @@ export default function reducer(state: State = initialState, action: Action): St
       };
     case 'LOGOUT':
       return initialState;
+    case 'SET_DRUNK_RESULTS':
+      return {
+        ...state,
+        user: { ...state.user, drunkBeers: [...state.user.drunkBeers, action.payload] },
+      };
     default:
       return state;
   }

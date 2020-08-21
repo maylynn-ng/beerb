@@ -14,7 +14,13 @@ const BeerBadge = ({ beer }: any) => {
           setDisplayModal(true);
         }}
       >
-        <Image style={styles.image} source={{ uri: beer.beerLabel }} />
+        <View>
+          {beer.haveHad ? (
+            <Image style={styles.image} source={{ uri: beer.beerLabel }} />
+          ) : (
+            <Image style={styles.grayImage} source={{ uri: beer.beerLabel }} />
+          )}
+        </View>
       </TouchableOpacity>
       <Modal
         isVisible={displayModal}
@@ -34,8 +40,16 @@ const styles = StyleSheet.create({
     marginHorizontal: 10,
   },
   image: {
-    height: 100,
-    width: 100,
+    height: 80,
+    width: 80,
+  },
+  grayImage: {
+    height: 80,
+    width: 80,
+    opacity: 0.3,
+  },
+  badge: {
+    shadowColor: 'gray',
   },
 });
 
