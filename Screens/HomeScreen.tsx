@@ -81,6 +81,7 @@ const HomeScreen = ({
             navigation.navigate('Modal');
           }}
         >
+          {console.log(user.picture)}
           <Image source={require('../assets/menu.png')} style={styles.burgerMenu} />
         </TouchableOpacity>
         <Text style={{ opacity: 0.6, fontSize: 20 }}>{currentBorough.boroughName}</Text>
