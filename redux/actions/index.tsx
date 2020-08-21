@@ -83,7 +83,7 @@ export function fetchSearchBeers(searchTerm: string) {
               breweryUrl: beer.brewery.contact.url,
             };
           });
-          dispatch({ type: 'SET_SEARCH_BEER_RESULTS', payload: results.slice(0, 4) });
+          dispatch({ type: 'SET_SEARCH_BEER_RESULTS', payload: results });
         })
         .catch(error => console.error('FETCH SEARCH BEERS SAYS NO: ', error));
     }

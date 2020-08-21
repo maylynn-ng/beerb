@@ -58,15 +58,18 @@ function AddBeer({
     }
 
     const newEntry = {
-      beerName: beer.beerName,
-      beerId: beer.beerId,
-      placeName: pub.name || 'unknown pub',
-      placeId: pub.place_id || 'unknown pub',
-      boroughName: currentBorough.boroughName,
-      boroughId: currentBorough.boroughId,
-      longitude: lng,
-      latitude: lat,
-      UserId: user.id,
+      location: {
+        beerName: beer.beerName,
+        beerId: beer.beerId,
+        placeName: pub.name || 'unknown pub',
+        placeId: pub.place_id || 'unknown pub',
+        boroughName: currentBorough.boroughName,
+        boroughId: currentBorough.boroughId,
+        longitude: lng,
+        latitude: lat,
+        UserId: user.id,
+      },
+      beers: beerSearchResults,
     };
 
     postNewEntry(newEntry);
@@ -131,7 +134,7 @@ function AddBeer({
                 flexWrap: 'wrap',
               }}
             >
-              {beerSearchResults.map((curBeer: any) => (
+              {beerSearchResults.slice(0, 4).map((curBeer: any) => (
                 <TouchableOpacity
                   key={curBeer.beerId}
                   style={beer.beerId === curBeer.beerId ? styles.beerHighlight : styles.beerItem}
@@ -166,7 +169,7 @@ function AddBeer({
 function mapStateToProps(state: any) {
   return {
     searchTerm: state.searchTerm,
-    beerSearchResults: state.beerSearchResults,
+    beerSearchResults: state.user.beerSearchResults,
     pubLocations: state.locationsNearby,
     location: state.location,
     currentBorough: state.currentBorough,

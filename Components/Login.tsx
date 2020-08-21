@@ -72,6 +72,7 @@ const Login = ({ user, setUser }: any) => {
               borderRadius: 10,
               position: 'relative',
               top: -50,
+              elevation: 10,
             }}
             onPress={() => promptAsync({ useProxy })}
           >
