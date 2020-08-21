@@ -1,6 +1,7 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { SafeAreaView, View, Image, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
+import moment from 'moment';
 import * as Location from 'expo-location';
 import Map from '../Components/Map';
 import { isPointInPolygon } from 'geolib';
@@ -29,10 +30,9 @@ const HomeScreen = ({
   setPlacesNearby,
   setLocation,
   setLocations,
+  location,
   user,
 }: any) => {
-  //const [location, setLocation] = useState({});
-
   useEffect(() => {
     (async () => {
       let { status } = await Location.requestPermissionsAsync();
@@ -62,6 +62,16 @@ const HomeScreen = ({
     }
   }, [user.sub]);
 
+  useEffect(() => {
+    if (user.sub) {
+      user.Locations.length !== 0
+        ? setLastBeer(user.Locations[user.Locations.length - 1])
+        : setLastBeer({ beerName: 'get a beer', createdAt: new Date(), boroughName: 'you' });
+    }
+  }, [user.Locations]);
+
+  const [lastBeer, setLastBeer] = useState({});
+
   return (
     <SafeAreaView style={styles.homeScreen}>
       <View style={styles.topBar}>
@@ -74,11 +84,29 @@ const HomeScreen = ({
           {console.log('🎉🎉🎉🎉', user.sub)}
           <Image source={require('../assets/menu.png')} style={styles.burgerMenu} />
         </TouchableOpacity>
+        <Text style={[styles.currentBoroughName, { opacity: 0.6 }]}>
+          {currentBorough.boroughName}
+        </Text>
         <View style={styles.currentView}>
-          <Text>You're in {currentBorough.boroughName}</Text>
+          <Text style={styles.currentBoroughName}>
+            {Object.keys(user.boroughCounter).length}/33
+          </Text>
         </View>
       </View>
-      <Map boroughs={simpleArrayOfBoroughs} boroughCounter={user.boroughCounter} />
+      <Map
+        boroughs={simpleArrayOfBoroughs}
+        boroughCounter={user.boroughCounter}
+        location={location}
+        user={user}
+      />
+      <View style={styles.lastBeer}>
+        <Text style={styles.lastBeerName}>
+          {lastBeer.beerName} in {lastBeer.boroughName}
+        </Text>
+        <Text style={styles.lastBeerDate}>
+          {moment(lastBeer.createdAt).format('dddd, MMM Do YYYY')}
+        </Text>
+      </View>
       <Navbar navigation={navigation} />
     </SafeAreaView>
   );
@@ -89,8 +117,8 @@ function mapStateToProps(state: any) {
     currentBorough: state.currentBorough,
     searchTerm: state.searchTerm,
     beerSearchResults: state.beerSearchResults,
-    simpleBoroughs: state.boroughs,
     user: state.user,
+    location: state.location,
   };
 }
 
@@ -126,7 +154,27 @@ const styles = StyleSheet.create({
   },
   lastBeer: {
     flex: 1,
-    height: '50%',
+    backgroundColor: '#ffd400',
+    borderWidth: 2,
+    width: 300,
+    borderColor: 'whitesmoke',
+    borderRadius: 4,
+    position: 'absolute',
+    bottom: 100,
+    left: '50%',
+    marginLeft: -150,
+    elevation: 22,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  lastBeerName: {
+    fontSize: 25,
+    marginVertical: 7,
+    fontWeight: 'bold',
+  },
+  lastBeerDate: {
+    fontSize: 15,
+    marginVertical: 7,
   },
   map: {
     width: '100%',
@@ -145,6 +193,10 @@ const styles = StyleSheet.create({
   currentView: {
     width: 'auto',
     height: 25,
-    opacity: 0.7,
+    justifyContent: 'center',
+  },
+  currentBoroughName: {
+    fontSize: 25,
+    marginLeft: 10,
   },
 });
