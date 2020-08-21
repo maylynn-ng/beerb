@@ -79,9 +79,10 @@ const Map = ({ boroughs, boroughCounter, location, user }: any) => {
           );
         })}
         {showMarkers &&
-          user.Locations.map((loc: object) => {
+          user.Locations.map((loc: object, index: number) => {
             return (
               <Marker
+                key={index}
                 coordinate={{ latitude: +loc.latitude, longitude: +loc.longitude }}
                 title={loc.placeName}
               >

@@ -98,6 +98,9 @@ const HomeScreen = ({
         user={user}
       />
       <View style={styles.lastBeer}>
+        {user.Locations.lengtgh !== 0 ? (
+          <Text style={{ opacity: 0.6 }}>Your last beer was a :</Text>
+        ) : null}
         <Text style={styles.lastBeerName}>
           {lastBeer.beerName} in {lastBeer.boroughName}
         </Text>
