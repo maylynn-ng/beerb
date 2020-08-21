@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Text, View, StyleSheet, SafeAreaView } from 'react-native';
-import Loading from '../Components/Loading';
+// import Loading from '../Components/Loading';
 import { connect } from 'react-redux';
 import { StatusBar } from 'expo-status-bar';
 
