@@ -59,9 +59,16 @@ const HomeScreen = ({
   useEffect(() => {
     if (user.sub) {
       setLocations(user);
-      setLastBeer(user.Locations[user.Locations.length - 1]);
     }
   }, [user.sub]);
+
+  useEffect(() => {
+    if (user.sub) {
+      user.Locations.length !== 0
+        ? setLastBeer(user.Locations[user.Locations.length - 1])
+        : setLastBeer({ beerName: 'get a beer', createdAt: new Date(), boroughName: 'you' });
+    }
+  }, [user.Locations]);
 
   const [lastBeer, setLastBeer] = useState({});
 

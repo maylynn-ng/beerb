@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Image } from 'react-native';
+import { View, Image, Switch, StyleSheet } from 'react-native';
 import MapView, { Polygon, Marker } from 'react-native-maps';
 import { getCenterOfBounds } from 'geolib';
 import { Borough } from '../Models/Borough.model';
@@ -48,46 +48,65 @@ const Map = ({ boroughs, boroughCounter, location, user }: any) => {
   const color10 = (counter: number): number => (counter >= 10 ? 10 : counter);
 
   return (
-    <MapView
-      region={region}
-      style={{ flex: 3, width: '100%', height: '50%' }}
-      customMapStyle={mapStyle}
-    >
-      {boroughs.map((borough: Borough) => {
-        return (
-          <Polygon
-            key={borough.boroughId}
-            coordinates={borough.boroughCoords}
-            strokeWidth={2}
-            strokeColor="whitesmoke"
-            fillColor={colors[color10([boroughCounter[borough.boroughName]])] || colors[0]}
-            tappable={true}
-            onPress={() => {
-              handlePress(borough);
-              toggleMarkers();
-            }}
-          ></Polygon>
-        );
-      })}
-      {showMarkers &&
-        user.Locations.map((loc: object) => {
+    <>
+      <View style={styles.switch}>
+        <Switch
+          trackColor={{ false: '#615e5caa', true: '#ffd400bb' }}
+          thumbColor={showMarkers ? 'white' : 'white'}
+          onValueChange={toggleMarkers}
+          value={showMarkers}
+        />
+      </View>
+      <MapView
+        region={region}
+        style={{ flex: 3, width: '100%', height: '50%' }}
+        customMapStyle={mapStyle}
+        onPress={() => setRegion(initialRegion)}
+      >
+        {boroughs.map((borough: Borough) => {
           return (
-            <Marker
-              coordinate={{ latitude: +loc.latitude, longitude: +loc.longitude }}
-              title={loc.placeName}
-            >
-              <Image
-                source={require('../assets/pintMarker.png')}
-                style={{ height: 30, width: 30 }}
-              />
-            </Marker>
+            <Polygon
+              key={borough.boroughId}
+              coordinates={borough.boroughCoords}
+              strokeWidth={2}
+              strokeColor="whitesmoke"
+              fillColor={colors[color10([boroughCounter[borough.boroughName]])] || colors[0]}
+              tappable={true}
+              onPress={() => {
+                handlePress(borough);
+              }}
+            ></Polygon>
           );
         })}
-      <Marker coordinate={location} title="Your location">
-        <Image source={require('../assets/pinRed.png')} style={{ height: 30, width: 30 }} />
-      </Marker>
-    </MapView>
+        {showMarkers &&
+          user.Locations.map((loc: object) => {
+            return (
+              <Marker
+                coordinate={{ latitude: +loc.latitude, longitude: +loc.longitude }}
+                title={loc.placeName}
+              >
+                <Image
+                  source={require('../assets/pintMarker.png')}
+                  style={{ height: 30, width: 30 }}
+                />
+              </Marker>
+            );
+          })}
+        <Marker coordinate={location} title="Your location">
+          <Image source={require('../assets/pinRed.png')} style={{ height: 30, width: 30 }} />
+        </Marker>
+      </MapView>
+    </>
   );
 };
 
 export default Map;
+
+const styles = StyleSheet.create({
+  switch: {
+    position: 'absolute',
+    bottom: '88%',
+    left: '85%',
+    zIndex: 3,
+  },
+});
