@@ -51,6 +51,13 @@ export function setLocationsNearby(locations: []) {
   };
 }
 
+export function logoutUser(user: any) {
+  return {
+    type: 'LOGOUT',
+    payload: user,
+  };
+}
+
 export function fetchSearchBeers(searchTerm: string) {
   return function (dispatch: any) {
     dispatch(setSearchTerm(searchTerm));
@@ -142,7 +149,7 @@ export function postEntry(newEntry: object) {
       .then(res => res.json())
       .then(data => {
         dispatch({ type: 'ADD_ENTRY', payload: data });
-        ToastAndroid.show('Beer Stored', ToastAndroid.SHORT);
+        ToastAndroid.show('Cheers!! 🍺', ToastAndroid.SHORT);
       })
       .catch(err => {
         ToastAndroid.show('Something went wrong...', ToastAndroid.SHORT);

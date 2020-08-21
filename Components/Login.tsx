@@ -61,7 +61,7 @@ const Login = ({ user, setUser }: any) => {
 
   return (
     <View style={{ width: '100%', height: '100%' }}>
-      {Object.keys(user).length === 0 ? (
+      {!user.sub ? (
         <View>
           <Image source={require('../assets/logo.png')} style={{ height: 200, width: 200 }} />
           <Button title="Login" onPress={() => promptAsync({ useProxy })} />

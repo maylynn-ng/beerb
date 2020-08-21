@@ -98,6 +98,8 @@ export default function reducer(state: State = initialState, action: Action): St
         ...state,
         user: { ...state.user, boroughCounter: action.payload },
       };
+    case 'LOGOUT':
+      return initialState;
     default:
       return state;
   }
