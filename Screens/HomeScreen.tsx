@@ -68,6 +68,7 @@ const HomeScreen = ({
   useEffect(() => {
     if (user.sub) {
       setLocations(user);
+      // setLoading(false);
     }
   }, [user.sub]);
 
@@ -79,9 +80,9 @@ const HomeScreen = ({
     }
   }, [user.Locations]);
 
-  useEffect(() => {
-    if (user.Locations.length !== 0 && user.sub) setLoading(false);
-  }, [user.Locations, user.sub]);
+  // useEffect(() => {
+  //   if (user.Locations.length !== 0 && user.sub) setLoading(false);
+  // }, [user.Locations, user.sub]);
 
   return (
     <SafeAreaView style={styles.homeScreen}>

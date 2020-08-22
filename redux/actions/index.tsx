@@ -194,10 +194,12 @@ export function getLocations(user: any) {
         });
         dispatch({ type: 'GET_LOCATIONS', payload: counter });
         dispatch({ type: 'SET_USER_INFO', payload: { id: res.id, Locations: res.Locations } });
+        dispatch(changeLoading(false));
       })
       .catch(error => {
         ToastAndroid.show("Couldn't retreive your data 😢", ToastAndroid.SHORT);
         console.log('SORRY: ', error);
+        dispatch(changeLoading(false));
       });
   };
 }
