@@ -1,11 +1,17 @@
 import React, { useState } from 'react';
 import { Dimensions, View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import AddBeer from './AddBeerModal';
+import ShortProfile from './ShortProfile';
 
-const Navbar = ({ navigation, location }: any) => {
+const Navbar = ({ navigation, location, lastBeer, takeScreenShot }: any) => {
   const [isShownAddBeer, setIsShownAddBeer] = useState(false);
   const toggleAddBeer = () => {
     setIsShownAddBeer(!isShownAddBeer);
+  };
+
+  const [isShownShortProfile, setIsShownShortProfile] = useState(false);
+  const toggleShortProfile = () => {
+    setIsShownShortProfile(!isShownShortProfile);
   };
 
   return (
@@ -13,11 +19,17 @@ const Navbar = ({ navigation, location }: any) => {
       <TouchableOpacity
         style={styles.navbarBtn}
         onPress={() => {
-          navigation.navigate('Profile');
+          toggleShortProfile();
         }}
       >
         <Image source={require('../assets/user.png')} style={styles.navbarPic} />
       </TouchableOpacity>
+      <ShortProfile
+        isShownShortProfile={isShownShortProfile}
+        toggleShortProfile={toggleShortProfile}
+        lastBeer={lastBeer}
+        takeScreenShot={takeScreenShot}
+      />
       <TouchableOpacity
         style={styles.addBtn}
         onPress={() => {

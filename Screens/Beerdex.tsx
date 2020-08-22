@@ -28,7 +28,7 @@ function Beerdex({ setTrendingBeers, trendingBeersList, user, setDrunkBeers }: a
     }
   }, []);
 
-  console.log('😍 Beerdex.tsx, line 13 hi!!!!!: ', beerList);
+  //console.log('😍 Beerdex.tsx, line 13 hi!!!!!: ', beerList);
 
   return (
     <SafeAreaView>

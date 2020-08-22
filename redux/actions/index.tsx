@@ -9,7 +9,7 @@ const CLIENT_SECRET = process.env.REACT_NATIVE_UNTAPPED_CLIENT_SECRET;
 const PLACES_NEARBY_URL = process.env.REACT_NATIVE_PLACES_NEARBY_URL;
 const PLACES_KEY = process.env.REACT_NATIVE_PLACES_KEY;
 const PLACES_NEARBY_PARAMS: string = '&radius=200&type=bar&keyword=pub&key=';
-const DB_LOCALHOST = process.env.EXPO_LOCALHOST;
+const DB_LOCALHOST = process.env.REACT_NATIVE_LOCALHOST;
 const DRUNK_API = process.env.REACT_NATIVE_UNTAPPED_DRUNK_URL;
 
 export type Action = {
@@ -56,6 +56,13 @@ export function logoutUser(user: any) {
   return {
     type: 'LOGOUT',
     payload: user,
+  };
+}
+
+export function storeBeerFreqs(freqs: [[]]) {
+  return {
+    type: 'STORE_BEER_FREQS',
+    payload: freqs,
   };
 }
 
@@ -200,7 +207,7 @@ export function fetchDrunkBeers(id: number) {
     fetch(`${DRUNK_API}/${id}?client_id=${CLIENT_ID}&client_secret=${CLIENT_SECRET}`)
       .then(res => res.json())
       .then(res => {
-        console.log('FETCH DRUNK', res);
+        //console.log('FETCH DRUNK', res);
         const beer = res.response.beer;
         return {
           beerId: beer.bid,

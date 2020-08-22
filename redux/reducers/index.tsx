@@ -12,6 +12,7 @@ export type State = {
     Locations: any[];
     boroughCounter: {};
     drunkBeers: Beer[];
+    beerFreqs: [[]];
   };
   location: {
     latitude: number;
@@ -30,6 +31,7 @@ const initialState: State = {
     Locations: [],
     boroughCounter: {},
     drunkBeers: [],
+    beerFreqs: [[]],
   },
   location: {
     latitude: 51.507388,
@@ -109,6 +111,11 @@ export default function reducer(state: State = initialState, action: Action): St
       return {
         ...state,
         user: { ...state.user, drunkBeers: [...state.user.drunkBeers, action.payload] },
+      };
+    case 'STORE_BEER_FREQS':
+      return {
+        ...state,
+        user: { ...state.user, beerFreqs: action.payload },
       };
     default:
       return state;
