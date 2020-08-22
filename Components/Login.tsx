@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { View, Image, Button, Platform, Alert } from 'react-native';
+import { View, Image, Text, TouchableOpacity, Platform, Alert } from 'react-native';
 import { connect } from 'react-redux';
 
 import { setUserInfo } from '../redux/actions';
@@ -61,10 +61,23 @@ const Login = ({ user, setUser }: any) => {
 
   return (
     <View style={{ width: '100%', height: '100%' }}>
-      {Object.keys(user).length === 0 ? (
-        <View>
-          <Image source={require('../assets/logo.png')} style={{ height: 200, width: 200 }} />
-          <Button title="Login" onPress={() => promptAsync({ useProxy })} />
+      {!user.sub ? (
+        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+          <Image source={require('../assets/logo.png')} style={{ height: 250, width: 250 }} />
+          <TouchableOpacity
+            style={{
+              backgroundColor: 'gold',
+              paddingHorizontal: 50,
+              paddingVertical: 10,
+              borderRadius: 10,
+              position: 'relative',
+              top: -50,
+              elevation: 10,
+            }}
+            onPress={() => promptAsync({ useProxy })}
+          >
+            <Text style={{ fontWeight: '700', fontSize: 22 }}>Hops in!</Text>
+          </TouchableOpacity>
         </View>
       ) : (
         <Navigation />

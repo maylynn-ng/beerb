@@ -2,12 +2,15 @@ import React from 'react';
 import { Text, StyleSheet, View, TouchableOpacity, Image } from 'react-native';
 import { connect } from 'react-redux';
 import AsyncStorage from '@react-native-community/async-storage';
-import { setUserInfo } from '../redux/actions';
+import { logoutUser } from '../redux/actions';
 
-function Menu({ navigation, setUser }: any) {
+function Menu({ navigation, logout }: any) {
   const logOut = () => {
     AsyncStorage.setItem('@session_token', '').then(data => {
-      setUser({});
+      logout({
+        Locations: [],
+        boroughCounter: {},
+      });
     });
   };
 
@@ -52,7 +55,7 @@ function Menu({ navigation, setUser }: any) {
 
 function mapDispatch(dispatch: any) {
   return {
-    setUser: (user: object) => dispatch(setUserInfo(user)),
+    logout: (user: object) => dispatch(logoutUser(user)),
   };
 }
 

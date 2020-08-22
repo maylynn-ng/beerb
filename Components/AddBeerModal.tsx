@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import {
   Picker,
   TouchableOpacity,
@@ -6,14 +6,15 @@ import {
   View,
   StyleSheet,
   TextInput,
-  Alert,
-  Button,
+  ToastAndroid,
+  Image,
 } from 'react-native';
 import Modal from 'react-native-modal';
 import { fetchSearchBeers, postEntry } from '../redux/actions';
 import { connect } from 'react-redux';
 import { ScrollView } from 'react-native-gesture-handler';
 import { Beer } from '../Models/Beer.model';
+import _ from 'lodash';
 
 const initialBeer: Beer = {
   beerId: 0,
@@ -47,31 +48,45 @@ function AddBeer({
   const submitBeerNLoc = () => {
     let lat: number = 0;
     let lng: number = 0;
-
-    if (Object.keys(pub).length !== 0) {
-      lat = pub.geometry.location.lat;
-      lng = pub.geometry.location.lng;
+    if (beer.beerId === 0) {
+      ToastAndroid.show('Select your beer!', ToastAndroid.SHORT);
     } else {
-      lat = location.latitude;
-      lng = location.longitude;
+      if (Object.keys(pub).length !== 0) {
+        lat = pub.geometry.location.lat;
+        lng = pub.geometry.location.lng;
+      } else {
+        lat = location.latitude;
+        lng = location.longitude;
+      }
+
+      const newEntry = {
+        location: {
+          beerName: beer.beerName,
+          beerId: beer.beerId,
+          placeName: pub.name || 'unknown pub',
+          placeId: pub.place_id || 'unknown pub',
+          boroughName: currentBorough.boroughName,
+          boroughId: currentBorough.boroughId,
+          longitude: lng,
+          latitude: lat,
+          UserId: user.id,
+        },
+        beers: beerSearchResults,
+      };
+
+      postNewEntry(newEntry);
+      toggleAddBeer();
     }
+  };
 
-    const newEntry = {
-      beerName: beer.beerName,
-      beerId: beer.beerId,
-      placeName: pub.name || 'unknown pub',
-      placeId: pub.place_id || 'unknown pub',
-      boroughName: currentBorough.boroughName,
-      boroughId: currentBorough.boroughId,
-      longitude: lng,
-      latitude: lat,
-      //UserId: 1, //CHANGE TO UserId from the state when the DB is linked
-      UserId: user.id,
-    };
+  const delayedQuery = useCallback(
+    _.debounce((tempSearchTerm: string) => setSearch(tempSearchTerm), 400),
+    []
+  );
 
-    postNewEntry(newEntry);
-    Alert.alert('Operation success');
-    toggleAddBeer();
+  const onChange = (input: string) => {
+    setTempSearchTerm(input);
+    delayedQuery(input);
   };
 
   return (
@@ -87,61 +102,55 @@ function AddBeer({
         <View style={styles.addBeerModal}>
           <View style={styles.lastBeer}>
             <Text style={styles.header}>Your location:</Text>
-            <Picker
-              selectedValue={location}
-              onValueChange={pub => setPub(pub)}
-              itemStyle={{
-                fontSize: 5,
-              }}
-            >
-              <Picker.Item label="Current Location" value={location} />
-              {pubLocations.map(pub => (
-                <Picker.Item
-                  key={pub.place_id}
-                  label={`${pub.name} - ${pub.vicinity}`}
-                  value={pub}
-                />
-              ))}
-            </Picker>
+            <View style={styles.input}>
+              <Picker
+                selectedValue={location}
+                onValueChange={pub => setPub(pub)}
+                itemStyle={{
+                  fontSize: 5,
+                }}
+              >
+                <Picker.Item label="Current Location" value={location} />
+                {pubLocations.map(pub => (
+                  <Picker.Item
+                    key={pub.place_id}
+                    label={`${pub.name} - ${pub.vicinity}`}
+                    value={pub}
+                  />
+                ))}
+              </Picker>
+            </View>
             <Text style={styles.header}>Your beer:</Text>
-            <Text style={styles.beerSelected}>{beer.beerName}</Text>
             <TextInput
-              style={styles.input}
+              style={styles.input2}
               placeholder={'Search Beer'}
               enablesReturnKeyAutomatically={true}
               autoCapitalize="words"
-              onChangeText={input => {
-                setTempSearchTerm(input);
-              }}
+              onChangeText={onChange}
               returnKeyLabel="done"
               value={tempSearchTerm}
             />
-            <Button
-              title="SEARCH"
-              onPress={() => {
-                setSearch(tempSearchTerm);
-                setTempSearchTerm('');
-              }}
-            />
-
             <ScrollView
               style={{
                 flex: 1,
-                height: 200,
-                borderWidth: 1,
-                borderColor: 'red',
                 overflow: 'hidden',
                 flexWrap: 'wrap',
               }}
             >
-              {beerSearchResults.map((beer: any) => (
+              {beerSearchResults.slice(0, 4).map((curBeer: any) => (
                 <TouchableOpacity
-                  key={beer.beerId}
-                  style={styles.beerItem}
-                  onPress={() => setBeer(beer)}
+                  key={curBeer.beerId}
+                  style={beer.beerId === curBeer.beerId ? styles.beerHighlight : styles.beerItem}
+                  onPress={() => setBeer(curBeer)}
                 >
-                  <Text style={styles.beerName}>{beer.beerName}</Text>
-                  <Text style={styles.beerBrewery}>{beer.breweryName}</Text>
+                  <Image
+                    source={{ uri: curBeer.beerLabel }}
+                    style={{ width: 30, height: 30, marginRight: 10, alignSelf: 'center' }}
+                  />
+                  <View>
+                    <Text style={styles.beerName}>{curBeer.beerName}</Text>
+                    <Text style={styles.beerBrewery}>{curBeer.breweryName}</Text>
+                  </View>
                 </TouchableOpacity>
               ))}
             </ScrollView>
@@ -163,7 +172,7 @@ function AddBeer({
 function mapStateToProps(state: any) {
   return {
     searchTerm: state.searchTerm,
-    beerSearchResults: state.beerSearchResults,
+    beerSearchResults: state.user.beerSearchResults,
     pubLocations: state.locationsNearby,
     location: state.location,
     currentBorough: state.currentBorough,
@@ -182,39 +191,47 @@ export default connect(mapStateToProps, mapDispatch)(AddBeer);
 
 const styles = StyleSheet.create({
   addBeerModal: {
-    flex: 1,
     justifyContent: 'flex-start',
     alignItems: 'center',
     backgroundColor: 'white',
     marginHorizontal: 30,
     marginVertical: 60,
-    padding: 10,
+    padding: 30,
     borderRadius: 15,
+    height: 570,
   },
   header: {
     fontSize: 20,
     fontWeight: 'bold',
-    marginBottom: 10,
+    marginVertical: 10,
   },
   input: {
-    height: 40,
     borderColor: 'transparent',
-    borderBottomWidth: 4,
-    paddingHorizontal: 8,
-    paddingVertical: 1,
-    borderRadius: 5,
-    borderBottomColor: 'black',
+    paddingHorizontal: 15,
+    borderRadius: 10,
     textDecorationLine: 'none',
     fontSize: 18,
     width: 250,
-    marginHorizontal: 10,
+    marginVertical: 10,
+    backgroundColor: '#eeeeee',
+  },
+  input2: {
+    borderColor: 'transparent',
+    paddingHorizontal: 15,
+    paddingVertical: 12,
+    borderRadius: 10,
+    textDecorationLine: 'none',
+    fontSize: 18,
+    width: 250,
+    marginVertical: 10,
+    backgroundColor: '#eeeeee',
   },
   create: {
     backgroundColor: '#37897c',
     width: 200,
     justifyContent: 'center',
     alignItems: 'center',
-    padding: 7,
+    padding: 12,
     borderRadius: 3,
   },
   createText: {
@@ -225,7 +242,15 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   beerItem: {
-    margin: 5,
+    padding: 5,
+    flexDirection: 'row',
+    width: 250,
+  },
+  beerHighlight: {
+    padding: 5,
+    backgroundColor: 'gold',
+    width: 250,
+    flexDirection: 'row',
   },
   beerName: {
     fontWeight: 'bold',
