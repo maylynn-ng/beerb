@@ -7,7 +7,13 @@ import Map from '../Components/Map';
 import { isPointInPolygon } from 'geolib';
 import Navbar from '../Components/Navbar';
 import boroughs from '../assets/london_sport.json';
-import { storeBorough, fetchPlacesNearby, storeLocation, getLocations } from '../redux/actions';
+import {
+  storeBorough,
+  fetchPlacesNearby,
+  storeLocation,
+  getLocations,
+  changeLoading,
+} from '../redux/actions';
 
 const simpleArrayOfBoroughs = boroughs.features.map(borough => {
   return {
@@ -25,15 +31,18 @@ const simpleArrayOfBoroughs = boroughs.features.map(borough => {
 const HomeScreen = ({
   currentBorough,
   navigation,
-  simpleBoroughs,
   setBorough,
   setPlacesNearby,
   setLocation,
   setLocations,
   location,
   user,
+  setLoading,
 }: any) => {
+  const [lastBeer, setLastBeer] = useState({});
+
   useEffect(() => {
+    setLoading(true);
     (async () => {
       let { status } = await Location.requestPermissionsAsync();
       if (status !== 'granted') {
@@ -70,7 +79,10 @@ const HomeScreen = ({
     }
   }, [user.Locations]);
 
-  const [lastBeer, setLastBeer] = useState({});
+  useEffect(() => {
+    console.log(user.Locations.length, user.sub);
+    if (user.Locations.length !== 0 && user.sub) setLoading(false);
+  }, [user.Locations, user.sub]);
 
   return (
     <SafeAreaView style={styles.homeScreen}>
@@ -81,7 +93,6 @@ const HomeScreen = ({
             navigation.navigate('Modal');
           }}
         >
-          {console.log('🎉🎉🎉🎉', user.picture)}
           <Image source={require('../assets/menu.png')} style={styles.burgerMenu} />
         </TouchableOpacity>
         <Text style={{ opacity: 0.6, fontSize: 20 }}>{currentBorough.boroughName}</Text>
@@ -125,10 +136,12 @@ function mapStateToProps(state: any) {
 
 function mapDispatch(dispatch: any) {
   return {
-    setLocation: (location: object) => dispatch(storeLocation(location)),
+    setLocation: (location: { latitude: number; longitude: number }) =>
+      dispatch(storeLocation(location)),
     setBorough: (name: string) => dispatch(storeBorough(name)),
     setPlacesNearby: (lat: number, lng: number) => dispatch(fetchPlacesNearby(lat, lng)),
     setLocations: (user: any) => dispatch(getLocations(user)),
+    setLoading: (status: boolean) => dispatch(changeLoading(status)),
   };
 }
 

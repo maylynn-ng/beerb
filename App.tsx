@@ -7,6 +7,7 @@ import { StyleSheet, SafeAreaView } from 'react-native';
 import reducer from './redux/reducers';
 import ReduxThunk from 'redux-thunk';
 import Login from './Components/Login';
+import Loading from './Components/Loading';
 
 const store = createStore(reducer, applyMiddleware(ReduxThunk));
 

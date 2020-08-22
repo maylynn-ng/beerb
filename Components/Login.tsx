@@ -65,9 +65,7 @@ const Login = ({ user, setUser, isLoading, setLoading }: any) => {
 
   return (
     <View style={{ width: '100%', height: '100%' }}>
-      {isLoading ? (
-        <Loading />
-      ) : !user.sub ? (
+      {!user.sub ? (
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
           <Image source={require('../assets/logo.png')} style={{ height: 250, width: 250 }} />
           <TouchableOpacity
@@ -90,6 +88,7 @@ const Login = ({ user, setUser, isLoading, setLoading }: any) => {
       ) : (
         <Navigation />
       )}
+      {isLoading ? <Loading /> : null}
     </View>
   );
 };

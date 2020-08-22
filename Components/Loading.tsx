@@ -1,5 +1,4 @@
 import React from 'react';
-
 import { View, Dimensions } from 'react-native';
 import { Video } from 'expo-av';
 
@@ -7,11 +6,14 @@ const Loading = () => {
   return (
     <View
       style={{
+        position: 'absolute',
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
         height: Dimensions.get('window').height,
         width: Dimensions.get('screen').width,
+        zIndex: 5,
+        backgroundColor: 'white',
       }}
     >
       {console.log('animating...')}
