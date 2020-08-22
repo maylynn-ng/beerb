@@ -2,18 +2,19 @@ import React, { useEffect } from 'react';
 import { View, Image, Text, TouchableOpacity, Platform, Alert } from 'react-native';
 import { connect } from 'react-redux';
 
-import { setUserInfo } from '../redux/actions';
+import { setUserInfo, changeLoading } from '../redux/actions';
 import * as AuthSession from 'expo-auth-session';
 import jwtDecode from 'jwt-decode';
 import AsyncStorage from '@react-native-community/async-storage';
 import Navigation from '../Components/Navigation';
+import Loading from './Loading';
 
 const useProxy = Platform.select({ web: false, default: true });
 const redirectUri = AuthSession.makeRedirectUri({ useProxy });
 const auth0ClientId: any = process.env.REACT_NATIVE_AUTH0_CLIENT_ID;
 const authorizationEndpoint: any = process.env.REACT_NATIVE_AUTH_ENDPOINT;
 
-const Login = ({ user, setUser }: any) => {
+const Login = ({ user, setUser, isLoading, setLoading }: any) => {
   const [request, result, promptAsync] = AuthSession.useAuthRequest(
     {
       redirectUri,
@@ -28,12 +29,14 @@ const Login = ({ user, setUser }: any) => {
   );
 
   useEffect(() => {
+    setLoading(true);
     try {
       AsyncStorage.getItem('@session_token').then(value => {
         if (value) {
           setUser(JSON.parse(value));
         }
       });
+      setLoading(false);
     } catch (error) {
       console.info('error while fetching session token');
       setUser({});
@@ -57,11 +60,14 @@ const Login = ({ user, setUser }: any) => {
         AsyncStorage.setItem('@session_token', JSON.stringify(decoded));
       }
     }
+    setLoading(false);
   }, [result]);
 
   return (
     <View style={{ width: '100%', height: '100%' }}>
-      {!user.sub ? (
+      {isLoading ? (
+        <Loading />
+      ) : !user.sub ? (
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
           <Image source={require('../assets/logo.png')} style={{ height: 250, width: 250 }} />
           <TouchableOpacity
@@ -73,7 +79,10 @@ const Login = ({ user, setUser }: any) => {
               position: 'relative',
               top: -50,
             }}
-            onPress={() => promptAsync({ useProxy })}
+            onPress={() => {
+              setLoading(true);
+              promptAsync({ useProxy });
+            }}
           >
             <Text style={{ fontWeight: '700', fontSize: 22 }}>Hops in!</Text>
           </TouchableOpacity>
@@ -88,12 +97,14 @@ const Login = ({ user, setUser }: any) => {
 function mapStateToProps(state: any) {
   return {
     user: state.user,
+    isLoading: state.isLoading,
   };
 }
 
 function mapDispatch(dispatch: any) {
   return {
     setUser: (user: object) => dispatch(setUserInfo(user)),
+    setLoading: (status: boolean) => dispatch(changeLoading(status)),
   };
 }
 

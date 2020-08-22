@@ -2,38 +2,40 @@ import { Action } from '../actions';
 import { Beer, TrendingBeer } from '../../Models/Beer.model';
 
 export type State = {
-  boroughs: [];
   beerSearchResults: Beer[];
+  boroughs: [];
   currentBorough: string;
-  searchTerm: string;
-  trendingBeers: TrendingBeer[];
-  locationsNearby: [];
-  user: {
-    Locations: any[];
-    boroughCounter: {};
-    drunkBeers: Beer[];
-  };
   location: {
     latitude: number;
     longitude: number;
   };
+  isLoading: boolean;
+  locationsNearby: [];
+  searchTerm: string;
+  trendingBeers: TrendingBeer[];
+  user: {
+    boroughCounter: {};
+    drunkBeers: Beer[];
+    Locations: any[];
+  };
 };
 
 const initialState: State = {
-  boroughs: [],
   beerSearchResults: [],
+  boroughs: [],
   currentBorough: '',
-  searchTerm: '',
-  trendingBeers: [],
-  locationsNearby: [],
-  user: {
-    Locations: [],
-    boroughCounter: {},
-    drunkBeers: [],
-  },
   location: {
     latitude: 51.507388,
     longitude: -0.12789,
+  },
+  isLoading: false,
+  locationsNearby: [],
+  searchTerm: '',
+  trendingBeers: [],
+  user: {
+    boroughCounter: {},
+    drunkBeers: [],
+    Locations: [],
   },
 };
 
@@ -106,6 +108,11 @@ export default function reducer(state: State = initialState, action: Action): St
       return {
         ...state,
         user: { ...state.user, drunkBeers: [...state.user.drunkBeers, action.payload] },
+      };
+    case 'SET_LOADING':
+      return {
+        ...state,
+        isLoading: action.payload,
       };
     default:
       return state;

@@ -17,14 +17,14 @@ export type Action = {
   payload: any;
 };
 
-export function storeLocation(location) {
+export function storeLocation(location: { latitude: number; longitude: number }) {
   return {
     type: 'STORE_LOCATION',
     payload: location,
   };
 }
 
-export function setArrayOfBoroughs(boroughs) {
+export function setArrayOfBoroughs(boroughs: any[]) {
   return {
     type: 'SIMPLE_ARRAY_BOROUGHS',
     payload: boroughs,
@@ -56,6 +56,13 @@ export function logoutUser(user: any) {
   return {
     type: 'LOGOUT',
     payload: user,
+  };
+}
+
+export function changeLoading(status: boolean) {
+  return {
+    type: 'SET_LOADING',
+    payload: status,
   };
 }
 
@@ -122,7 +129,7 @@ export function fetchPlacesNearby(lat: number, lng: number) {
       .then(res => res.json())
       .then(locations => {
         const sortedLocs = locations.results.sort(
-          (a, b) =>
+          (a: any, b: any) =>
             getDistance(
               { latitude: a.geometry.location.lat, longitude: a.geometry.location.lng },
               { latitude: lat, longitude: lng }
@@ -132,7 +139,7 @@ export function fetchPlacesNearby(lat: number, lng: number) {
               { latitude: lat, longitude: lng }
             )
         );
-        const filteredLocs = sortedLocs.filter(loc => loc.business_status === 'OPERATIONAL');
+        const filteredLocs = sortedLocs.filter((loc: any) => loc.business_status === 'OPERATIONAL');
         dispatch(setLocationsNearby(filteredLocs.slice(0, 6)));
       });
   };
@@ -168,7 +175,7 @@ export function setUserInfo(user: object) {
 
 export function getLocations(user: any) {
   const { sub, name } = user;
-  let counter = {};
+  let counter: { [key: string]: any } = {};
   const fetchBody = { sub, name };
   return (dispatch: any) => {
     fetch(`${DB_LOCALHOST}/locations`, {
@@ -178,7 +185,7 @@ export function getLocations(user: any) {
     })
       .then(res => res.json())
       .then(res => {
-        res.Locations.map((entry: any) => {
+        res.Locations.map((entry: { boroughName: string }) => {
           if (counter[entry.boroughName]) {
             counter[entry.boroughName]++;
           } else {
