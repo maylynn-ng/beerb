@@ -170,7 +170,7 @@ export function getLocations(user: any) {
 
 // export function fetchDrunkBeers(id: number) {
 //   return function (dispatch: any) {
-//     fetch(`${DRUNK_API}/${id}?client_id=${CLIENT_ID}&client_secret=${CLIENT_SECRET}`)
+//     fetch(`${DB_LOCALHOST}/drunk/${id}`)
 //       .then(res => res.json())
 //       .then(res => {
 //         const beer = res.response.beer;
@@ -192,6 +192,29 @@ export function getLocations(user: any) {
 //       .catch(error => console.error('FETCH DRUNK BEERS SAYS NO: ', error));
 //   };
 // }
+
+export function getDrunkBeers(beerIds: number[]) {
+  return async function (dispatch: any) {
+    let drunkBeers: any[] = [];
+    beerIds.map(entry => {
+      fetch(
+        `${DB_LOCALHOST}/drunkbeers/${entry}`
+        // , {
+        //   method: 'POST',
+        //   headers: { 'Content-Type': 'application/json' },
+        //   body: JSON.stringify(beerIds),
+        // }
+      )
+        .then(res => res.json())
+        .then(res => {
+          drunkBeers.push(res);
+          console.log('DRUNKBEERS', drunkBeers);
+        })
+        .then(dispatch({ type: 'SET_DRUNK_BEERS', payload: drunkBeers }))
+        .catch(error => console.error('FETCH DRUNK BEERS SAYS NO: ', error));
+    });
+  };
+}
 
 export function getBeerdex() {
   return function (dispatch: any) {

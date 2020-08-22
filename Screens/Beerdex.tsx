@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Text, View, StyleSheet, SafeAreaView } from 'react-native';
-import { getBeerdex } from '../redux/actions';
+import { getBeerdex, getDrunkBeers } from '../redux/actions';
 // import Loading from '../Components/Loading';
 import { connect } from 'react-redux';
 import { StatusBar } from 'expo-status-bar';
@@ -11,12 +11,22 @@ import { Beer } from '../Models/Beer.model';
 import BeerBadge from '../Components/BeerBadge';
 import { ScrollView } from 'react-native-gesture-handler';
 
-function Beerdex({ user, populateBeerdex, beerdex }: any) {
+function Beerdex({ user, populateBeerdex, populateDrunkBeers, beerdex }: any) {
   useEffect(() => {
     populateBeerdex();
+
+    populateDrunkBeers(orderDrunkBeers());
   }, []);
 
-  console.log('😍 Beerdex.tsx, line 13 hi!!!!!: ', beerdex[0]);
+  console.log('😍 Beerdex.tsx, line 13 hi!!!!!: ', user.drunkBeers);
+
+  function orderDrunkBeers() {
+    let beerIds: number[] = [];
+    user.Locations.map((entry: any) => {
+      beerIds.push(entry.beerId);
+    });
+    return beerIds;
+  }
 
   return (
     <SafeAreaView>
@@ -25,6 +35,11 @@ function Beerdex({ user, populateBeerdex, beerdex }: any) {
         <Text style={styles.heading}>BEERDEX</Text>
         <ScrollView>
           <View style={styles.logoContainer}>
+            {user.drunkBeers && user.drunkBeers.length
+              ? user.drunkBeers.map((entry: any, index: number) => (
+                  <BeerBadge style={styles.drunkBadge} key={index} beer={entry} />
+                ))
+              : null}
             {beerdex && beerdex.length ? (
               beerdex.map((beer: Beer, index: number) => (
                 <BeerBadge style={styles.badge} key={index} beer={beer} />
@@ -42,7 +57,6 @@ function Beerdex({ user, populateBeerdex, beerdex }: any) {
 
 function mapStateToProps(state: State) {
   return {
-    trendingBeersList: state.trendingBeers,
     user: state.user,
     beerdex: state.beerdex,
   };
@@ -51,6 +65,7 @@ function mapStateToProps(state: State) {
 function mapDispatch(dispatch: any) {
   return {
     populateBeerdex: () => dispatch(getBeerdex()),
+    populateDrunkBeers: (beerIds: []) => dispatch(getDrunkBeers(beerIds)),
   };
 }
 
@@ -75,8 +90,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginHorizontal: 5,
   },
+  drunkBadge: {
+    height: 200,
+    width: 200,
+  },
   badge: {
     height: 200,
     width: 200,
+    overlayColor: 'gray',
   },
 });

@@ -1,18 +1,17 @@
 import { Action } from '../actions';
-import { Beer, TrendingBeer } from '../../Models/Beer.model';
+import { Beer } from '../../Models/Beer.model';
 
 export type State = {
   boroughs: [];
   currentBorough: string;
   searchTerm: string;
-  trendingBeers: TrendingBeer[];
   locationsNearby: [];
   beerdex: any[];
   user: {
     beerSearchResults: Beer[];
     Locations: any[];
     boroughCounter: {};
-    drunkBeers: Beer[];
+    drunkBeers: any[];
   };
   location: {
     latitude: number;
@@ -24,7 +23,6 @@ const initialState: State = {
   boroughs: [],
   currentBorough: '',
   searchTerm: '',
-  trendingBeers: [],
   locationsNearby: [],
   beerdex: [],
   user: {
@@ -64,11 +62,6 @@ export default function reducer(state: State = initialState, action: Action): St
       return {
         ...state,
         searchTerm: action.payload,
-      };
-    case 'SET_TRENDING_BEER_RESULTS':
-      return {
-        ...state,
-        trendingBeers: action.payload,
       };
     case 'SET_LOCATIONS_NEARBY':
       return {
@@ -110,7 +103,7 @@ export default function reducer(state: State = initialState, action: Action): St
     case 'SET_DRUNK_RESULTS':
       return {
         ...state,
-        user: { ...state.user, drunkBeers: [...state.user.drunkBeers, action.payload] },
+        user: { ...state.user, drunkBeers: action.payload },
       };
     case 'SET_BEERDEX':
       return {
