@@ -80,7 +80,6 @@ const HomeScreen = ({
   }, [user.Locations]);
 
   useEffect(() => {
-    console.log(user.Locations.length, user.sub);
     if (user.Locations.length !== 0 && user.sub) setLoading(false);
   }, [user.Locations, user.sub]);
 
