@@ -42,6 +42,8 @@ const HomeScreen = ({
   const [lastBeer, setLastBeer] = useState({});
 
   useEffect(() => {
+    // status cleared on the getLocations action to make sure the api calls have ended before
+    // showing the screen.
     setLoading(true);
     (async () => {
       let { status } = await Location.requestPermissionsAsync();
@@ -68,7 +70,6 @@ const HomeScreen = ({
   useEffect(() => {
     if (user.sub) {
       setLocations(user);
-      // setLoading(false);
     }
   }, [user.sub]);
 
@@ -79,10 +80,6 @@ const HomeScreen = ({
         : setLastBeer({ beerName: 'get a beer', createdAt: new Date(), boroughName: 'you' });
     }
   }, [user.Locations]);
-
-  // useEffect(() => {
-  //   if (user.Locations.length !== 0 && user.sub) setLoading(false);
-  // }, [user.Locations, user.sub]);
 
   return (
     <SafeAreaView style={styles.homeScreen}>
