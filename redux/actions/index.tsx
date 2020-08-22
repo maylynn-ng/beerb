@@ -1,9 +1,8 @@
-import { Beer, TrendingBeer } from '../../Models/Beer.model';
+import { Beer } from '../../Models/Beer.model';
 import { ToastAndroid } from 'react-native';
 import { getDistance } from 'geolib';
 
 const SEARCH_API_URL = process.env.REACT_NATIVE_UNTAPPED_SEARCH_URL;
-const TRENDING_URL = process.env.REACT_NATIVE_UNTAPPED_TRENDING_URL;
 const CLIENT_ID = process.env.REACT_NATIVE_UNTAPPED_CLIENT_ID;
 const CLIENT_SECRET = process.env.REACT_NATIVE_UNTAPPED_CLIENT_SECRET;
 const PLACES_NEARBY_URL = process.env.REACT_NATIVE_PLACES_NEARBY_URL;
@@ -90,32 +89,6 @@ export function fetchSearchBeers(searchTerm: string) {
   };
 }
 
-export function fetchTrending() {
-  return function (dispatch: any) {
-    let results: TrendingBeer[] = [];
-    fetch(`${TRENDING_URL}&client_id=${CLIENT_ID}&client_secret=${CLIENT_SECRET}`)
-      .then(res => res.json())
-      .then(res => {
-        let beers = res.response.macro.items;
-        for (let i = 0; i < beers.length; i++) {
-          results.push({
-            beerId: beers[i].beer.bid,
-            haveHad: false,
-            beerName: beers[i].beer.beer_name,
-            beerLabel: beers[i].beer.beer_label,
-            beerStyle: beers[i].beer.beer_style,
-            breweryName: beers[i].brewery.brewery_name,
-            breweryCountry: beers[i].brewery.country_name,
-            breweryLabel: beers[i].brewery.brewery_label,
-            breweryUrl: beers[i].brewery.contact.url,
-          });
-        }
-        dispatch({ type: 'SET_TRENDING_BEER_RESULTS', payload: results });
-      })
-      .catch(error => console.error('FETCH TRENDY BEERS SAYS NO: ', error));
-  };
-}
-
 export function fetchPlacesNearby(lat: number, lng: number) {
   return (dispatch: any) => {
     fetch(`${PLACES_NEARBY_URL}${lat},${lng}${PLACES_NEARBY_PARAMS}${PLACES_KEY}`)
@@ -195,28 +168,39 @@ export function getLocations(user: any) {
   };
 }
 
-export function fetchDrunkBeers(id: number) {
+// export function fetchDrunkBeers(id: number) {
+//   return function (dispatch: any) {
+//     fetch(`${DRUNK_API}/${id}?client_id=${CLIENT_ID}&client_secret=${CLIENT_SECRET}`)
+//       .then(res => res.json())
+//       .then(res => {
+//         const beer = res.response.beer;
+//         return {
+//           beerId: beer.bid,
+//           haveHad: true,
+//           beerName: beer.beer_name,
+//           beerLabel: beer.beer_label,
+//           beerIbu: beer.beer_ibu,
+//           beerDescription: beer.beer_description,
+//           beerStyle: beer.beer_style,
+//           breweryName: beer.brewery.brewery_name,
+//           breweryCountry: beer.brewery.country_name,
+//           breweryLabel: beer.brewery.brewery_label,
+//           breweryUrl: beer.brewery.contact.url,
+//         };
+//       })
+//       .then(res => dispatch({ type: 'SET_DRUNK_RESULTS', payload: res }))
+//       .catch(error => console.error('FETCH DRUNK BEERS SAYS NO: ', error));
+//   };
+// }
+
+export function getBeerdex() {
   return function (dispatch: any) {
-    fetch(`${DRUNK_API}/${id}?client_id=${CLIENT_ID}&client_secret=${CLIENT_SECRET}`)
+    fetch(`${DB_LOCALHOST}/beers`)
       .then(res => res.json())
       .then(res => {
-        console.log('FETCH DRUNK', res);
-        const beer = res.response.beer;
-        return {
-          beerId: beer.bid,
-          haveHad: true,
-          beerName: beer.beer_name,
-          beerLabel: beer.beer_label,
-          beerIbu: beer.beer_ibu,
-          beerDescription: beer.beer_description,
-          beerStyle: beer.beer_style,
-          breweryName: beer.brewery.brewery_name,
-          breweryCountry: beer.brewery.country_name,
-          breweryLabel: beer.brewery.brewery_label,
-          breweryUrl: beer.brewery.contact.url,
-        };
+        const result = res.length > 50 ? res.slice(0, 50) : res;
+        dispatch({ type: 'SET_BEERDEX', payload: result });
       })
-      .then(res => dispatch({ type: 'SET_DRUNK_RESULTS', payload: res }))
-      .catch(error => console.error('FETCH DRUNK BEERS SAYS NO: ', error));
+      .catch(error => console.error('Unable to reach Beerdex ', error));
   };
 }

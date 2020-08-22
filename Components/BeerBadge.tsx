@@ -6,6 +6,7 @@ import BeerModal from '../Components/BeerModal';
 
 const BeerBadge = ({ beer }: any) => {
   const [displayModal, setDisplayModal] = useState(false);
+  // console.log('🌵🌵🌵🌵🌵 IN BADGE', beer.length);
 
   return (
     <View style={styles.container}>

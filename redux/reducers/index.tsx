@@ -7,6 +7,7 @@ export type State = {
   searchTerm: string;
   trendingBeers: TrendingBeer[];
   locationsNearby: [];
+  beerdex: any[];
   user: {
     beerSearchResults: Beer[];
     Locations: any[];
@@ -25,6 +26,7 @@ const initialState: State = {
   searchTerm: '',
   trendingBeers: [],
   locationsNearby: [],
+  beerdex: [],
   user: {
     beerSearchResults: [],
     Locations: [],
@@ -109,6 +111,11 @@ export default function reducer(state: State = initialState, action: Action): St
       return {
         ...state,
         user: { ...state.user, drunkBeers: [...state.user.drunkBeers, action.payload] },
+      };
+    case 'SET_BEERDEX':
+      return {
+        ...state,
+        beerdex: action.payload,
       };
     default:
       return state;
