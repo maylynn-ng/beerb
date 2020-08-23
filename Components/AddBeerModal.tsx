@@ -6,7 +6,7 @@ import {
   View,
   StyleSheet,
   TextInput,
-  Button,
+  ToastAndroid,
   Image,
 } from 'react-native';
 import Modal from 'react-native-modal';
@@ -48,29 +48,35 @@ function AddBeer({
   const submitBeerNLoc = () => {
     let lat: number = 0;
     let lng: number = 0;
-
-    if (Object.keys(pub).length !== 0) {
-      lat = pub.geometry.location.lat;
-      lng = pub.geometry.location.lng;
+    if (beer.beerId === 0) {
+      ToastAndroid.show('Select your beer!', ToastAndroid.SHORT);
     } else {
-      lat = location.latitude;
-      lng = location.longitude;
-    }
+      if (Object.keys(pub).length !== 0) {
+        lat = pub.geometry.location.lat;
+        lng = pub.geometry.location.lng;
+      } else {
+        lat = location.latitude;
+        lng = location.longitude;
+      }
 
-    const newEntry = {
-      beerName: beer.beerName,
-      beerId: beer.beerId,
-      placeName: pub.name || 'unknown pub',
-      placeId: pub.place_id || 'unknown pub',
-      boroughName: currentBorough.boroughName,
-      boroughId: currentBorough.boroughId,
-      longitude: lng,
-      latitude: lat,
-      UserId: user.id,
-    };
-    console.log('🎉newEntry', newEntry);
-    postNewEntry(newEntry);
-    toggleAddBeer();
+      const newEntry = {
+        location: {
+          beerName: beer.beerName,
+          beerId: beer.beerId,
+          placeName: pub.name || 'unknown pub',
+          placeId: pub.place_id || 'unknown pub',
+          boroughName: currentBorough.boroughName,
+          boroughId: currentBorough.boroughId,
+          longitude: lng,
+          latitude: lat,
+          UserId: user.id,
+        },
+        beers: beerSearchResults,
+      };
+
+      postNewEntry(newEntry);
+      toggleAddBeer();
+    }
   };
 
   const delayedQuery = useCallback(
@@ -131,7 +137,7 @@ function AddBeer({
                 flexWrap: 'wrap',
               }}
             >
-              {beerSearchResults.map((curBeer: any) => (
+              {beerSearchResults.slice(0, 4).map((curBeer: any) => (
                 <TouchableOpacity
                   key={curBeer.beerId}
                   style={beer.beerId === curBeer.beerId ? styles.beerHighlight : styles.beerItem}
@@ -166,7 +172,7 @@ function AddBeer({
 function mapStateToProps(state: any) {
   return {
     searchTerm: state.searchTerm,
-    beerSearchResults: state.beerSearchResults,
+    beerSearchResults: state.user.beerSearchResults,
     pubLocations: state.locationsNearby,
     location: state.location,
     currentBorough: state.currentBorough,

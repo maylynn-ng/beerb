@@ -79,6 +79,7 @@ const Login = ({ user, setUser, isLoading, setLoading }: any) => {
               borderRadius: 10,
               position: 'relative',
               top: -50,
+              elevation: 10,
             }}
             onPress={() => {
               setLoading(true);

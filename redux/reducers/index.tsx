@@ -2,7 +2,6 @@ import { Action } from '../actions';
 import { Beer, TrendingBeer } from '../../Models/Beer.model';
 
 export type State = {
-  beerSearchResults: Beer[];
   boroughs: [];
   currentBorough: string;
   location: {
@@ -14,15 +13,15 @@ export type State = {
   searchTerm: string;
   trendingBeers: TrendingBeer[];
   user: {
+    beerSearchResults: Beer[];
+    Locations: any[];
     boroughCounter: {};
     drunkBeers: Beer[];
-    Locations: any[];
     sub: string;
   };
 };
 
 const initialState: State = {
-  beerSearchResults: [],
   boroughs: [],
   currentBorough: '',
   location: {
@@ -34,9 +33,10 @@ const initialState: State = {
   searchTerm: '',
   trendingBeers: [],
   user: {
+    beerSearchResults: [],
+    Locations: [],
     boroughCounter: {},
     drunkBeers: [],
-    Locations: [],
     sub: '',
   },
 };
@@ -57,7 +57,10 @@ export default function reducer(state: State = initialState, action: Action): St
     case 'SET_SEARCH_BEER_RESULTS':
       return {
         ...state,
-        beerSearchResults: action.payload,
+        user: {
+          ...state.user,
+          beerSearchResults: action.payload,
+        },
       };
     case 'SET_SEARCH_TERM':
       return {
