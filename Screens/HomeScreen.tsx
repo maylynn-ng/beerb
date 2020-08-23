@@ -42,8 +42,8 @@ const HomeScreen = ({
   const [lastBeer, setLastBeer] = useState({});
 
   useEffect(() => {
-    // status cleared on the getLocations action to make sure the api calls have ended before
-    // showing the screen.
+    // Loading status cleared on the getLocations action to make sure the api calls
+    // have ended before showing the screen.
     setLoading(true);
     (async () => {
       let { status } = await Location.requestPermissionsAsync();
@@ -62,7 +62,6 @@ const HomeScreen = ({
         borough =>
           isPointInPolygon({ latitude, longitude }, borough.boroughCoords) && setBorough(borough)
       );
-
       setPlacesNearby(newLocation.coords.latitude, newLocation.coords.longitude);
     })();
   }, []);

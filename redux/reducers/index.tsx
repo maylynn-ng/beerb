@@ -17,6 +17,7 @@ export type State = {
     boroughCounter: {};
     drunkBeers: Beer[];
     Locations: any[];
+    sub: string;
   };
 };
 
@@ -28,7 +29,7 @@ const initialState: State = {
     latitude: 51.507388,
     longitude: -0.12789,
   },
-  isLoading: false,
+  isLoading: true,
   locationsNearby: [],
   searchTerm: '',
   trendingBeers: [],
@@ -36,6 +37,7 @@ const initialState: State = {
     boroughCounter: {},
     drunkBeers: [],
     Locations: [],
+    sub: '',
   },
 };
 

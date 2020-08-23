@@ -15,6 +15,19 @@ const auth0ClientId: any = process.env.REACT_NATIVE_AUTH0_CLIENT_ID;
 const authorizationEndpoint: any = process.env.REACT_NATIVE_AUTH_ENDPOINT;
 
 const Login = ({ user, setUser, isLoading, setLoading }: any) => {
+  useEffect(() => {
+    try {
+      AsyncStorage.getItem('@session_token').then(value => {
+        if (value) {
+          setUser(JSON.parse(value));
+        }
+      });
+    } catch (error) {
+      console.info('error while fetching session token');
+      setUser({});
+    }
+  }, []);
+
   const [request, result, promptAsync] = AuthSession.useAuthRequest(
     {
       redirectUri,
@@ -27,21 +40,6 @@ const Login = ({ user, setUser, isLoading, setLoading }: any) => {
     },
     { authorizationEndpoint }
   );
-
-  useEffect(() => {
-    setLoading(true);
-    try {
-      AsyncStorage.getItem('@session_token').then(value => {
-        if (value) {
-          setUser(JSON.parse(value));
-        }
-      });
-      setLoading(false);
-    } catch (error) {
-      console.info('error while fetching session token');
-      setUser({});
-    }
-  }, []);
 
   useEffect(() => {
     if (result) {
@@ -63,8 +61,13 @@ const Login = ({ user, setUser, isLoading, setLoading }: any) => {
     setLoading(false);
   }, [result]);
 
+  useEffect(() => {
+    user.sub === '' && setLoading(false);
+  }, [user.sub]);
+
   return (
     <View style={{ width: '100%', height: '100%' }}>
+      {isLoading ? <Loading /> : null}
       {!user.sub ? (
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
           <Image source={require('../assets/logo.png')} style={{ height: 250, width: 250 }} />
@@ -88,7 +91,6 @@ const Login = ({ user, setUser, isLoading, setLoading }: any) => {
       ) : (
         <Navigation />
       )}
-      {isLoading ? <Loading /> : null}
     </View>
   );
 };

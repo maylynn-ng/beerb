@@ -68,7 +68,7 @@ function AddBeer({
       latitude: lat,
       UserId: user.id,
     };
-
+    console.log('🎉newEntry', newEntry);
     postNewEntry(newEntry);
     toggleAddBeer();
   };
