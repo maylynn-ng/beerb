@@ -18,14 +18,8 @@ function Beerdex({ user, populateBeerdex, populateDrunkBeers, beerdex }: any) {
     populateDrunkBeers(orderDrunkBeers());
   }, []);
 
-  console.log('😍 Beerdex.tsx, line 13 hi!!!!!: ', user.drunkBeers);
-
   function orderDrunkBeers() {
-    let beerIds: number[] = [];
-    user.Locations.map((entry: any) => {
-      beerIds.push(entry.beerId);
-    });
-    return beerIds;
+    return Array.from(new Set(user.Locations.map((entry: any) => entry.beerId)));
   }
 
   return (
@@ -37,12 +31,12 @@ function Beerdex({ user, populateBeerdex, populateDrunkBeers, beerdex }: any) {
           <View style={styles.logoContainer}>
             {user.drunkBeers && user.drunkBeers.length
               ? user.drunkBeers.map((entry: any, index: number) => (
-                  <BeerBadge style={styles.drunkBadge} key={index} beer={entry} />
+                  <BeerBadge style={styles.drunkBadge} hasDrunk={1} key={index} beer={entry} />
                 ))
               : null}
             {beerdex && beerdex.length ? (
               beerdex.map((beer: Beer, index: number) => (
-                <BeerBadge style={styles.badge} key={index} beer={beer} />
+                <BeerBadge style={styles.badge} hasDrunk={0.3} key={index} beer={beer} />
               ))
             ) : (
               // <Loading />
@@ -97,6 +91,5 @@ const styles = StyleSheet.create({
   badge: {
     height: 200,
     width: 200,
-    overlayColor: 'gray',
   },
 });

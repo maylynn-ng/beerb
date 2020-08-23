@@ -168,51 +168,16 @@ export function getLocations(user: any) {
   };
 }
 
-// export function fetchDrunkBeers(id: number) {
-//   return function (dispatch: any) {
-//     fetch(`${DB_LOCALHOST}/drunk/${id}`)
-//       .then(res => res.json())
-//       .then(res => {
-//         const beer = res.response.beer;
-//         return {
-//           beerId: beer.bid,
-//           haveHad: true,
-//           beerName: beer.beer_name,
-//           beerLabel: beer.beer_label,
-//           beerIbu: beer.beer_ibu,
-//           beerDescription: beer.beer_description,
-//           beerStyle: beer.beer_style,
-//           breweryName: beer.brewery.brewery_name,
-//           breweryCountry: beer.brewery.country_name,
-//           breweryLabel: beer.brewery.brewery_label,
-//           breweryUrl: beer.brewery.contact.url,
-//         };
-//       })
-//       .then(res => dispatch({ type: 'SET_DRUNK_RESULTS', payload: res }))
-//       .catch(error => console.error('FETCH DRUNK BEERS SAYS NO: ', error));
-//   };
-// }
-
 export function getDrunkBeers(beerIds: number[]) {
   return async function (dispatch: any) {
-    let drunkBeers: any[] = [];
-    beerIds.map(entry => {
-      fetch(
-        `${DB_LOCALHOST}/drunkbeers/${entry}`
-        // , {
-        //   method: 'POST',
-        //   headers: { 'Content-Type': 'application/json' },
-        //   body: JSON.stringify(beerIds),
-        // }
-      )
-        .then(res => res.json())
-        .then(res => {
-          drunkBeers.push(res);
-          console.log('DRUNKBEERS', drunkBeers);
-        })
-        .then(dispatch({ type: 'SET_DRUNK_BEERS', payload: drunkBeers }))
-        .catch(error => console.error('FETCH DRUNK BEERS SAYS NO: ', error));
-    });
+    fetch(`${DB_LOCALHOST}/drunkbeers`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(beerIds),
+    })
+      .then(res => res.json())
+      .then(res => dispatch({ type: 'SET_DRUNK_BEERS', payload: res }))
+      .catch(error => console.error("You're drunk, go home: ", error));
   };
 }
 

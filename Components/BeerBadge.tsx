@@ -4,10 +4,8 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 import Modal from 'react-native-modal';
 import BeerModal from '../Components/BeerModal';
 
-const BeerBadge = ({ beer }: any) => {
+const BeerBadge = ({ beer, hasDrunk }: any) => {
   const [displayModal, setDisplayModal] = useState(false);
-  // console.log('🌵🌵🌵🌵🌵 IN BADGE', beer.length);
-
   return (
     <View style={styles.container}>
       <TouchableOpacity
@@ -16,7 +14,7 @@ const BeerBadge = ({ beer }: any) => {
         }}
       >
         <View>
-          <Image style={styles.image} source={{ uri: beer.beerLabel }} />
+          <Image style={[styles.image, { opacity: hasDrunk }]} source={{ uri: beer.beerLabel }} />
         </View>
       </TouchableOpacity>
       <Modal

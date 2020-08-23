@@ -100,7 +100,7 @@ export default function reducer(state: State = initialState, action: Action): St
       };
     case 'LOGOUT':
       return initialState;
-    case 'SET_DRUNK_RESULTS':
+    case 'SET_DRUNK_BEERS':
       return {
         ...state,
         user: { ...state.user, drunkBeers: action.payload },
