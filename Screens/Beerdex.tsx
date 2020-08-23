@@ -31,7 +31,7 @@ function Beerdex({ user, populateBeerdex, populateDrunkBeers, beerdex }: any) {
           <View style={styles.logoContainer}>
             {user.drunkBeers && user.drunkBeers.length
               ? user.drunkBeers.map((entry: any, index: number) => (
-                  <BeerBadge style={styles.drunkBadge} hasDrunk={1} key={index} beer={entry} />
+                  <BeerBadge style={styles.badge} hasDrunk={1} key={index} beer={entry} />
                 ))
               : null}
             {beerdex && beerdex.length ? (
@@ -76,17 +76,13 @@ const styles = StyleSheet.create({
     fontSize: 36,
     fontWeight: 'bold',
     textAlign: 'center',
-    marginTop: 10,
+    marginVertical: 15,
   },
   logoContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'center',
     marginHorizontal: 5,
-  },
-  drunkBadge: {
-    height: 200,
-    width: 200,
   },
   badge: {
     height: 200,

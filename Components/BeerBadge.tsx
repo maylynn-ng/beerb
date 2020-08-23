@@ -33,13 +33,11 @@ const styles = StyleSheet.create({
   container: {
     marginVertical: 10,
     marginHorizontal: 10,
+    padding: 5,
   },
   image: {
     height: 80,
     width: 80,
-  },
-  badge: {
-    shadowColor: 'gray',
   },
 });
 
