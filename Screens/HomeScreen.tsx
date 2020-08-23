@@ -1,19 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { SafeAreaView, View, Image, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
+import store from '../redux/store';
 import moment from 'moment';
 import * as Location from 'expo-location';
+import * as TaskManager from 'expo-task-manager';
 import Map from '../Components/Map';
 import { isPointInPolygon } from 'geolib';
 import Navbar from '../Components/Navbar';
 import boroughs from '../assets/london_sport.json';
-import {
-  storeBorough,
-  fetchPlacesNearby,
-  storeLocation,
-  getLocations,
-  changeLoading,
-} from '../redux/actions';
+
+import { storeBorough, storeLocation, getLocations, changeLoading } from '../redux/actions';
 
 const simpleArrayOfBoroughs = boroughs.features.map(borough => {
   return {
@@ -31,9 +28,6 @@ const simpleArrayOfBoroughs = boroughs.features.map(borough => {
 const HomeScreen = ({
   currentBorough,
   navigation,
-  setBorough,
-  setPlacesNearby,
-  setLocation,
   setLocations,
   location,
   user,
@@ -42,27 +36,20 @@ const HomeScreen = ({
   const [lastBeer, setLastBeer] = useState({});
 
   useEffect(() => {
+    setLoading(true);
     // Loading status cleared on the getLocations action to make sure the api calls
     // have ended before showing the screen.
-    setLoading(true);
     (async () => {
       let { status } = await Location.requestPermissionsAsync();
       if (status !== 'granted') {
         console.info('Permission to access location was denied');
       }
 
-      let newLocation = await Location.getCurrentPositionAsync({
+      // Triggers a new listener that will check if the location is updated.
+      // On update, background-location-task will manage the changes in the TaskManager.
+      await Location.startLocationUpdatesAsync('background-location-task', {
         accuracy: Location.Accuracy.Highest,
-        maximumAge: 1,
       });
-      const { latitude, longitude } = newLocation.coords;
-      setLocation({ latitude, longitude });
-
-      simpleArrayOfBoroughs.some(
-        borough =>
-          isPointInPolygon({ latitude, longitude }, borough.boroughCoords) && setBorough(borough)
-      );
-      setPlacesNearby(newLocation.coords.latitude, newLocation.coords.longitude);
     })();
   }, []);
 
@@ -120,11 +107,24 @@ const HomeScreen = ({
   );
 };
 
+TaskManager.defineTask('background-location-task', ({ data, error }) => {
+  if (error) {
+    console.log('error in taskManager');
+  }
+  if (data) {
+    const { latitude, longitude } = data.locations[0].coords;
+    store.dispatch(storeLocation({ latitude, longitude }));
+    simpleArrayOfBoroughs.some(
+      borough =>
+        isPointInPolygon({ latitude, longitude }, borough.boroughCoords) &&
+        store.dispatch(storeBorough(borough))
+    );
+  }
+});
+
 function mapStateToProps(state: any) {
   return {
     currentBorough: state.currentBorough,
-    searchTerm: state.searchTerm,
-    beerSearchResults: state.beerSearchResults,
     user: state.user,
     location: state.location,
   };
@@ -132,10 +132,6 @@ function mapStateToProps(state: any) {
 
 function mapDispatch(dispatch: any) {
   return {
-    setLocation: (location: { latitude: number; longitude: number }) =>
-      dispatch(storeLocation(location)),
-    setBorough: (name: string) => dispatch(storeBorough(name)),
-    setPlacesNearby: (lat: number, lng: number) => dispatch(fetchPlacesNearby(lat, lng)),
     setLocations: (user: any) => dispatch(getLocations(user)),
     setLoading: (status: boolean) => dispatch(changeLoading(status)),
   };

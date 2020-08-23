@@ -10,7 +10,7 @@ import {
   Image,
 } from 'react-native';
 import Modal from 'react-native-modal';
-import { fetchSearchBeers, postEntry } from '../redux/actions';
+import { fetchSearchBeers, postEntry, fetchPlacesNearby, changeLoading } from '../redux/actions';
 import { connect } from 'react-redux';
 import { ScrollView } from 'react-native-gesture-handler';
 import { Beer } from '../Models/Beer.model';

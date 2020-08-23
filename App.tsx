@@ -1,15 +1,9 @@
 import 'react-native-gesture-handler';
 import React from 'react';
 import { Provider } from 'react-redux';
-import { createStore, applyMiddleware } from 'redux';
 import { StyleSheet, SafeAreaView } from 'react-native';
-
-import reducer from './redux/reducers';
-import ReduxThunk from 'redux-thunk';
+import store from './redux/store';
 import Login from './Components/Login';
-import Loading from './Components/Loading';
-
-const store = createStore(reducer, applyMiddleware(ReduxThunk));
 
 // store.subscribe(() => {
 //   console.log('💮💮💮💮💮💮', store.getState());

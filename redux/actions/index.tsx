@@ -1,4 +1,5 @@
 import { Beer, TrendingBeer } from '../../Models/Beer.model';
+import { Borough } from '../../Models/Borough.model';
 import { ToastAndroid } from 'react-native';
 import { getDistance } from 'geolib';
 
@@ -31,7 +32,7 @@ export function setArrayOfBoroughs(boroughs: any[]) {
   };
 }
 
-export function storeBorough(currentBorough: string): Action {
+export function storeBorough(currentBorough: Borough): Action {
   return {
     type: 'STORE_BOROUGH',
     payload: currentBorough,

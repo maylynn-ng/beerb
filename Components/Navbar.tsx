@@ -1,10 +1,16 @@
 import React, { useState } from 'react';
 import { Dimensions, View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import AddBeer from './AddBeerModal';
+import { connect } from 'react-redux';
+import { fetchPlacesNearby, changeLoading } from '../redux/actions';
 
-const Navbar = ({ navigation, location }: any) => {
+const Navbar = ({ navigation, location, setLoading, setPlacesNearby }: any) => {
   const [isShownAddBeer, setIsShownAddBeer] = useState(false);
   const toggleAddBeer = () => {
+    setLoading(true);
+    console.log('location', location);
+    setPlacesNearby(location.latitude, location.longitude);
+    setLoading(false);
     setIsShownAddBeer(!isShownAddBeer);
   };
 
@@ -39,7 +45,20 @@ const Navbar = ({ navigation, location }: any) => {
   );
 };
 
-export default Navbar;
+function mapStateToProps(state: any) {
+  return {
+    location: state.location,
+  };
+}
+
+function mapDispatch(dispatch: any) {
+  return {
+    setPlacesNearby: (lat: number, lng: number) => dispatch(fetchPlacesNearby(lat, lng)),
+    setLoading: (status: boolean) => dispatch(changeLoading(status)),
+  };
+}
+
+export default connect(mapStateToProps, mapDispatch)(Navbar);
 
 const windowHeight = Dimensions.get('window').height;
 const styles = StyleSheet.create({
