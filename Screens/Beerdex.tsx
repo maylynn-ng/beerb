@@ -20,7 +20,7 @@ function Beerdex({ user, populateBeerdex, populateDrunkBeers, beerdex }: any) {
   function orderDrunkBeers() {
     return Array.from(new Set(user.Locations.map((entry: any) => entry.beerId)));
   }
-
+  console.log(user.drunkBeers);
   return (
     <SafeAreaView>
       <StatusBar style="auto" />
@@ -29,14 +29,19 @@ function Beerdex({ user, populateBeerdex, populateDrunkBeers, beerdex }: any) {
         <ScrollView>
           <View style={styles.logoContainer}>
             {user.drunkBeers && user.drunkBeers.length
-              ? user.drunkBeers.map((entry: any, index: number) => (
-                  <BeerBadge style={styles.badge} hasDrunk={1} key={index} beer={entry} />
-                ))
+              ? user.drunkBeers.map(
+                  (entry: any, index: number) =>
+                    entry && (
+                      <BeerBadge style={styles.badge} hasDrunk={1} key={index} beer={entry} />
+                    )
+                )
               : null}
             {beerdex && beerdex.length ? (
-              beerdex.map((beer: Beer, index: number) => (
-                <BeerBadge style={styles.badge} hasDrunk={0.3} key={index} beer={beer} />
-              ))
+              beerdex.map((beer: Beer, index: number) => {
+                if (orderDrunkBeers().indexOf(beer.beerId) === -1) {
+                  return <BeerBadge style={styles.badge} hasDrunk={0.3} key={index} beer={beer} />;
+                }
+              })
             ) : (
               // <Loading />
               <Text>Loading</Text>

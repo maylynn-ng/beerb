@@ -16,7 +16,9 @@ const BeerModal = ({ beer }: any) => {
   return (
     <View style={styles.container}>
       <View style={styles.labelAndName}>
-        <Image style={styles.label} source={{ uri: thisBeer.beerLabel }} />
+        {thisBeer.beerLabel !== '' && (
+          <Image style={styles.label} source={{ uri: thisBeer.beerLabel }} />
+        )}
         <Text style={styles.beerName}>{thisBeer.beerName.toUpperCase()}</Text>
       </View>
       <Text style={styles.breweryInfo}>
