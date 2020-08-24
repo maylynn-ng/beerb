@@ -1,16 +1,12 @@
 import React, { useState } from 'react';
 import { Dimensions, View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import AddBeer from './AddBeerModal';
-<<<<<<< HEAD
 import { connect } from 'react-redux';
 import { fetchPlacesNearby, changeLoading } from '../redux/actions';
 
-const Navbar = ({ navigation, location, setLoading, setPlacesNearby }: any) => {
-=======
 import ShortProfile from './ShortProfile';
 
-const Navbar = ({ navigation, location, lastBeer, takeScreenShot }: any) => {
->>>>>>> origin/userProfile
+const Navbar = ({ location, lastBeer, takeScreenShot, setLoading, setPlacesNearby }: any) => {
   const [isShownAddBeer, setIsShownAddBeer] = useState(false);
   const toggleAddBeer = () => {
     setLoading(true);
