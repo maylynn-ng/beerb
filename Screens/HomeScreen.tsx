@@ -1,5 +1,5 @@
-import React, { useEffect, useState, useRef, useCallback } from 'react';
-import { View, Image, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import React, { useEffect, useState, useRef } from 'react';
+import { View, Image, Text, TouchableOpacity, StyleSheet, Dimensions } from 'react-native';
 import { PermissionsAndroid, Platform } from 'react-native';
 import * as MediaLibrary from 'expo-media-library';
 import { connect } from 'react-redux';
@@ -127,15 +127,17 @@ const HomeScreen = ({
   return (
     <ViewShot ref={screenShot} style={styles.homeScreen}>
       <View style={styles.topBar}>
-        <TouchableOpacity
-          style={styles.burgerMenuTouch}
-          onPress={() => {
-            navigation.navigate('Modal');
-          }}
-        >
-          <Image source={require('../assets/menu.png')} style={styles.burgerMenu} />
-        </TouchableOpacity>
-        <Text style={{ opacity: 0.6, fontSize: 20 }}>{currentBorough.boroughName}</Text>
+        <View style={styles.menuContainer}>
+          <TouchableOpacity
+            style={styles.burgerMenuTouch}
+            onPress={() => {
+              navigation.navigate('Modal');
+            }}
+          >
+            <Image source={require('../assets/menu.png')} style={styles.burgerMenu} />
+          </TouchableOpacity>
+        </View>
+        <Text style={styles.title}>{currentBorough.boroughName}</Text>
         <View style={styles.currentView}>
           <Text style={styles.currentBoroughName}>
             {Object.keys(user.boroughCounter).length}/33
@@ -204,7 +206,10 @@ const styles = StyleSheet.create({
     width: '100%',
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: 30,
+  },
+  menuContainer: {
+    width: '50%',
+    height: 40,
   },
   burgerMenu: {
     width: 30,
@@ -216,6 +221,7 @@ const styles = StyleSheet.create({
     height: 40,
     justifyContent: 'center',
     marginHorizontal: 10,
+    zIndex: 2,
   },
   lastBeer: {
     flex: 1,
@@ -250,12 +256,13 @@ const styles = StyleSheet.create({
   topBar: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-around',
+    justifyContent: 'space-between',
     padding: 8,
     height: 'auto',
     paddingHorizontal: 10,
     backgroundColor: 'gold',
     elevation: 10,
+    width: '100%',
   },
   currentView: {
     width: 'auto',
@@ -269,5 +276,12 @@ const styles = StyleSheet.create({
   previewImage: {
     height: 200,
     backgroundColor: 'black',
+  },
+  title: {
+    opacity: 0.6,
+    fontSize: 20,
+    position: 'absolute',
+    width: Dimensions.get('screen').width,
+    textAlign: 'center',
   },
 });

@@ -1,16 +1,29 @@
 import React, { useEffect } from 'react';
-import { Text, View, StyleSheet, SafeAreaView } from 'react-native';
+import {
+  Text,
+  View,
+  StyleSheet,
+  SafeAreaView,
+  TouchableOpacity,
+  Image,
+  Dimensions,
+} from 'react-native';
 import { getBeerdex, getDrunkBeers, changeLoading } from '../redux/actions';
 import { connect } from 'react-redux';
-import { StatusBar } from 'expo-status-bar';
-
 import { State } from '../redux/reducers';
 import { Beer } from '../Models/Beer.model';
 
 import BeerBadge from '../Components/BeerBadge';
 import { ScrollView } from 'react-native-gesture-handler';
 
-function Beerdex({ user, populateBeerdex, populateDrunkBeers, beerdex, setLoading }: any) {
+function Beerdex({
+  user,
+  populateBeerdex,
+  populateDrunkBeers,
+  beerdex,
+  setLoading,
+  navigation,
+}: any) {
   useEffect(() => {
     setLoading(true);
     populateBeerdex();
@@ -27,12 +40,26 @@ function Beerdex({ user, populateBeerdex, populateDrunkBeers, beerdex, setLoadin
   function orderDrunkBeers() {
     return Array.from(new Set(user.Locations.map((entry: any) => entry.beerId)));
   }
-  console.log(user.drunkBeers);
   return (
     <SafeAreaView>
-      <StatusBar style="auto" />
       <View style={styles.screen}>
-        <Text style={styles.heading}>BEERDEX</Text>
+        <View style={styles.topBar}>
+          <View style={styles.menuContainer}>
+            <TouchableOpacity
+              style={styles.burgerMenuTouch}
+              onPress={() => {
+                navigation.navigate('Modal');
+              }}
+            >
+              <Image source={require('../assets/menu.png')} style={styles.burgerMenu} />
+            </TouchableOpacity>
+          </View>
+          <Text style={styles.title}>BEERDEX</Text>
+          <View style={styles.currentView}>
+            <Text>You've had {user.drunkBeers.length}</Text>
+            <Text>unique beer{user.drunkBeers.length !== 1 ? 's' : ''}</Text>
+          </View>
+        </View>
         <ScrollView>
           <View style={styles.logoContainer}>
             {user.drunkBeers && user.drunkBeers.length
@@ -78,22 +105,53 @@ export default connect(mapStateToProps, mapDispatch)(Beerdex);
 
 const styles = StyleSheet.create({
   screen: {
-    marginTop: 15,
     height: '100%',
     width: '100%',
     backgroundColor: 'white',
   },
-  heading: {
-    fontSize: 36,
-    fontWeight: 'bold',
-    textAlign: 'center',
-    marginVertical: 15,
+  menuContainer: {
+    width: '50%',
+    height: 40,
+  },
+  burgerMenu: {
+    width: 30,
+    height: 30,
+  },
+  burgerMenuTouch: {
+    flex: 1,
+    width: 30,
+    height: 40,
+    justifyContent: 'center',
+    marginHorizontal: 10,
+    zIndex: 2,
+  },
+  topBar: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingVertical: 8,
+    height: 'auto',
+    paddingHorizontal: 10,
+    backgroundColor: 'gold',
+    elevation: 10,
   },
   logoContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'center',
     marginHorizontal: 5,
+  },
+  currentView: {
+    width: 'auto',
+    height: 25,
+    justifyContent: 'center',
+  },
+  title: {
+    opacity: 0.6,
+    fontSize: 25,
+    position: 'absolute',
+    width: Dimensions.get('screen').width,
+    textAlign: 'center',
   },
   badge: {
     height: 200,
