@@ -1,6 +1,5 @@
 export type Beer = {
   beerId: number;
-  haveHad: boolean;
   beerName: string;
   beerLabel: string;
   beerIbu: number;
@@ -12,14 +11,15 @@ export type Beer = {
   breweryUrl: string;
 };
 
-export type TrendingBeer = {
-  beerId: number;
-  haveHad: boolean;
-  beerName: string;
-  beerLabel: string;
-  beerStyle: string;
-  breweryName: string;
-  breweryCountry: string;
-  breweryLabel: string;
-  breweryUrl: string;
+export const InitalBeer = {
+  beerId: 0,
+  beerName: '',
+  beerLabel: '',
+  beerIbu: 0,
+  beerDescription: '',
+  beerStyle: '',
+  breweryName: '',
+  breweryCountry: '',
+  breweryLabel: '',
+  breweryUrl: '',
 };

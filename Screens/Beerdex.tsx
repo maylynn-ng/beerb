@@ -1,34 +1,25 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { Text, View, StyleSheet, SafeAreaView } from 'react-native';
-import Loading from '../Components/Loading';
+import { getBeerdex, getDrunkBeers } from '../redux/actions';
 import { connect } from 'react-redux';
 import { StatusBar } from 'expo-status-bar';
 
 import { State } from '../redux/reducers';
 import { Beer } from '../Models/Beer.model';
-import { fetchTrending, fetchDrunkBeers } from '../redux/actions';
 
 import BeerBadge from '../Components/BeerBadge';
 import { ScrollView } from 'react-native-gesture-handler';
 
-function Beerdex({ setTrendingBeers, trendingBeersList, user, setDrunkBeers }: any) {
-  const [beerList, setBeerList] = useState([]);
-
+function Beerdex({ user, populateBeerdex, populateDrunkBeers, beerdex }: any) {
   useEffect(() => {
-    if (user.Locations && user.Locations.length) {
-      user.Locations.map((entry: any) => {
-        setDrunkBeers(entry.beerId);
-      });
-    }
+    populateBeerdex();
 
-    setBeerList([...beerList, ...trendingBeersList, ...user.drunkBeers]);
-
-    if (!trendingBeersList.length) {
-      setTrendingBeers();
-    }
+    populateDrunkBeers(orderDrunkBeers());
   }, []);
 
-  console.log('😍 Beerdex.tsx, line 13 hi!!!!!: ', beerList);
+  function orderDrunkBeers() {
+    return Array.from(new Set(user.Locations.map((entry: any) => entry.beerId)));
+  }
 
   return (
     <SafeAreaView>
@@ -37,9 +28,14 @@ function Beerdex({ setTrendingBeers, trendingBeersList, user, setDrunkBeers }: a
         <Text style={styles.heading}>BEERDEX</Text>
         <ScrollView>
           <View style={styles.logoContainer}>
-            {beerList && beerList.length ? (
-              beerList.map((beer: Beer, index: number) => (
-                <BeerBadge style={styles.badge} key={index} beer={beer} />
+            {user.drunkBeers && user.drunkBeers.length
+              ? user.drunkBeers.map((entry: any, index: number) => (
+                  <BeerBadge style={styles.badge} hasDrunk={1} key={index} beer={entry} />
+                ))
+              : null}
+            {beerdex && beerdex.length ? (
+              beerdex.map((beer: Beer, index: number) => (
+                <BeerBadge style={styles.badge} hasDrunk={0.3} key={index} beer={beer} />
               ))
             ) : (
               // <Loading />
@@ -54,15 +50,15 @@ function Beerdex({ setTrendingBeers, trendingBeersList, user, setDrunkBeers }: a
 
 function mapStateToProps(state: State) {
   return {
-    trendingBeersList: state.trendingBeers,
     user: state.user,
+    beerdex: state.beerdex,
   };
 }
 
 function mapDispatch(dispatch: any) {
   return {
-    setTrendingBeers: () => dispatch(fetchTrending()),
-    setDrunkBeers: (id: number) => dispatch(fetchDrunkBeers(id)),
+    populateBeerdex: () => dispatch(getBeerdex()),
+    populateDrunkBeers: (beerIds: []) => dispatch(getDrunkBeers(beerIds)),
   };
 }
 
@@ -79,7 +75,7 @@ const styles = StyleSheet.create({
     fontSize: 36,
     fontWeight: 'bold',
     textAlign: 'center',
-    marginTop: 10,
+    marginVertical: 15,
   },
   logoContainer: {
     flexDirection: 'row',

@@ -1,18 +1,29 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, Image, StyleSheet } from 'react-native';
+import { InitalBeer } from '../Models/Beer.model';
+
+const DB_LOCALHOST = process.env.EXPO_LOCALHOST;
 
 const BeerModal = ({ beer }: any) => {
+  const [thisBeer, setThisBeer] = useState(InitalBeer);
+
+  useEffect(() => {
+    fetch(`${DB_LOCALHOST}/searchBeer/${beer.beerId}`)
+      .then(res => res.json())
+      .then(res => setThisBeer(res));
+  }, []);
+
   return (
     <View style={styles.container}>
       <View style={styles.labelAndName}>
-        <Image style={styles.label} source={{ uri: beer.beerLabel }} />
-        <Text style={styles.beerName}>{beer.beerName.toUpperCase()}</Text>
+        <Image style={styles.label} source={{ uri: thisBeer.beerLabel }} />
+        <Text style={styles.beerName}>{thisBeer.beerName.toUpperCase()}</Text>
       </View>
       <Text style={styles.breweryInfo}>
-        {beer.breweryName}, {beer.breweryCountry}
+        {thisBeer.breweryName}, {thisBeer.breweryCountry}
       </Text>
       <View>
-        <Text style={styles.beerDescription}>{beer.beerDescription}</Text>
+        <Text style={styles.beerDescription}>{thisBeer.beerDescription}</Text>
       </View>
     </View>
   );
