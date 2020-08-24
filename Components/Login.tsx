@@ -69,7 +69,14 @@ const Login = ({ user, setUser, isLoading, setLoading }: any) => {
     <View style={{ width: '100%', height: '100%' }}>
       {isLoading ? <Loading /> : null}
       {!user.sub ? (
-        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+        <View
+          style={{
+            flex: 1,
+            alignItems: 'center',
+            justifyContent: 'center',
+            opacity: isLoading ? 0 : 1,
+          }}
+        >
           <Image source={require('../assets/logo.png')} style={{ height: 250, width: 250 }} />
           <TouchableOpacity
             style={{
