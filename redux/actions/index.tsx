@@ -86,6 +86,7 @@ export function fetchSearchBeers(searchTerm: string) {
               beerId: beer.beer.bid,
               beerName: beer.beer.beer_name,
               beerLabel: beer.beer.beer_label,
+              beerAbv: beer.beer.beer_abv,
               beerIbu: beer.beer.beer_ibu,
               beerDescription: beer.beer.beer_description,
               beerStyle: beer.beer.beer_style,

@@ -36,14 +36,12 @@ const FavouriteBeer = ({ beerId, favouriteBeers, UserId, setFavBeers }: any) => 
   };
 
   return (
-    <View>
-      <TouchableOpacity style={styles.favIcon} onPress={handlePress}>
-        <Image
-          style={styles.favIcon}
-          source={isFav ? require('../assets/fav-full.png') : require('../assets/fav-empty.png')}
-        />
-      </TouchableOpacity>
-    </View>
+    <TouchableOpacity style={styles.favIcon} onPress={handlePress}>
+      <Image
+        style={styles.favIcon}
+        source={isFav ? require('../assets/fav-full.png') : require('../assets/fav-empty.png')}
+      />
+    </TouchableOpacity>
   );
 };
 

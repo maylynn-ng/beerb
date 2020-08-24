@@ -39,12 +39,6 @@ function Menu({ navigation, logout }: any) {
           <Text style={styles.menuText}>Beerdex</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity
-          style={styles.menuRoutes}
-          onPress={() => navigation.navigate('Favorites')}
-        >
-          <Text style={styles.menuText}>Favorites</Text>
-        </TouchableOpacity>
         <TouchableOpacity style={styles.menuRoutes} onPress={() => logOut()}>
           <Text style={styles.menuText}>Logout</Text>
         </TouchableOpacity>
