@@ -71,6 +71,7 @@ const Login = ({ user, setUser, isLoading, setLoading }: any) => {
         width: '100%',
         height: '100%',
         marginTop: 50,
+        backgroundColor: 'white',
       }}
     >
       {isLoading ? <Loading /> : null}
