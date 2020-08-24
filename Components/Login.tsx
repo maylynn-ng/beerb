@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { View, Image, Text, TouchableOpacity, Platform, Alert } from 'react-native';
+import { View, Image, Text, TouchableOpacity, Platform, Alert, StatusBar } from 'react-native';
 import { connect } from 'react-redux';
 
 import { setUserInfo, changeLoading } from '../redux/actions';
@@ -66,7 +66,13 @@ const Login = ({ user, setUser, isLoading, setLoading }: any) => {
   }, [user.sub]);
 
   return (
-    <View style={{ width: '100%', height: '100%' }}>
+    <View
+      style={{
+        width: '100%',
+        height: '100%',
+        marginTop: 50,
+      }}
+    >
       {isLoading ? <Loading /> : null}
       {!user.sub ? (
         <View

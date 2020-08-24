@@ -11,7 +11,6 @@ function ShortProfile({
   lastBeer,
   currentBorough,
   takeScreenShot,
-  location,
 }: any) {
   const share = async () => {
     try {
@@ -21,7 +20,7 @@ function ShortProfile({
 
       const link = () => {
         let index = user.Locations.length - 1;
-        if (user.Locations[index].placeName === 'unknown pub') {
+        if (user.Locations[index].placeName === 'somewhere') {
           let gps = `${user.Locations[index].latitude},${user.Locations[index].longitude}`;
           return `google.co.uk/maps/search/?api=1&query=${gps}`;
         } else {
@@ -32,7 +31,7 @@ function ShortProfile({
 
       await Share.share({
         message: `Hey! Fancy joining me? I'm having ${whatArticle()} ${lastBeer.beerName} in ${
-          lastBeer.placeName
+          lastBeer.placeName === 'somewhere' ? lastBeer.boroughName : lastBeer.placeName
         }. ${link()}`,
       });
     } catch (error) {
@@ -94,7 +93,8 @@ function ShortProfile({
             Your last beer...
           </Text>
           <Text style={styles.lastBeer}>
-            {lastBeer.beerName} in {lastBeer.placeName}
+            {lastBeer.beerName} in{' '}
+            {lastBeer.placeName === 'somewhere' ? lastBeer.boroughName : lastBeer.placeName}
           </Text>
           <View style={styles.shareView}>
             <TouchableOpacity style={styles.shareButton} onPress={() => share()}>

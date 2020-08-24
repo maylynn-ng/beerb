@@ -63,8 +63,8 @@ function AddBeer({
         location: {
           beerName: beer.beerName,
           beerId: beer.beerId,
-          placeName: pub.name || 'unknown pub',
-          placeId: pub.place_id || 'unknown pub',
+          placeName: pub.name || 'somewhere',
+          placeId: pub.place_id || 'somewhere',
           boroughName: currentBorough.boroughName,
           boroughId: currentBorough.boroughId,
           longitude: lng,

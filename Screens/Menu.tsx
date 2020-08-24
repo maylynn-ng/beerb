@@ -15,7 +15,7 @@ function Menu({ navigation, logout }: any) {
   };
 
   return (
-    <>
+    <View style={{ height: '100%' }}>
       <TouchableOpacity onPress={() => navigation.goBack()}>
         <Image source={require('../assets/close.png')} style={styles.closeMenu} />
       </TouchableOpacity>
@@ -49,7 +49,7 @@ function Menu({ navigation, logout }: any) {
           <Text style={styles.menuText}>Logout</Text>
         </TouchableOpacity>
       </View>
-    </>
+    </View>
   );
 }
 
