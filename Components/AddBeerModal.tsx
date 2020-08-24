@@ -106,11 +106,15 @@ function AddBeer({
               <Picker
                 selectedValue={location}
                 onValueChange={pub => setPub(pub)}
+                enabled={pubLocations.length === 0 ? false : true}
                 itemStyle={{
                   fontSize: 5,
                 }}
               >
-                <Picker.Item label="Current Location" value={location} />
+                <Picker.Item
+                  label={pubLocations.length === 0 ? 'No pubs nearby' : 'Current Location'}
+                  value={location}
+                />
                 {pubLocations.map(pub => (
                   <Picker.Item
                     key={pub.place_id}
@@ -120,6 +124,9 @@ function AddBeer({
                 ))}
               </Picker>
             </View>
+            {pubLocations.length === 0 ? (
+              <Text>Even if there are no pubs in your vicinity, you can still log a beer!</Text>
+            ) : null}
             <Text style={styles.header}>Your beer:</Text>
             <TextInput
               style={styles.input2}
