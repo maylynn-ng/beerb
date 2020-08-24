@@ -1,7 +1,7 @@
 import 'react-native-gesture-handler';
 import React from 'react';
 import { Provider } from 'react-redux';
-import { StyleSheet, SafeAreaView } from 'react-native';
+import { StyleSheet, SafeAreaView, Dimensions } from 'react-native';
 import store from './redux/store';
 import Login from './Components/Login';
 
@@ -25,5 +25,6 @@ const styles = StyleSheet.create({
     backgroundColor: 'gold',
     alignItems: 'center',
     justifyContent: 'center',
+    height: Dimensions.get('screen').height,
   },
 });

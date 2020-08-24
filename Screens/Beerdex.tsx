@@ -15,6 +15,7 @@ import { Beer } from '../Models/Beer.model';
 
 import BeerBadge from '../Components/BeerBadge';
 import { ScrollView } from 'react-native-gesture-handler';
+import Topbar from '../Components/Topbar';
 
 function Beerdex({
   user,
@@ -27,7 +28,6 @@ function Beerdex({
   useEffect(() => {
     setLoading(true);
     populateBeerdex();
-
     populateDrunkBeers(orderDrunkBeers());
   }, []);
 
@@ -41,48 +41,34 @@ function Beerdex({
     return Array.from(new Set(user.Locations.map((entry: any) => entry.beerId)));
   }
   return (
-    <SafeAreaView>
-      <View style={styles.screen}>
-        <View style={styles.topBar}>
-          <View style={styles.menuContainer}>
-            <TouchableOpacity
-              style={styles.burgerMenuTouch}
-              onPress={() => {
-                navigation.push('Modal');
-              }}
-            >
-              <Image source={require('../assets/menu.png')} style={styles.burgerMenu} />
-            </TouchableOpacity>
-          </View>
-          <Text style={styles.title}>BEERDEX</Text>
-          <View style={styles.currentView}>
-            <Text>You've had {user.drunkBeers.length}</Text>
-            <Text>unique beer{user.drunkBeers.length !== 1 ? 's' : ''}</Text>
-          </View>
+    <>
+      <Topbar navigation={navigation} user={user} />
+      <SafeAreaView>
+        <View style={styles.screen}>
+          <ScrollView>
+            <View style={styles.logoContainer}>
+              {user.drunkBeers && user.drunkBeers.length
+                ? user.drunkBeers.map(
+                    (entry: any, index: number) =>
+                      entry && (
+                        <BeerBadge style={styles.badge} hasDrunk={1} key={index} beer={entry} />
+                      )
+                  )
+                : null}
+              {beerdex && beerdex.length
+                ? beerdex.map((beer: Beer, index: number) => {
+                    if (orderDrunkBeers().indexOf(beer.beerId) === -1) {
+                      return (
+                        <BeerBadge style={styles.badge} hasDrunk={0.3} key={index} beer={beer} />
+                      );
+                    }
+                  })
+                : null}
+            </View>
+          </ScrollView>
         </View>
-        <ScrollView>
-          <View style={styles.logoContainer}>
-            {user.drunkBeers && user.drunkBeers.length
-              ? user.drunkBeers.map(
-                  (entry: any, index: number) =>
-                    entry && (
-                      <BeerBadge style={styles.badge} hasDrunk={1} key={index} beer={entry} />
-                    )
-                )
-              : null}
-            {beerdex && beerdex.length
-              ? beerdex.map((beer: Beer, index: number) => {
-                  if (orderDrunkBeers().indexOf(beer.beerId) === -1) {
-                    return (
-                      <BeerBadge style={styles.badge} hasDrunk={0.3} key={index} beer={beer} />
-                    );
-                  }
-                })
-              : null}
-          </View>
-        </ScrollView>
-      </View>
-    </SafeAreaView>
+      </SafeAreaView>
+    </>
   );
 }
 

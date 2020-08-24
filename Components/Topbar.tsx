@@ -3,7 +3,7 @@ import { Image, StyleSheet, View, Text, TouchableOpacity } from 'react-native';
 import { Dimensions } from 'react-native';
 import { useRoute } from '@react-navigation/native';
 
-function Topbar({ navigation, user }) {
+function Topbar({ navigation, user, currentBorough }: any) {
   const route = useRoute();
 
   return (
@@ -12,18 +12,28 @@ function Topbar({ navigation, user }) {
         <TouchableOpacity
           style={styles.burgerMenuTouch}
           onPress={() => {
-            navigation.push('Modal');
+            navigation.openDrawer();
           }}
         >
           <Image source={require('../assets/menu.png')} style={styles.burgerMenu} />
         </TouchableOpacity>
       </View>
-      <Text style={styles.title}>{route.name}</Text>
+      {route.name !== 'Home' && <Text style={styles.title}>{route.name}</Text>}
       {route.name === 'Beerdex' && (
         <View style={styles.currentView}>
           <Text>You've had {user.drunkBeers.length}</Text>
           <Text>unique beer{user.drunkBeers.length !== 1 ? 's' : ''}</Text>
         </View>
+      )}
+      {route.name === 'Home' && (
+        <>
+          <Text style={styles.title}>{currentBorough.boroughName}</Text>
+          <View style={styles.currentView}>
+            <Text style={styles.currentBoroughName}>
+              {Object.keys(user.boroughCounter).length}/33
+            </Text>
+          </View>
+        </>
       )}
     </View>
   );
@@ -57,6 +67,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     backgroundColor: 'gold',
     elevation: 10,
+    width: Dimensions.get('screen').width,
   },
   logoContainer: {
     flexDirection: 'row',
@@ -71,9 +82,13 @@ const styles = StyleSheet.create({
   },
   title: {
     opacity: 0.6,
-    fontSize: 25,
+    fontSize: 22,
     position: 'absolute',
     width: Dimensions.get('screen').width,
     textAlign: 'center',
+  },
+  currentBoroughName: {
+    fontSize: 25,
+    marginLeft: 10,
   },
 });

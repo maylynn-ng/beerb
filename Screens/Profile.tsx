@@ -9,7 +9,6 @@ import {
   Dimensions,
 } from 'react-native';
 import { connect } from 'react-redux';
-import { useRoute } from '@react-navigation/native';
 
 import {
   storeBorough,
@@ -37,8 +36,18 @@ function Profile({ user, beerFrequency, navigation }) {
         </View>
 
         <View style={styles.info}>
-          <Text>Last Borough: {user.Locations[user.Locations.length - 1].boroughName}</Text>
-          <Text>Last Location: {user.Locations[user.Locations.length - 1].placeName}</Text>
+          <Text>
+            Last Borough:
+            {user.Locations.length !== 0
+              ? user.Locations[user.Locations.length - 1].boroughName
+              : 'no borough yet'}
+          </Text>
+          <Text>
+            Last Location:
+            {user.Locations.length !== 0
+              ? user.Locations[user.Locations.length - 1].placeName
+              : 'no location yet'}
+          </Text>
           <Text>Total beers had: {user.Locations.length}</Text>
           <Text>
             Most frequently enjoyed: {beerFrequency[0][0]} - {beerFrequency[0][1]} times
