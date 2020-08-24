@@ -62,7 +62,6 @@ function ShortProfile({
         visible={true}
         onBackdropPress={() => {
           toggleShortProfile();
-          takeScreenShot();
         }}
       >
         <View style={styles.mainContainer}>
@@ -87,7 +86,7 @@ function ShortProfile({
               alignSelf: 'flex-start',
               marginHorizontal: 10,
               marginTop: 20,
-              marginBottom: 10,
+              marginBottom: 5,
             }}
           >
             Your last beer...
@@ -97,17 +96,14 @@ function ShortProfile({
             {lastBeer.placeName === 'somewhere' ? lastBeer.boroughName : lastBeer.placeName}
           </Text>
           <View style={styles.shareView}>
-            <TouchableOpacity style={styles.shareButton} onPress={() => share()}>
+            <TouchableOpacity style={styles.shareButton} onPress={() => takeScreenShot()}>
               <Image
-                source={require('../assets/share.png')}
-                style={{ height: 30, width: 30, opacity: 0.4 }}
+                source={require('../assets/shareImage.png')}
+                style={{ height: 30, width: 30 }}
               />
             </TouchableOpacity>
             <TouchableOpacity style={styles.shareButton} onPress={() => share()}>
-              <Image
-                source={require('../assets/share.png')}
-                style={{ height: 30, width: 30, opacity: 0.4 }}
-              />
+              <Image source={require('../assets/share.png')} style={{ height: 30, width: 30 }} />
             </TouchableOpacity>
           </View>
         </View>
@@ -163,13 +159,15 @@ const styles = StyleSheet.create({
   },
   infoView: {
     flexDirection: 'row',
-    alignItems: 'center',
     marginTop: '5%',
     marginHorizontal: 20,
+    paddingBottom: 4,
+    borderBottomColor: 'gold',
+    borderBottomWidth: 3,
+    borderRadius: 10,
   },
   info: {
     flex: 1,
-    justifyContent: 'center',
     alignItems: 'center',
   },
   number: {
@@ -191,22 +189,16 @@ const styles = StyleSheet.create({
     elevation: 5,
     borderRadius: 10,
     fontWeight: '400',
+    width: '90%',
   },
   shareView: {
     flexDirection: 'row',
-    alignItems: 'center',
-    marginTop: '5%',
-    padding: 10,
-    borderColor: 'whitesmoke',
-    borderWidth: 3,
   },
   shareButton: {
     height: 30,
     width: 30,
     opacity: 0.3,
-    flex: 1,
-    justifyContent: 'center',
+    margin: 20,
     alignItems: 'center',
-    padding: 15,
   },
 });

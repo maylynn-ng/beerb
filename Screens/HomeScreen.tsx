@@ -1,7 +1,8 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { View, Image, Text, TouchableOpacity, StyleSheet, Dimensions } from 'react-native';
-import { PermissionsAndroid, Platform } from 'react-native';
+import { PermissionsAndroid } from 'react-native';
 import * as MediaLibrary from 'expo-media-library';
+import * as Sharing from 'expo-sharing';
 import { connect } from 'react-redux';
 import store from '../redux/store';
 import ViewShot, { captureRef } from 'react-native-view-shot';
@@ -51,15 +52,17 @@ const HomeScreen = ({
     // have ended before showing the screen.
     (async () => {
       let { status } = await Location.requestPermissionsAsync();
-      if (status !== 'granted') {
+
+      if (status === 'granted') {
+        await Location.startLocationUpdatesAsync('background-location-task', {
+          accuracy: Location.Accuracy.Highest,
+        });
+      } else {
         console.info('Permission to access location was denied');
       }
 
       // Triggers a new listener that will check if the location is updated.
       // On update, background-location-task will manage the changes in the TaskManager.
-      await Location.startLocationUpdatesAsync('background-location-task', {
-        accuracy: Location.Accuracy.Highest,
-      });
     })();
   }, []);
 
@@ -108,20 +111,16 @@ const HomeScreen = ({
     const permission = PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE;
     const hasPermission = await PermissionsAndroid.check(permission);
     if (hasPermission) {
-      console.log(hasPermission);
+      const status = await PermissionsAndroid.request(permission);
+      status === 'granted'
+        ? console.log('Permission to store granted')
+        : console.log('Permission to store DENIED');
     }
-    const status = await PermissionsAndroid.request(permission);
-    return status === 'granted';
   };
 
-  const savePicture = async uri => {
-    if (Platform.OS === 'ios') {
-      return;
-    }
-    await MediaLibrary.requestPermissionsAsync();
-
-    console.log('hi');
+  const savePicture = async (uri: string) => {
     await MediaLibrary.saveToLibraryAsync(uri);
+    Sharing.shareAsync(uri);
   };
 
   return (
@@ -172,6 +171,7 @@ TaskManager.defineTask('background-location-task', ({ data, error }) => {
   }
   if (data) {
     const { latitude, longitude } = data.locations[0].coords;
+    console.log(latitude);
     store.dispatch(storeLocation({ latitude, longitude }));
     simpleArrayOfBoroughs.some(
       borough =>

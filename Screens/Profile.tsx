@@ -1,6 +1,15 @@
 import React from 'react';
-import { Image, SafeAreaView, StyleSheet, View, Text } from 'react-native';
+import {
+  Image,
+  SafeAreaView,
+  StyleSheet,
+  View,
+  Text,
+  TouchableOpacity,
+  Dimensions,
+} from 'react-native';
 import { connect } from 'react-redux';
+import { useRoute } from '@react-navigation/native';
 
 import {
   storeBorough,
@@ -9,29 +18,36 @@ import {
   getLocations,
   storeBeerFreqs,
 } from '../redux/actions';
+import Topbar from '../Components/Topbar';
 
-function Profile({ user, beerFrequency }) {
+function Profile({ user, beerFrequency, navigation }) {
+  const picture = () => {
+    let src;
+    user.picture ? (src = { uri: user.picture }) : (src = 'require("./assets/user.png")');
+    return src;
+  };
+
   return (
-    <SafeAreaView style={styles.mainContainer}>
-      <Image
-        style={styles.userImage}
-        source={{
-          uri: user.picture,
-        }}
-      />
-      <View>
-        <Text>{user.name}</Text>
-        <Text>Last Borough: {user.Locations[user.Locations.length - 1].boroughName}</Text>
-        <Text>Last Location: {user.Locations[user.Locations.length - 1].placeName}</Text>
-        <Text>Beers had: {user.Locations.length}</Text>
-        <Text>
-          Most frequently enjoyed: {beerFrequency[0][0]} - {beerFrequency[0][1]} times
-        </Text>
-        <Text>{Object.keys(user.boroughCounter).length}/32</Text>
+    <>
+      <Topbar navigation={navigation} user={user} />
+      <SafeAreaView style={styles.mainContainer}>
+        <View style={{ flex: 1, flexDirection: 'row' }}>
+          <Image style={styles.userImage} source={picture()} />
+          <Text style={{ fontSize: 30 }}>{user.name}</Text>
+        </View>
 
-        {/* modal picture howmany how many beers-locations name, last beer share with share your locations friends savebutton */}
-      </View>
-    </SafeAreaView>
+        <View style={styles.info}>
+          <Text>Last Borough: {user.Locations[user.Locations.length - 1].boroughName}</Text>
+          <Text>Last Location: {user.Locations[user.Locations.length - 1].placeName}</Text>
+          <Text>Total beers had: {user.Locations.length}</Text>
+          <Text>
+            Most frequently enjoyed: {beerFrequency[0][0]} - {beerFrequency[0][1]} times
+          </Text>
+          <Text>{Object.keys(user.boroughCounter).length}/33</Text>
+          <Text>Beers discovered{beerFrequency.length}/33</Text>
+        </View>
+      </SafeAreaView>
+    </>
   );
 }
 
@@ -60,20 +76,18 @@ export default connect(mapStateToProps, mapDispatch)(Profile);
 
 const styles = StyleSheet.create({
   mainContainer: {
-    margin: 20,
     flex: 1,
-    justifyContent: 'center',
     alignItems: 'center',
+    padding: '5%',
   },
   userImage: {
     height: 150,
     width: 150,
-    shadowColor: 'grey',
-    elevation: 4,
   },
-  grayImage: {
-    height: 80,
-    width: 80,
-    opacity: 0.3,
+  info: {
+    flex: 2,
+    borderWidth: 3,
+    width: Dimensions.get('screen').width,
+    padding: 10,
   },
 });
