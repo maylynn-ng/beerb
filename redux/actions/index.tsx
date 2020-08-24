@@ -10,6 +10,7 @@ const PLACES_NEARBY_URL = process.env.REACT_NATIVE_PLACES_NEARBY_URL;
 const PLACES_KEY = process.env.REACT_NATIVE_PLACES_KEY;
 const PLACES_NEARBY_PARAMS: string = '&radius=200&type=bar&keyword=pub&key=';
 const DB_LOCALHOST = process.env.EXPO_LOCALHOST;
+const DRUNK_API = process.env.REACT_NATIVE_UNTAPPED_DRUNK_URL;
 
 export type Action = {
   type: string;
@@ -62,6 +63,13 @@ export function changeLoading(status: boolean) {
   return {
     type: 'SET_LOADING',
     payload: status,
+  }
+}
+
+export function storeBeerFreqs(freqs: [[]]) {
+  return {
+    type: 'STORE_BEER_FREQS',
+    payload: freqs,
   };
 }
 

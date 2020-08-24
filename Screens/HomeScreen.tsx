@@ -1,7 +1,10 @@
-import React, { useEffect, useState } from 'react';
-import { SafeAreaView, View, Image, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import React, { useEffect, useState, useRef, useCallback } from 'react';
+import { View, Image, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { PermissionsAndroid, Platform } from 'react-native';
+import * as MediaLibrary from 'expo-media-library';
 import { connect } from 'react-redux';
 import store from '../redux/store';
+import ViewShot, { captureRef } from 'react-native-view-shot';
 import moment from 'moment';
 import * as Location from 'expo-location';
 import * as TaskManager from 'expo-task-manager';
@@ -10,7 +13,13 @@ import { isPointInPolygon } from 'geolib';
 import Navbar from '../Components/Navbar';
 import boroughs from '../assets/london_sport.json';
 
-import { storeBorough, storeLocation, getLocations, changeLoading } from '../redux/actions';
+import {
+  storeBorough,
+  storeLocation,
+  getLocations,
+  changeLoading,
+  storeBeerFreqs,
+} from '../redux/actions';
 
 const simpleArrayOfBoroughs = boroughs.features.map(borough => {
   return {
@@ -32,6 +41,7 @@ const HomeScreen = ({
   location,
   user,
   setLoading,
+  setBeerFrequency,
 }: any) => {
   const [lastBeer, setLastBeer] = useState({});
 
@@ -67,8 +77,55 @@ const HomeScreen = ({
     }
   }, [user.Locations]);
 
+  useEffect(() => {
+    let locs = [...user.Locations];
+    if (locs.length !== 0) {
+      let frequencies = locs.reduce((acc, cur) => {
+        acc[cur.beerName] = (acc[cur.beerName] || 0) + 1;
+        return acc;
+      }, {});
+      let sortedFreqs = Object.entries(frequencies).sort((a, b) => b[1] - a[1]);
+      setBeerFrequency(sortedFreqs);
+    }
+  }, [user.Locations]);
+
+  const screenShot = useRef();
+
+  const takeScreenShot = async () => {
+    try {
+      const uri = await captureRef(screenShot, {
+        format: 'jpg',
+        quality: 0.8,
+      });
+      await hasAndroidPermission();
+      await savePicture(uri);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const hasAndroidPermission = async () => {
+    const permission = PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE;
+    const hasPermission = await PermissionsAndroid.check(permission);
+    if (hasPermission) {
+      console.log(hasPermission);
+    }
+    const status = await PermissionsAndroid.request(permission);
+    return status === 'granted';
+  };
+
+  const savePicture = async uri => {
+    if (Platform.OS === 'ios') {
+      return;
+    }
+    await MediaLibrary.requestPermissionsAsync();
+
+    console.log('hi');
+    await MediaLibrary.saveToLibraryAsync(uri);
+  };
+
   return (
-    <SafeAreaView style={styles.homeScreen}>
+    <ViewShot ref={screenShot} style={styles.homeScreen}>
       <View style={styles.topBar}>
         <TouchableOpacity
           style={styles.burgerMenuTouch}
@@ -102,8 +159,8 @@ const HomeScreen = ({
           {moment(lastBeer.createdAt).format('dddd, MMM Do YYYY')}
         </Text>
       </View>
-      <Navbar navigation={navigation} />
-    </SafeAreaView>
+      <Navbar takeScreenShot={takeScreenShot} lastBeer={lastBeer} navigation={navigation} />
+    </ViewShot>
   );
 };
 
@@ -127,6 +184,7 @@ function mapStateToProps(state: any) {
     currentBorough: state.currentBorough,
     user: state.user,
     location: state.location,
+    beerFrequency: state.user.beerFreqs,
   };
 }
 
@@ -134,6 +192,7 @@ function mapDispatch(dispatch: any) {
   return {
     setLocations: (user: any) => dispatch(getLocations(user)),
     setLoading: (status: boolean) => dispatch(changeLoading(status)),
+    setBeerFrequency: (freqs: [[]]) => dispatch(storeBeerFreqs(freqs)),
   };
 }
 
@@ -206,5 +265,9 @@ const styles = StyleSheet.create({
   currentBoroughName: {
     fontSize: 25,
     marginLeft: 10,
+  },
+  previewImage: {
+    height: 200,
+    backgroundColor: 'black',
   },
 });

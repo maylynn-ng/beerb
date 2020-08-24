@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { View, Image, Switch, StyleSheet } from 'react-native';
 import MapView, { Polygon, Marker } from 'react-native-maps';
 import { getCenterOfBounds } from 'geolib';

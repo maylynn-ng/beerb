@@ -1,10 +1,16 @@
 import React, { useState } from 'react';
 import { Dimensions, View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import AddBeer from './AddBeerModal';
+<<<<<<< HEAD
 import { connect } from 'react-redux';
 import { fetchPlacesNearby, changeLoading } from '../redux/actions';
 
 const Navbar = ({ navigation, location, setLoading, setPlacesNearby }: any) => {
+=======
+import ShortProfile from './ShortProfile';
+
+const Navbar = ({ navigation, location, lastBeer, takeScreenShot }: any) => {
+>>>>>>> origin/userProfile
   const [isShownAddBeer, setIsShownAddBeer] = useState(false);
   const toggleAddBeer = () => {
     setLoading(true);
@@ -14,16 +20,27 @@ const Navbar = ({ navigation, location, setLoading, setPlacesNearby }: any) => {
     setIsShownAddBeer(!isShownAddBeer);
   };
 
+  const [isShownShortProfile, setIsShownShortProfile] = useState(false);
+  const toggleShortProfile = () => {
+    setIsShownShortProfile(!isShownShortProfile);
+  };
+
   return (
     <View style={styles.navbar}>
       <TouchableOpacity
         style={styles.navbarBtn}
         onPress={() => {
-          navigation.navigate('Profile');
+          toggleShortProfile();
         }}
       >
         <Image source={require('../assets/user.png')} style={styles.navbarPic} />
       </TouchableOpacity>
+      <ShortProfile
+        isShownShortProfile={isShownShortProfile}
+        toggleShortProfile={toggleShortProfile}
+        lastBeer={lastBeer}
+        takeScreenShot={takeScreenShot}
+      />
       <TouchableOpacity
         style={styles.addBtn}
         onPress={() => {
