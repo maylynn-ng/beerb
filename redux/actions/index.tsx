@@ -173,6 +173,8 @@ export function getLocations(user: any) {
         });
         dispatch({ type: 'GET_LOCATIONS', payload: counter });
         dispatch({ type: 'SET_USER_INFO', payload: { id: res.id, Locations: res.Locations } });
+        const favouriteBeers = new Set(res.favouriteBeers);
+        dispatch({ type: 'SAVE_FAVOURITES', payload: favouriteBeers });
         dispatch(changeLoading(false));
       })
       .catch(error => {
@@ -205,5 +207,12 @@ export function getBeerdex() {
         dispatch({ type: 'SET_BEERDEX', payload: result });
       })
       .catch(error => console.error('Unable to reach Beerdex ', error));
+  };
+}
+
+export function updateFavourites(favouriteBeers: Set<Object>) {
+  return {
+    type: 'SAVE_FAVOURITES',
+    payload: favouriteBeers,
   };
 }

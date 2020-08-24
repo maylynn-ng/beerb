@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, Image, StyleSheet } from 'react-native';
 import { InitalBeer } from '../Models/Beer.model';
+import FavouriteBeer from './FavouriteBeer';
 
 const DB_LOCALHOST = process.env.EXPO_LOCALHOST;
 
@@ -20,6 +21,7 @@ const BeerModal = ({ beer }: any) => {
           <Image style={styles.label} source={{ uri: thisBeer.beerLabel }} />
         )}
         <Text style={styles.beerName}>{thisBeer.beerName.toUpperCase()}</Text>
+        <FavouriteBeer beerId={thisBeer.beerId} />
       </View>
       <Text style={styles.breweryInfo}>
         {thisBeer.breweryName}, {thisBeer.breweryCountry}
