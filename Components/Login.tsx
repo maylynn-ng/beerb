@@ -102,6 +102,22 @@ const Login = ({ user, setUser, isLoading, setLoading }: any) => {
           >
             <Text style={{ fontWeight: '700', fontSize: 22 }}>Hops in!</Text>
           </TouchableOpacity>
+          <Text
+            style={{ position: 'absolute', bottom: 30, paddingHorizontal: 30, textAlign: 'center' }}
+          >
+            BeerB is an app to explore London's boroughs and have fun while drinking beer.
+          </Text>
+          <Text
+            style={{
+              position: 'absolute',
+              bottom: 10,
+              paddingHorizontal: 30,
+              textAlign: 'center',
+              fontWeight: 'bold',
+            }}
+          >
+            Please drink responsibly
+          </Text>
         </View>
       ) : (
         <Navigation />
