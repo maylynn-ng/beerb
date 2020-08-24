@@ -20,20 +20,20 @@ function ShortProfile({
       };
 
       const link = () => {
-        if (user.Locations.placeName === 'unknown pub') {
-          return '';
+        let index = user.Locations.length - 1;
+        if (user.Locations[index].placeName === 'unknown pub') {
+          let gps = `${user.Locations[index].latitude},${user.Locations[index].longitude}`;
+          return `google.co.uk/maps/search/?api=1&query=${gps}`;
         } else {
-          let pubName = user.Locations[0].placeName.split(' ').join('+');
-          let gps = `@${user.Locations[0].latitude},${user.Locations[0].longitude}`;
-          return `google.co.uk/maps/place/${pubName}/${gps},15z`;
+          let pubName = user.Locations[index].placeName.split(' ').join('+');
+          return `google.co.uk/maps/search/?api=1&query=${pubName}`;
         }
       };
-      const googleLink = link();
 
       await Share.share({
         message: `Hey! Fancy joining me? I'm having ${whatArticle()} ${lastBeer.beerName} in ${
           lastBeer.placeName
-        }. ${googleLink}`,
+        }. ${link()}`,
       });
     } catch (error) {
       console.log(error.message);
@@ -96,10 +96,20 @@ function ShortProfile({
           <Text style={styles.lastBeer}>
             {lastBeer.beerName} in {lastBeer.placeName}
           </Text>
-
-          <TouchableOpacity style={styles.shareButton} onPress={() => share()}>
-            <Image source={require('../assets/share.png')} style={styles.shareButton} />
-          </TouchableOpacity>
+          <View style={styles.shareView}>
+            <TouchableOpacity style={styles.shareButton} onPress={() => share()}>
+              <Image
+                source={require('../assets/share.png')}
+                style={{ height: 30, width: 30, opacity: 0.4 }}
+              />
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.shareButton} onPress={() => share()}>
+              <Image
+                source={require('../assets/share.png')}
+                style={{ height: 30, width: 30, opacity: 0.4 }}
+              />
+            </TouchableOpacity>
+          </View>
         </View>
       </Modal>
     )
@@ -182,10 +192,21 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     fontWeight: '400',
   },
+  shareView: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: '5%',
+    padding: 10,
+    borderColor: 'whitesmoke',
+    borderWidth: 3,
+  },
   shareButton: {
     height: 30,
     width: 30,
     opacity: 0.3,
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 15,
   },
-  shareIcon: {},
 });
