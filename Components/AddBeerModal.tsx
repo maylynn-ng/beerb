@@ -8,9 +8,10 @@ import {
   TextInput,
   ToastAndroid,
   Image,
+  Dimensions,
 } from 'react-native';
 import Modal from 'react-native-modal';
-import { fetchSearchBeers, postEntry, fetchPlacesNearby, changeLoading } from '../redux/actions';
+import { fetchSearchBeers, postEntry } from '../redux/actions';
 import { connect } from 'react-redux';
 import { ScrollView } from 'react-native-gesture-handler';
 import { Beer } from '../Models/Beer.model';
@@ -18,7 +19,6 @@ import _ from 'lodash';
 
 const initialBeer: Beer = {
   beerId: 0,
-  haveHad: false,
   beerName: '',
   beerLabel: '',
   beerIbu: 0,
@@ -92,8 +92,17 @@ function AddBeer({
   return (
     isShownAddBeer && (
       <Modal
-        style={{ backgroundColor: '#000000aa', margin: 0, flex: 1 }}
-        transparent={true}
+        style={{
+          backgroundColor: '#000000aa',
+          margin: 0,
+          flex: 1,
+          height: Dimensions.get('screen').height,
+          width: '100%',
+          position: 'absolute',
+          top: 0,
+          left: 0,
+        }}
+        statusBarTranslucent={true}
         visible={true}
         onBackdropPress={() => {
           toggleAddBeer();

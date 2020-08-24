@@ -20,6 +20,7 @@ const BeerBadge = ({ beer, hasDrunk }: any) => {
       </TouchableOpacity>
       <Modal
         isVisible={displayModal}
+        statusBarTranslucent={true}
         onBackdropPress={() => {
           setDisplayModal(false);
         }}

@@ -53,13 +53,14 @@ function ShortProfile({
     isShownShortProfile && (
       <Modal
         style={{
-          justifyContent: 'flex-end',
+          justifyContent: 'center',
           backgroundColor: '#000000aa',
           margin: 0,
           flex: 1,
         }}
         transparent={true}
         visible={true}
+        statusBarTranslucent={true}
         onBackdropPress={() => {
           toggleShortProfile();
         }}
@@ -143,7 +144,6 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     height: 500,
     marginHorizontal: 35,
-    marginBottom: 70,
   },
   userImage: {
     height: 150,
