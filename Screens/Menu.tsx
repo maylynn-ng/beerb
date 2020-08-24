@@ -21,8 +21,8 @@ function Menu({ navigation, logout }: any) {
       </TouchableOpacity>
 
       <View style={styles.mainContainer}>
-        <TouchableOpacity style={styles.menuRoutes}>
-          <Text style={styles.menuText}>Share</Text>
+        <TouchableOpacity style={styles.menuRoutes} onPress={() => navigation.navigate('Home')}>
+          <Text style={styles.menuText}>Scratch Map</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.menuRoutes} onPress={() => navigation.navigate('Profile')}>
           <Text style={styles.menuText}>Profile</Text>

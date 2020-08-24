@@ -48,7 +48,7 @@ function Beerdex({
             <TouchableOpacity
               style={styles.burgerMenuTouch}
               onPress={() => {
-                navigation.navigate('Modal');
+                navigation.push('Modal');
               }}
             >
               <Image source={require('../assets/menu.png')} style={styles.burgerMenu} />
