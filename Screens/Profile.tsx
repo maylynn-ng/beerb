@@ -5,11 +5,10 @@ import {
   StyleSheet,
   View,
   Text,
-  TouchableOpacity,
   Dimensions,
 } from 'react-native';
 import { connect } from 'react-redux';
-import { useRoute } from '@react-navigation/native';
+
 
 import {
   storeBorough,

@@ -1,17 +1,10 @@
 import React, { useEffect } from 'react';
-import {
-  Text,
-  View,
-  StyleSheet,
-  SafeAreaView,
-  TouchableOpacity,
-  Image,
-  Dimensions,
-} from 'react-native';
-import { getBeerdex, getDrunkBeers, changeLoading } from '../redux/actions';
+import { Text, View, StyleSheet, SafeAreaView } from 'react-native';
+import { getBeerdex, getDrunkBeers, changeLoading, setDrunkIds } from '../redux/actions';
 import { connect } from 'react-redux';
 import { State } from '../redux/reducers';
 import { Beer } from '../Models/Beer.model';
+import { AppDispatch, Action } from '../Models/Redux.model';
 
 import BeerBadge from '../Components/BeerBadge';
 import { ScrollView } from 'react-native-gesture-handler';
@@ -22,13 +15,12 @@ function Beerdex({
   populateDrunkBeers,
   beerdex,
   setLoading,
-  navigation,
+  populateDrunkIds,
 }: any) {
   useEffect(() => {
     setLoading(true);
     populateBeerdex();
-
-    populateDrunkBeers(orderDrunkBeers());
+    orderDrunkBeers();
   }, []);
 
   useEffect(() => {
@@ -38,7 +30,9 @@ function Beerdex({
   }, [beerdex]);
 
   function orderDrunkBeers() {
-    return Array.from(new Set(user.Locations.map((entry: any) => entry.beerId)));
+    const uniqueBeers = Array.from(new Set(user.Locations.map((entry: any) => entry.beerId)));
+    populateDrunkIds(uniqueBeers);
+    populateDrunkBeers(uniqueBeers);
   }
   return (
     <SafeAreaView>
@@ -72,7 +66,7 @@ function Beerdex({
               : null}
             {beerdex && beerdex.length
               ? beerdex.map((beer: Beer, index: number) => {
-                  if (orderDrunkBeers().indexOf(beer.beerId) === -1) {
+                  if (user.drunkBeers.indexOf(beer.beerId) === -1) {
                     return (
                       <BeerBadge style={styles.badge} hasDrunk={0.3} key={index} beer={beer} />
                     );
@@ -93,11 +87,12 @@ function mapStateToProps(state: State) {
   };
 }
 
-function mapDispatch(dispatch: any) {
+function mapDispatch(dispatch: AppDispatch) {
   return {
     populateBeerdex: () => dispatch(getBeerdex()),
     populateDrunkBeers: (beerIds: []) => dispatch(getDrunkBeers(beerIds)),
-    setLoading: (status: boolean) => dispatch(changeLoading(status)),
+    setLoading: (status: boolean): Action => dispatch(changeLoading(status)),
+    populateDrunkIds: (drunkIds: number[]): Action => dispatch(setDrunkIds(drunkIds)),
   };
 }
 

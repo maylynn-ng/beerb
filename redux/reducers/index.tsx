@@ -1,8 +1,9 @@
-import { Action } from '../actions';
-import { Beer } from '../../Models/Beer.model';
+import { Action } from '../../Models/Redux.model';
+import { Beer, DisplayBeer } from '../../Models/Beer.model';
+import { Location } from '../../Models/Locations.model';
 
 export type State = {
-  beerdex: any[];
+  beerdex: DisplayBeer[];
   boroughs: [];
   currentBorough: string;
   location: {
@@ -16,9 +17,10 @@ export type State = {
     beerFreqs: [[]];
     beerSearchResults: Beer[];
     boroughCounter: {};
-    drunkBeers: any[];
-    Locations: any[];
+    drunkBeers: DisplayBeer[];
+    Locations: Location[];
     sub: string;
+    uniqueDrunkIds: number[];
   };
 };
 
@@ -40,6 +42,7 @@ const initialState: State = {
     drunkBeers: [],
     Locations: [],
     sub: '',
+    uniqueDrunkIds: [],
   },
 };
 
@@ -125,6 +128,11 @@ export default function reducer(state: State = initialState, action: Action): St
       return {
         ...state,
         user: { ...state.user, beerFreqs: action.payload },
+      };
+    case 'SET_DRUNK_IDS':
+      return {
+        ...state,
+        user: { ...state.user, uniqueDrunkIds: action.payload },
       };
     default:
       return state;

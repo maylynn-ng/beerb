@@ -1,5 +1,6 @@
 import { Beer } from '../../Models/Beer.model';
 import { Borough } from '../../Models/Borough.model';
+import { AppDispatch, Action } from '../../Models/Redux.model';
 import { ToastAndroid } from 'react-native';
 import { getDistance } from 'geolib';
 
@@ -11,19 +12,14 @@ const PLACES_KEY = process.env.REACT_NATIVE_PLACES_KEY;
 const PLACES_NEARBY_PARAMS: string = '&radius=200&type=bar&keyword=pub&key=';
 const DB_LOCALHOST = process.env.EXPO_LOCALHOST;
 
-export type Action = {
-  type: string;
-  payload: any;
-};
-
-export function storeLocation(location: { latitude: number; longitude: number }) {
+export function storeLocation(location: { latitude: number; longitude: number }): Action {
   return {
     type: 'STORE_LOCATION',
     payload: location,
   };
 }
 
-export function setArrayOfBoroughs(boroughs: any[]) {
+export function setArrayOfBoroughs(boroughs: Borough[]): Action {
   return {
     type: 'SIMPLE_ARRAY_BOROUGHS',
     payload: boroughs,
@@ -37,35 +33,35 @@ export function storeBorough(currentBorough: Borough): Action {
   };
 }
 
-export function setSearchTerm(input: string) {
+export function setSearchTerm(input: string): Action {
   return {
     type: 'SET_SEARCH_TERM',
     payload: input,
   };
 }
 
-export function setLocationsNearby(locations: []) {
+export function setLocationsNearby(locations: []): Action {
   return {
     type: 'SET_LOCATIONS_NEARBY',
     payload: locations,
   };
 }
 
-export function logoutUser(user: any) {
+export function logoutUser(user: any): Action {
   return {
     type: 'LOGOUT',
     payload: user,
   };
 }
 
-export function changeLoading(status: boolean) {
+export function changeLoading(status: boolean): Action {
   return {
     type: 'SET_LOADING',
     payload: status,
   };
 }
 
-export function storeBeerFreqs(freqs: [[]]) {
+export function storeBeerFreqs(freqs: [[]]): Action {
   return {
     type: 'STORE_BEER_FREQS',
     payload: freqs,
@@ -73,7 +69,7 @@ export function storeBeerFreqs(freqs: [[]]) {
 }
 
 export function fetchSearchBeers(searchTerm: string) {
-  return function (dispatch: any) {
+  return function (dispatch: AppDispatch) {
     dispatch(setSearchTerm(searchTerm));
     if (searchTerm === '') {
       dispatch({ type: 'SET_SEARCH_BEER_RESULTS', payload: [] });
@@ -103,7 +99,7 @@ export function fetchSearchBeers(searchTerm: string) {
 }
 
 export function fetchPlacesNearby(lat: number, lng: number) {
-  return (dispatch: any) => {
+  return (dispatch: AppDispatch) => {
     fetch(`${PLACES_NEARBY_URL}${lat},${lng}${PLACES_NEARBY_PARAMS}${PLACES_KEY}`)
       .then(res => res.json())
       .then(locations => {
@@ -125,7 +121,7 @@ export function fetchPlacesNearby(lat: number, lng: number) {
 }
 
 export function postEntry(newEntry: object) {
-  return (dispatch: any) => {
+  return (dispatch: AppDispatch) => {
     fetch(`${DB_LOCALHOST}/location`, {
       method: 'POST',
       headers: {
@@ -145,7 +141,7 @@ export function postEntry(newEntry: object) {
   };
 }
 
-export function setUserInfo(user: object) {
+export function setUserInfo(user: object): Action {
   return {
     type: 'SET_USER_INFO',
     payload: user,
@@ -156,7 +152,7 @@ export function getLocations(user: any) {
   const { sub, name } = user;
   let counter: { [key: string]: any } = {};
   const fetchBody = { sub, name };
-  return (dispatch: any) => {
+  return (dispatch: AppDispatch) => {
     fetch(`${DB_LOCALHOST}/locations`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -184,7 +180,7 @@ export function getLocations(user: any) {
 }
 
 export function getDrunkBeers(beerIds: number[]) {
-  return async function (dispatch: any) {
+  return async function (dispatch: AppDispatch) {
     fetch(`${DB_LOCALHOST}/drunkbeers`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -197,7 +193,7 @@ export function getDrunkBeers(beerIds: number[]) {
 }
 
 export function getBeerdex() {
-  return function (dispatch: any) {
+  return function (dispatch: AppDispatch) {
     fetch(`${DB_LOCALHOST}/beers`)
       .then(res => res.json())
       .then(res => {
@@ -205,5 +201,12 @@ export function getBeerdex() {
         dispatch({ type: 'SET_BEERDEX', payload: result });
       })
       .catch(error => console.error('Unable to reach Beerdex ', error));
+  };
+}
+
+export function setDrunkIds(drunkIds: number[]): Action {
+  return {
+    type: 'SET_DRUNK_IDS',
+    payload: drunkIds,
   };
 }
