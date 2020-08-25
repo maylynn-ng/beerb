@@ -5,13 +5,17 @@ import FavouriteBeer from './FavouriteBeer';
 
 const DB_LOCALHOST = process.env.REACT_NATIVE_LOCALHOST;
 
-const BeerModal = ({ beer }: any) => {
+const BeerModal = ({ beer, noFetching }: any) => {
   const [thisBeer, setThisBeer] = useState(InitialBeer);
 
   useEffect(() => {
-    fetch(`${DB_LOCALHOST}/searchBeer/${beer.beerId}`)
-      .then(res => res.json())
-      .then(res => setThisBeer(res));
+    if (noFetching) {
+      setThisBeer(beer);
+    } else {
+      fetch(`${DB_LOCALHOST}/searchBeer/${beer.beerId}`)
+        .then(res => res.json())
+        .then(res => setThisBeer(res));
+    }
   }, []);
 
   return (
@@ -42,7 +46,7 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: 'white',
     height: '70%',
-    borderRadius: 5,
+    borderRadius: 15,
     padding: 5,
   },
   labelAndName: {
@@ -50,11 +54,12 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   label: {
-    height: 100,
-    width: 100,
+    height: 95,
+    width: 95,
+    marginRight: 5,
   },
   beerName: {
-    fontSize: 26,
+    fontSize: 24,
     textAlign: 'center',
     alignSelf: 'center',
     width: '60%',

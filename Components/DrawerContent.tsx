@@ -16,10 +16,27 @@ function DrawerContent(props: any) {
         <View style={styles.drawerContent}>
           <View style={styles.userInfoSection}>
             <View style={{ marginTop: 15 }}>
-              <Image source={require('../assets/logo.png')} style={{ width: 100, height: 100 }} />
-              <View style={{ marginLeft: 15, flexDirection: 'column' }}>
-                <Text style={styles.title}>{user.name}</Text>
-                <Text style={styles.caption}>{currentBorough.boroughName}</Text>
+              <Image
+                source={require('../assets/logo.png')}
+                style={{ width: 100, height: 100, marginHorizontal: 70 }}
+              />
+              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                <Image
+                  source={{ uri: user.picture }}
+                  style={[
+                    styles.icon,
+                    {
+                      borderRadius: 15,
+                      alignSelf: 'center',
+                      marginRight: 10,
+                      left: -1,
+                    },
+                  ]}
+                />
+                <View style={{ flexDirection: 'column' }}>
+                  <Text style={styles.title}>{user.nickname}</Text>
+                  <Text style={styles.caption}>{currentBorough.boroughName}</Text>
+                </View>
               </View>
             </View>
           </View>
@@ -92,7 +109,6 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 16,
-    marginTop: 3,
     fontWeight: 'bold',
   },
   caption: {

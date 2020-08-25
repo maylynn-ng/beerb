@@ -1,6 +1,9 @@
-import React from 'react';
-import { Image, SafeAreaView, StyleSheet, View, Text, Dimensions } from 'react-native';
+import React, { useState } from 'react';
+import { Image, StyleSheet, View, Text, ScrollView, TouchableOpacity } from 'react-native';
 import { connect } from 'react-redux';
+import moment from 'moment';
+import Modal from 'react-native-modal';
+import BeerModal from '../Components/BeerModal';
 
 import {
   storeBorough,
@@ -12,42 +15,86 @@ import {
 import Topbar from '../Components/Topbar';
 
 function Profile({ user, beerFrequency, navigation }: any) {
+  const [displayModal, setDisplayModal] = useState(false);
+  const [modalBeer, setModalBeer] = useState({ beerId: 0 });
   const picture = () => {
     let src;
     user.picture ? (src = { uri: user.picture }) : (src = 'require("./assets/user.png")');
     return src;
   };
 
+  const handleTouch = (beerId: number) => {
+    setModalBeer({ beerId });
+    setDisplayModal(true);
+  };
+
   return (
     <>
       <Topbar navigation={navigation} user={user} />
-      <SafeAreaView style={styles.mainContainer}>
-        <View style={{ flex: 1, flexDirection: 'row' }}>
+      <View style={styles.mainContainer}>
+        <View style={styles.userInfo}>
           <Image style={styles.userImage} source={picture()} />
-          <Text style={{ fontSize: 30 }}>{user.name}</Text>
+          <View style={{ paddingLeft: 15, paddingTop: 15 }}>
+            <Text style={{ fontSize: 30 }}>{user.name}</Text>
+            <View style={styles.infoView}>
+              <View style={styles.info}>
+                <Text style={styles.number}>
+                  {Object.keys(user.boroughCounter).length}
+                  <Text style={{ fontSize: 20, color: 'grey' }}>/33</Text>
+                </Text>
+                <Text style={styles.text}>
+                  {Object.keys(user.boroughCounter).length === 1 ? 'BOROUGH' : 'BOROUGHS'}
+                </Text>
+              </View>
+              <View style={styles.info}>
+                <Text style={styles.number}>{beerFrequency.length}</Text>
+                <Text style={styles.text}>{user.Locations.length === 1 ? 'BEER' : 'BEERS'}</Text>
+              </View>
+            </View>
+            <Text style={{ paddingTop: 15 }}>My favourite:</Text>
+            <Text style={{ fontWeight: 'bold' }}>
+              {beerFrequency[0][0]} - {beerFrequency[0][1]} time
+              {beerFrequency[0][1] === 1 ? '' : 's'}
+            </Text>
+          </View>
         </View>
-
-        <View style={styles.info}>
-          <Text>
-            Last Borough:
-            {user.Locations.length !== 0
-              ? user.Locations[user.Locations.length - 1].boroughName
-              : 'no borough yet'}
-          </Text>
-          <Text>
-            Last Location:
-            {user.Locations.length !== 0
-              ? user.Locations[user.Locations.length - 1].placeName
-              : 'no location yet'}
-          </Text>
-          <Text>Total beers had: {user.Locations.length}</Text>
-          <Text>
-            Most frequently enjoyed: {beerFrequency[0][0]} - {beerFrequency[0][1]} times
-          </Text>
-          <Text>{Object.keys(user.boroughCounter).length}/33</Text>
-          <Text>Beers discovered{beerFrequency.length}/33</Text>
-        </View>
-      </SafeAreaView>
+        <Text style={{ fontSize: 20, alignSelf: 'flex-start', paddingLeft: 15 }}>History:</Text>
+        <ScrollView style={styles.scrollable}>
+          {user && user.Locations && user.Locations.length ? (
+            user.Locations.map(loc => (
+              <TouchableOpacity
+                key={loc.createdAt}
+                style={styles.historyItem}
+                onPress={() => handleTouch(loc.beerId)}
+              >
+                <Text style={styles.historyItemText}>
+                  {loc.beerName} in{' '}
+                  {loc.placeName === 'somewhere' || loc.boroughName === 'you!'
+                    ? loc.boroughName
+                    : loc.placeName}
+                </Text>
+                <Text style={[styles.historyItemText, { fontSize: 13, color: 'gray' }]}>
+                  {loc.boroughName !== 'somewhere' ? loc.boroughName + ' - ' : ''}
+                  {moment(loc.createdAt).format('MMM Do, YYYY')}
+                </Text>
+              </TouchableOpacity>
+            ))
+          ) : (
+            <View style={styles.historyItem}>
+              <Text style={styles.historyItemText}>No beers yet? What are you waiting for?</Text>
+            </View>
+          )}
+        </ScrollView>
+        <Modal
+          isVisible={displayModal}
+          statusBarTranslucent={true}
+          onBackdropPress={() => {
+            setDisplayModal(false);
+          }}
+        >
+          <BeerModal beer={modalBeer} />
+        </Modal>
+      </View>
     </>
   );
 }
@@ -79,16 +126,55 @@ const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
     alignItems: 'center',
-    padding: '5%',
+  },
+  userInfo: {
+    flexDirection: 'row',
+    padding: 15,
+  },
+  scrollable: {
+    flex: 2,
+    margin: 20,
+    marginTop: 10,
+    width: '100%',
+    padding: 0,
   },
   userImage: {
     height: 150,
     width: 150,
+    borderRadius: 80,
+    marginTop: 15,
+  },
+  infoView: {
+    flexDirection: 'row',
+    paddingBottom: 4,
+    borderBottomColor: 'gold',
+    borderBottomWidth: 3,
+    borderRadius: 10,
+    width: 170,
   },
   info: {
-    flex: 2,
-    borderWidth: 3,
-    width: Dimensions.get('screen').width,
+    flex: 1,
+    alignItems: 'center',
+  },
+  number: {
+    fontSize: 25,
+    fontWeight: 'bold',
+  },
+  text: {
+    color: 'grey',
+  },
+  historyItem: {
+    alignSelf: 'center',
+    marginTop: 0,
     padding: 10,
+    backgroundColor: '#ffd70080',
+    marginBottom: 3,
+    borderRadius: 5,
+    width: '90%',
+  },
+  historyItemText: {
+    textAlign: 'center',
+    fontSize: 15,
+    fontWeight: '400',
   },
 });

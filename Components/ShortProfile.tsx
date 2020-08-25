@@ -18,7 +18,7 @@ function ShortProfile({
       const whatArticle = () => (/[AEIOU]/.test(lastBeer.beerName[0]) ? 'an' : 'a');
 
       const link = () => {
-        let index = user.Locations.length - 1;
+        let index = 0;
         if (user.Locations[index].placeName === 'somewhere') {
           let gps = `${user.Locations[index].latitude},${user.Locations[index].longitude}`;
           return `google.co.uk/maps/search/?api=1&query=${gps}`;
@@ -63,7 +63,7 @@ function ShortProfile({
       >
         <View style={styles.mainContainer}>
           <Image style={styles.userImage} source={picture()} />
-          <Text style={styles.userName}>{user.given_name}</Text>
+          <Text style={styles.userName}>{user.nickname}</Text>
           <Text style={styles.currentB}>{currentBorough.boroughName}</Text>
           <View style={styles.infoView}>
             <View style={styles.info}>
@@ -81,7 +81,7 @@ function ShortProfile({
             style={{
               opacity: 0.2,
               alignSelf: 'flex-start',
-              marginHorizontal: 10,
+              marginHorizontal: 20,
               marginTop: 20,
               marginBottom: 5,
             }}
@@ -90,7 +90,9 @@ function ShortProfile({
           </Text>
           <Text style={styles.lastBeer}>
             {lastBeer.beerName} in{' '}
-            {lastBeer.placeName === 'somewhere' ? lastBeer.boroughName : lastBeer.placeName}
+            {lastBeer.placeName === 'somewhere' || lastBeer.boroughName === 'you!'
+              ? lastBeer.boroughName
+              : lastBeer.placeName}
           </Text>
           <View style={styles.shareView}>
             <TouchableOpacity style={styles.shareButton} onPress={() => takeScreenShot()}>
@@ -145,6 +147,7 @@ const styles = StyleSheet.create({
     height: 150,
     width: 150,
     borderRadius: 100,
+    marginTop: 25,
   },
   userName: {
     fontSize: 30,
