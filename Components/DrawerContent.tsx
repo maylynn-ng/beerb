@@ -26,30 +26,28 @@ function DrawerContent(props: any) {
 
           <View style={styles.drawerSection}>
             <DrawerItem
-              icon={() => <Image source={require('../assets/map.png')} style={styles.icon} />}
+              icon={() => <Image source={require('../assets/map3.png')} style={styles.icon} />}
               label="Home"
               onPress={() => {
                 props.navigation.navigate('Home');
               }}
             />
             <DrawerItem
-              icon={() => <Image source={require('../assets/userIcon.png')} style={styles.icon} />}
+              icon={() => <Image source={require('../assets/user.png')} style={styles.icon} />}
               label="Profile"
               onPress={() => {
                 props.navigation.navigate('Profile');
               }}
             />
             <DrawerItem
-              icon={() => (
-                <Image source={require('../assets/food-and-restaurant.png')} style={styles.icon} />
-              )}
+              icon={() => <Image source={require('../assets/beer.png')} style={styles.icon} />}
               label="Beerdex"
               onPress={() => {
                 props.navigation.navigate('Beerdex');
               }}
             />
             <DrawerItem
-              icon={() => <Image source={require('../assets/ribbon.png')} style={styles.icon} />}
+              icon={() => <Image source={require('../assets/medal.png')} style={styles.icon} />}
               label="Achievements"
               onPress={() => {
                 props.navigation.navigate('Achievements');
@@ -83,7 +81,7 @@ function mapStateToProps(state: any) {
   };
 }
 
-export default connect(mapStateToProps, () => {})(DrawerContent);
+export default connect(mapStateToProps, () => ({}))(DrawerContent);
 
 const styles = StyleSheet.create({
   drawerContent: {
@@ -100,20 +98,6 @@ const styles = StyleSheet.create({
   caption: {
     fontSize: 14,
     lineHeight: 14,
-  },
-  row: {
-    marginTop: 20,
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  section: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginRight: 15,
-  },
-  paragraph: {
-    fontWeight: 'bold',
-    marginRight: 3,
   },
   drawerSection: {
     marginTop: 15,

@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, Image, StyleSheet, ScrollView } from 'react-native';
-import { InitalBeer } from '../Models/Beer.model';
+import { InitialBeer } from '../Models/Beer.model';
 import FavouriteBeer from './FavouriteBeer';
 
-const DB_LOCALHOST = process.env.EXPO_LOCALHOST;
+const DB_LOCALHOST = process.env.REACT_NATIVE_LOCALHOST;
 
 const BeerModal = ({ beer }: any) => {
-  const [thisBeer, setThisBeer] = useState(InitalBeer);
+  const [thisBeer, setThisBeer] = useState(InitialBeer);
 
   useEffect(() => {
     fetch(`${DB_LOCALHOST}/searchBeer/${beer.beerId}`)
