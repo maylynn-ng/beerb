@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { View, Text, StyleSheet, Dimensions } from 'react-native';
+import { View, Text, StyleSheet, Dimensions, ToastAndroid } from 'react-native';
 import { PermissionsAndroid } from 'react-native';
 import * as MediaLibrary from 'expo-media-library';
 import * as Sharing from 'expo-sharing';
@@ -53,6 +53,7 @@ const HomeScreen = ({
     // Loading status cleared on the getLocations action to make sure the api calls
     // have ended before showing the screen.
     (async () => {
+      await MediaLibrary.requestPermissionsAsync();
       let { status } = await Location.requestPermissionsAsync();
 
       if (status === 'granted') {
@@ -98,13 +99,18 @@ const HomeScreen = ({
 
   const takeScreenShot = async () => {
     try {
+      await hasAndroidPermission();
       const uri = await captureRef(screenShot, {
         format: 'jpg',
         quality: 0.8,
       });
-      console.log(uri);
-      console.log(await hasAndroidPermission());
+      ToastAndroid.showWithGravity(
+        "Your map has been saved and it's ready to be shared 🍺",
+        ToastAndroid.SHORT,
+        ToastAndroid.CENTER
+      );
       await savePicture(uri);
+      Sharing.shareAsync(uri);
     } catch (error) {
       console.log(error);
     }
@@ -115,16 +121,20 @@ const HomeScreen = ({
     const hasPermission = await PermissionsAndroid.check(permission);
     if (hasPermission) {
       const status = await PermissionsAndroid.request(permission);
-      status === 'granted'
-        ? console.log('Permission to store granted')
-        : console.log('Permission to store DENIED');
+      status === 'granted' ? null : console.log('Permission to store DENIED');
     }
   };
 
   const savePicture = async (uri: string) => {
-    await MediaLibrary.getPermissionsAsync();
-    await MediaLibrary.saveToLibraryAsync(uri);
-    Sharing.shareAsync(uri);
+    try {
+      // await MediaLibrary.requestPermissionsAsync();
+      const { granted } = await MediaLibrary.getPermissionsAsync();
+      granted
+        ? await MediaLibrary.saveToLibraryAsync(uri)
+        : console.log('problems while saving screenshot');
+    } catch (e) {
+      console.log('Error in catch - savePicture', e);
+    }
   };
 
   return (
@@ -135,6 +145,7 @@ const HomeScreen = ({
         boroughCounter={user.boroughCounter}
         location={location}
         user={user}
+        ref={screenShot}
       />
       <View style={styles.lastBeer}>
         {user.Locations.lengtgh !== 0 ? (
@@ -194,25 +205,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     height: Dimensions.get('screen').height,
   },
-  menuContainer: {
-    width: '50%',
-    height: 40,
-  },
-  burgerMenu: {
-    width: 30,
-    height: 30,
-  },
-  burgerMenuTouch: {
-    flex: 1,
-    width: 30,
-    height: 40,
-    justifyContent: 'center',
-    marginHorizontal: 10,
-    zIndex: 2,
-  },
   lastBeer: {
     flex: 1,
-    backgroundColor: '#ffd400',
+    backgroundColor: '#ffd700',
     borderWidth: 2,
     width: 300,
     borderColor: 'whitesmoke',

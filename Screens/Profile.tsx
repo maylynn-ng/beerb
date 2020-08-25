@@ -11,7 +11,7 @@ import {
 } from '../redux/actions';
 import Topbar from '../Components/Topbar';
 
-function Profile({ user, beerFrequency, navigation }) {
+function Profile({ user, beerFrequency, navigation }: any) {
   const picture = () => {
     let src;
     user.picture ? (src = { uri: user.picture }) : (src = 'require("./assets/user.png")');

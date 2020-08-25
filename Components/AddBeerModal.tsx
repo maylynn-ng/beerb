@@ -29,6 +29,7 @@ const initialBeer: Beer = {
   breweryCountry: '',
   breweryLabel: '',
   breweryUrl: '',
+  beerAbv: 0,
 };
 
 function AddBeer({

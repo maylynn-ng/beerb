@@ -15,7 +15,7 @@ function Topbar({ navigation, user, currentBorough }: any) {
             navigation.openDrawer();
           }}
         >
-          <Image source={require('../assets/menu.png')} style={styles.burgerMenu} />
+          <Image source={require('../assets/open-menu.png')} style={styles.burgerMenu} />
         </TouchableOpacity>
       </View>
       {route.name !== 'Home' && <Text style={styles.title}>{route.name}</Text>}
@@ -48,6 +48,7 @@ const styles = StyleSheet.create({
   burgerMenu: {
     width: 30,
     height: 30,
+    opacity: 0.9,
   },
   burgerMenuTouch: {
     flex: 1,

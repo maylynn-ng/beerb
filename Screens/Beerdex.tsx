@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import SearchBar from 'react-native-dynamic-search-bar';
 import { getBeerdex, getDrunkBeers, changeLoading, setDrunkIds } from '../redux/actions';
 import { Text, View, StyleSheet, SafeAreaView, TouchableOpacity, Dimensions } from 'react-native';
 import { connect } from 'react-redux';
@@ -21,7 +22,7 @@ function Beerdex({
   favouriteBeers,
 }: any) {
   const [filterBeers, setFilterBeers] = useState(false);
-
+  const [searchInBeerdex, setSearchInBeerdex] = useState('');
   useEffect(() => {
     setLoading(true);
     populateBeerdex();
@@ -47,7 +48,7 @@ function Beerdex({
   return (
     <>
       <Topbar navigation={navigation} user={user} />
-      <SafeAreaView>
+      <SafeAreaView style={styles.screen}>
         <View style={{ flexDirection: 'row' }}>
           <TouchableOpacity style={styles.filterSelector} onPress={() => handleFilter('')}>
             <Text style={{ fontSize: 20 }}>All</Text>
@@ -56,44 +57,71 @@ function Beerdex({
             <Text style={{ fontSize: 20 }}>Favourites</Text>
           </TouchableOpacity>
         </View>
+        <SearchBar
+          placeholder="Search for a beer..."
+          onChangeText={value => setSearchInBeerdex(value)}
+          onPressToFocus={true}
+          value={searchInBeerdex}
+          onPressCancel={() => setSearchInBeerdex('')}
+          height={35}
+          shadowStyle={{
+            borderColor: '#ffe566aa',
+            borderWidth: 2,
+            marginTop: 5,
+            elevation: 1,
+          }}
+          fontColor="#202020aa"
+          iconColor="#202020aa"
+          cancelIconColor="#c6c6c6"
+          fontSize={14}
+        />
         <ScrollView>
           <View style={styles.logoContainer}>
             {user.uniqueDrunkIds && user.uniqueDrunkIds.length
               ? filterBeers
                 ? user.drunkBeers
-                    .filter((beer: Beer) => favouriteBeers.has(beer.beerId))
+                    .filter(
+                      (beer: Beer) =>
+                        favouriteBeers.has(beer.beerId) && beer.beerName.includes(searchInBeerdex)
+                    )
                     .map(
                       (entry: any, index: number) =>
                         entry && (
                           <BeerBadge style={styles.badge} hasDrunk={1} key={index} beer={entry} />
                         )
                     )
-                : user.drunkBeers.map(
-                    (entry: any, index: number) =>
-                      entry && (
-                        <BeerBadge style={styles.badge} hasDrunk={1} key={index} beer={entry} />
-                      )
-                  )
+                : user.drunkBeers
+                    .filter(beer => beer.beerName.includes(searchInBeerdex))
+                    .map(
+                      (entry: any, index: number) =>
+                        entry && (
+                          <BeerBadge style={styles.badge} hasDrunk={1} key={index} beer={entry} />
+                        )
+                    )
               : null}
             {beerdex && beerdex.length
               ? filterBeers
                 ? beerdex
-                    .filter((beer: Beer) => favouriteBeers.has(beer.beerId))
+                    .filter(
+                      (beer: Beer) =>
+                        favouriteBeers.has(beer.beerId) && beer.beerName.includes(searchInBeerdex)
+                    )
                     .map((beer: Beer, index: number) => {
-                      console.log(user.drunkBeers);
                       if (user.uniqueDrunkIds.indexOf(beer.beerId) === -1) {
                         return (
                           <BeerBadge style={styles.badge} hasDrunk={0.3} key={index} beer={beer} />
                         );
                       }
                     })
-                : beerdex.map((beer: Beer, index: number) => {
-                    if (user.uniqueDrunkIds.indexOf(beer.beerId) === -1) {
-                      return (
-                        <BeerBadge style={styles.badge} hasDrunk={0.3} key={index} beer={beer} />
-                      );
-                    }
-                  })
+                : beerdex
+                    .filter(beer => beer.beerName.includes(searchInBeerdex))
+                    .map((beer: Beer, index: number) => {
+                      if (user.uniqueDrunkIds.indexOf(beer.beerId) === -1) {
+                        return (
+                          <BeerBadge style={styles.badge} hasDrunk={0.3} key={index} beer={beer} />
+                        );
+                      }
+                    })
               : null}
           </View>
         </ScrollView>

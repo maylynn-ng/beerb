@@ -1,5 +1,5 @@
-import React, { useRef } from 'react';
-import { Image, Text, StyleSheet, View, Share, TouchableOpacity } from 'react-native';
+import React from 'react';
+import { Image, Text, StyleSheet, View, Share, TouchableOpacity, ToastAndroid } from 'react-native';
 import { connect } from 'react-redux';
 import Modal from 'react-native-modal';
 import { storeBorough, fetchPlacesNearby, storeLocation, getLocations } from '../redux/actions';
@@ -11,12 +11,11 @@ function ShortProfile({
   lastBeer,
   currentBorough,
   takeScreenShot,
+  beerFrequency,
 }: any) {
   const share = async () => {
     try {
-      const whatArticle = () => {
-        return /[AEIOU]/.test(lastBeer.beerName[0]) ? 'an' : 'a';
-      };
+      const whatArticle = () => (/[AEIOU]/.test(lastBeer.beerName[0]) ? 'an' : 'a');
 
       const link = () => {
         let index = user.Locations.length - 1;
@@ -28,6 +27,11 @@ function ShortProfile({
           return `google.co.uk/maps/search/?api=1&query=${pubName}`;
         }
       };
+      ToastAndroid.showWithGravity(
+        '🍺 Share your beer and your location',
+        ToastAndroid.SHORT,
+        ToastAndroid.TOP
+      );
 
       await Share.share({
         message: `Hey! Fancy joining me? I'm having ${whatArticle()} ${lastBeer.beerName} in ${
@@ -39,15 +43,7 @@ function ShortProfile({
     }
   };
 
-  const picture = () => {
-    let src;
-    if (user.picture) {
-      src = { uri: user.picture };
-    } else {
-      src = 'require("./assets/user.png")';
-    }
-    return src;
-  };
+  const picture = () => (user.picture ? { uri: user.picture } : 'require("./assets/user.png")');
 
   return (
     isShownShortProfile && (
@@ -77,8 +73,8 @@ function ShortProfile({
               </Text>
             </View>
             <View style={styles.info}>
-              <Text style={styles.number}>{user.Locations.length}</Text>
-              <Text style={styles.text}>{user.Locations.length === 1 ? 'BEER' : 'BEERS'}</Text>
+              <Text style={styles.number}>{beerFrequency.length}</Text>
+              <Text style={styles.text}>{beerFrequency.length === 1 ? 'BEER' : 'BEERS'}</Text>
             </View>
           </View>
           <Text
