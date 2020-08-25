@@ -78,7 +78,7 @@ const HomeScreen = ({
     if (user.sub) {
       user.Locations.length !== 0
         ? setLastBeer(user.Locations[user.Locations.length - 1])
-        : setLastBeer({ beerName: 'get a beer', createdAt: new Date(), boroughName: 'you' });
+        : setLastBeer({ beerName: 'Get a beer', createdAt: new Date(), boroughName: 'you!' });
     }
   }, [user.Locations]);
 
