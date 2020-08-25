@@ -12,7 +12,7 @@ export type Beer = {
   breweryUrl: string;
 };
 
-export const InitalBeer = {
+export const InitialBeer = {
   beerId: 0,
   beerName: '',
   beerLabel: '',

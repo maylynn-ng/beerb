@@ -5,8 +5,16 @@ import { connect } from 'react-redux';
 import { fetchPlacesNearby, changeLoading } from '../redux/actions';
 
 import ShortProfile from './ShortProfile';
+import DiscoveryModal from './DiscoveryModal';
 
-const Navbar = ({ location, lastBeer, takeScreenShot, setLoading, setPlacesNearby }: any) => {
+const Navbar = ({
+  location,
+  lastBeer,
+  takeScreenShot,
+  setLoading,
+  setPlacesNearby,
+  boroughs,
+}: any) => {
   const [isShownAddBeer, setIsShownAddBeer] = useState(false);
   const toggleAddBeer = () => {
     setLoading(true);
@@ -18,6 +26,11 @@ const Navbar = ({ location, lastBeer, takeScreenShot, setLoading, setPlacesNearb
   const [isShownShortProfile, setIsShownShortProfile] = useState(false);
   const toggleShortProfile = () => {
     setIsShownShortProfile(!isShownShortProfile);
+  };
+
+  const [isShownDiscovery, setIsShownDiscovery] = useState(false);
+  const toggleDiscovery = () => {
+    setIsShownDiscovery(!isShownDiscovery);
   };
 
   return (
@@ -48,11 +61,16 @@ const Navbar = ({ location, lastBeer, takeScreenShot, setLoading, setPlacesNearb
       <TouchableOpacity
         style={styles.navbarBtn}
         onPress={() => {
-          console.info('link to random beer/location');
+          toggleDiscovery();
         }}
       >
         <Image source={require('../assets/discover.png')} style={styles.navbarPic} />
       </TouchableOpacity>
+      <DiscoveryModal
+        isShownDiscovery={isShownDiscovery}
+        toggleDiscovery={toggleDiscovery}
+        boroughs={boroughs}
+      />
     </View>
   );
 };

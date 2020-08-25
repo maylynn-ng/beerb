@@ -20,7 +20,7 @@ function ShortProfile({
       };
 
       const link = () => {
-        let index = user.Locations.length - 1;
+        let index = 0;
         if (user.Locations[index].placeName === 'somewhere') {
           let gps = `${user.Locations[index].latitude},${user.Locations[index].longitude}`;
           return `google.co.uk/maps/search/?api=1&query=${gps}`;

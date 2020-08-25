@@ -34,9 +34,8 @@ function Profile({ user, beerFrequency, navigation }) {
       <View style={styles.mainContainer}>
         <View style={styles.userInfo}>
           <Image style={styles.userImage} source={picture()} />
-          <View style={{ paddingLeft: 15 }}>
+          <View style={{ paddingLeft: 15, paddingTop: 15 }}>
             <Text style={{ fontSize: 30 }}>{user.name}</Text>
-            <Text style={{ fontSize: 20 }}>My discoveries:</Text>
             <View style={styles.infoView}>
               <View style={styles.info}>
                 <Text style={styles.number}>
@@ -169,8 +168,8 @@ const styles = StyleSheet.create({
     marginTop: 0,
     padding: 10,
     backgroundColor: '#ffd70080',
-    borderBottomColor: 'gray',
-    borderBottomWidth: 1,
+    marginBottom: 3,
+    borderRadius: 5,
     width: '90%',
   },
   historyItemText: {

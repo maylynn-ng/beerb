@@ -147,7 +147,12 @@ const HomeScreen = ({
           {moment(lastBeer.createdAt).format('dddd, MMM Do YYYY')}
         </Text>
       </View>
-      <Navbar takeScreenShot={takeScreenShot} lastBeer={lastBeer} navigation={navigation} />
+      <Navbar
+        takeScreenShot={takeScreenShot}
+        lastBeer={lastBeer}
+        boroughs={simpleArrayOfBoroughs}
+        navigation={navigation}
+      />
     </ViewShot>
   );
 };

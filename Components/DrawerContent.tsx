@@ -20,7 +20,7 @@ function DrawerContent(props: any) {
                 source={require('../assets/logo.png')}
                 style={{ width: 100, height: 100, marginHorizontal: 70 }}
               />
-              <View style={{ flexDirection: 'row' }}>
+              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                 <Image
                   source={{ uri: user.picture }}
                   style={[
@@ -111,7 +111,6 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 16,
-    marginTop: 3,
     fontWeight: 'bold',
   },
   caption: {

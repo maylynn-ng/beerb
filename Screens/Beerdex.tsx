@@ -158,6 +158,7 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     justifyContent: 'center',
     marginHorizontal: 5,
+    marginBottom: 60,
   },
   currentView: {
     width: 'auto',
