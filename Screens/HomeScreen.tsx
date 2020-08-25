@@ -147,7 +147,6 @@ const HomeScreen = ({
           {moment(lastBeer.createdAt).format('dddd, MMM Do YYYY')}
         </Text>
       </View>
-      {console.log(user.Locations)}
       <Navbar takeScreenShot={takeScreenShot} lastBeer={lastBeer} navigation={navigation} />
     </ViewShot>
   );
