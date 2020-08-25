@@ -3,7 +3,7 @@ import { View, Text, Image, StyleSheet, ScrollView } from 'react-native';
 import { InitialBeer } from '../Models/Beer.model';
 import FavouriteBeer from './FavouriteBeer';
 
-const DB_LOCALHOST = process.env.REACT_NATIVE_LOCALHOST;
+const DB_LOCALHOST = process.env.EXPO_LOCALHOST;
 
 const BeerModal = ({ beer, noFetching }: any) => {
   const [thisBeer, setThisBeer] = useState(InitialBeer);

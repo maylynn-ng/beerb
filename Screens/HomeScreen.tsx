@@ -145,7 +145,6 @@ const HomeScreen = ({
         boroughCounter={user.boroughCounter}
         location={location}
         user={user}
-        ref={screenShot}
       />
       <View style={styles.lastBeer}>
         {user.Locations.lengtgh !== 0 ? (
