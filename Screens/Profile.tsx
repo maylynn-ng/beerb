@@ -69,7 +69,6 @@ const styles = StyleSheet.create({
     height: 150,
     width: 150,
     shadowColor: 'grey',
-    elevation: 4,
   },
   grayImage: {
     height: 80,

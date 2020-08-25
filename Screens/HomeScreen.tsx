@@ -12,6 +12,7 @@ import Map from '../Components/Map';
 import { isPointInPolygon } from 'geolib';
 import Navbar from '../Components/Navbar';
 import boroughs from '../assets/london_sport.json';
+import { AppDispatch } from '../Models/Redux.model';
 
 import {
   storeBorough,
@@ -188,7 +189,7 @@ function mapStateToProps(state: any) {
   };
 }
 
-function mapDispatch(dispatch: any) {
+function mapDispatch(dispatch: AppDispatch) {
   return {
     setLocations: (user: any) => dispatch(getLocations(user)),
     setLoading: (status: boolean) => dispatch(changeLoading(status)),

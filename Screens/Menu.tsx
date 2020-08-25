@@ -3,6 +3,7 @@ import { Text, StyleSheet, View, TouchableOpacity, Image } from 'react-native';
 import { connect } from 'react-redux';
 import AsyncStorage from '@react-native-community/async-storage';
 import { logoutUser } from '../redux/actions';
+import { AppDispatch } from '../Models/Redux.model';
 
 function Menu({ navigation, logout }: any) {
   const logOut = () => {
@@ -53,7 +54,7 @@ function Menu({ navigation, logout }: any) {
   );
 }
 
-function mapDispatch(dispatch: any) {
+function mapDispatch(dispatch: AppDispatch) {
   return {
     logout: (user: object) => dispatch(logoutUser(user)),
   };

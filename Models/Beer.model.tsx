@@ -23,3 +23,9 @@ export const InitalBeer = {
   breweryLabel: '',
   breweryUrl: '',
 };
+
+export type DisplayBeer = {
+  beerId: number;
+  beerName: string;
+  beerLabel: string;
+};
