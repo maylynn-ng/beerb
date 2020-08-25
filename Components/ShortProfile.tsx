@@ -11,6 +11,7 @@ function ShortProfile({
   lastBeer,
   currentBorough,
   takeScreenShot,
+  beerFrequency,
 }: any) {
   const share = async () => {
     try {
@@ -77,7 +78,7 @@ function ShortProfile({
               </Text>
             </View>
             <View style={styles.info}>
-              <Text style={styles.number}>{user.Locations.length}</Text>
+              <Text style={styles.number}>{beerFrequency.length}</Text>
               <Text style={styles.text}>{user.Locations.length === 1 ? 'BEER' : 'BEERS'}</Text>
             </View>
           </View>
