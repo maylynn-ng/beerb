@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { View, Image, Text, TouchableOpacity, StyleSheet, Dimensions } from 'react-native';
+import { View, Text, StyleSheet, Dimensions } from 'react-native';
 import { PermissionsAndroid } from 'react-native';
 import * as MediaLibrary from 'expo-media-library';
 import * as Sharing from 'expo-sharing';
@@ -22,6 +22,7 @@ import {
   changeLoading,
   storeBeerFreqs,
 } from '../redux/actions';
+import Topbar from '../Components/Topbar';
 
 const simpleArrayOfBoroughs = boroughs.features.map(borough => {
   return {
@@ -101,7 +102,8 @@ const HomeScreen = ({
         format: 'jpg',
         quality: 0.8,
       });
-      await hasAndroidPermission();
+      console.log(uri);
+      console.log(await hasAndroidPermission());
       await savePicture(uri);
     } catch (error) {
       console.log(error);
@@ -109,7 +111,7 @@ const HomeScreen = ({
   };
 
   const hasAndroidPermission = async () => {
-    const permission = PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE;
+    const permission = await PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE;
     const hasPermission = await PermissionsAndroid.check(permission);
     if (hasPermission) {
       const status = await PermissionsAndroid.request(permission);
@@ -120,30 +122,14 @@ const HomeScreen = ({
   };
 
   const savePicture = async (uri: string) => {
+    await MediaLibrary.getPermissionsAsync();
     await MediaLibrary.saveToLibraryAsync(uri);
     Sharing.shareAsync(uri);
   };
 
   return (
     <ViewShot ref={screenShot} style={styles.homeScreen}>
-      <View style={styles.topBar}>
-        <View style={styles.menuContainer}>
-          <TouchableOpacity
-            style={styles.burgerMenuTouch}
-            onPress={() => {
-              navigation.push('Modal');
-            }}
-          >
-            <Image source={require('../assets/menu.png')} style={styles.burgerMenu} />
-          </TouchableOpacity>
-        </View>
-        <Text style={styles.title}>{currentBorough.boroughName}</Text>
-        <View style={styles.currentView}>
-          <Text style={styles.currentBoroughName}>
-            {Object.keys(user.boroughCounter).length}/33
-          </Text>
-        </View>
-      </View>
+      <Topbar navigation={navigation} user={user} currentBorough={currentBorough} />
       <Map
         boroughs={simpleArrayOfBoroughs}
         boroughCounter={user.boroughCounter}
@@ -206,7 +192,7 @@ const styles = StyleSheet.create({
     width: '100%',
     alignItems: 'center',
     justifyContent: 'center',
-    overflow: 'visible',
+    height: Dimensions.get('screen').height,
   },
   menuContainer: {
     width: '50%',
