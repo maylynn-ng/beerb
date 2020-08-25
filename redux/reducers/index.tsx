@@ -19,6 +19,7 @@ export type State = {
     boroughCounter: {};
     drunkBeers: DisplayBeer[];
     Locations: Location[];
+    favouriteBeers: Set<Object>;
     sub: string;
     uniqueDrunkIds: number[];
   };
@@ -40,6 +41,7 @@ const initialState: State = {
     beerSearchResults: [],
     boroughCounter: {},
     drunkBeers: [],
+    favouriteBeers: new Set(),
     Locations: [],
     sub: '',
     uniqueDrunkIds: [],
@@ -133,6 +135,11 @@ export default function reducer(state: State = initialState, action: Action): St
       return {
         ...state,
         user: { ...state.user, uniqueDrunkIds: action.payload },
+      };
+    case 'SAVE_FAVOURITES':
+      return {
+        ...state,
+        user: { ...state.user, favouriteBeers: action.payload },
       };
     default:
       return state;

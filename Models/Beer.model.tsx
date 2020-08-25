@@ -2,6 +2,7 @@ export type Beer = {
   beerId: number;
   beerName: string;
   beerLabel: string;
+  beerAbv: number;
   beerIbu: number;
   beerDescription: string;
   beerStyle: string;
@@ -15,6 +16,7 @@ export const InitalBeer = {
   beerId: 0,
   beerName: '',
   beerLabel: '',
+  beerAbv: 0,
   beerIbu: 0,
   beerDescription: '',
   beerStyle: '',

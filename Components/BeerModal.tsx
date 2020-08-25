@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, Image, StyleSheet } from 'react-native';
+import { View, Text, Image, StyleSheet, ScrollView } from 'react-native';
 import { InitalBeer } from '../Models/Beer.model';
+import FavouriteBeer from './FavouriteBeer';
 
 const DB_LOCALHOST = process.env.EXPO_LOCALHOST;
 
@@ -20,13 +21,19 @@ const BeerModal = ({ beer }: any) => {
           <Image style={styles.label} source={{ uri: thisBeer.beerLabel }} />
         )}
         <Text style={styles.beerName}>{thisBeer.beerName.toUpperCase()}</Text>
+        <FavouriteBeer beerId={thisBeer.beerId} />
       </View>
+
+      <Text style={{ textAlign: 'center' }}>{thisBeer.beerStyle}</Text>
+      <Text style={{ textAlign: 'center' }}>
+        ABV: {thisBeer.beerAbv}% - IBU: {thisBeer.beerIbu === 0 ? 'N/A' : thisBeer.beerIbu}
+      </Text>
       <Text style={styles.breweryInfo}>
         {thisBeer.breweryName}, {thisBeer.breweryCountry}
       </Text>
-      <View>
+      <ScrollView>
         <Text style={styles.beerDescription}>{thisBeer.beerDescription}</Text>
-      </View>
+      </ScrollView>
     </View>
   );
 };

@@ -172,7 +172,6 @@ TaskManager.defineTask('background-location-task', ({ data, error }) => {
   }
   if (data) {
     const { latitude, longitude } = data.locations[0].coords;
-    console.log(latitude);
     store.dispatch(storeLocation({ latitude, longitude }));
     simpleArrayOfBoroughs.some(
       borough =>

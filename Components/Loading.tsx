@@ -16,7 +16,6 @@ const Loading = () => {
         backgroundColor: 'white',
       }}
     >
-      {console.log('animating...')}
       <Video
         source={require('../assets/LoadingVideos/19713-six-pack-beer.mp4')}
         rate={1.0}

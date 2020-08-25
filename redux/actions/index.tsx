@@ -82,6 +82,7 @@ export function fetchSearchBeers(searchTerm: string) {
               beerId: beer.beer.bid,
               beerName: beer.beer.beer_name,
               beerLabel: beer.beer.beer_label,
+              beerAbv: beer.beer.beer_abv,
               beerIbu: beer.beer.beer_ibu,
               beerDescription: beer.beer.beer_description,
               beerStyle: beer.beer.beer_style,
@@ -169,6 +170,8 @@ export function getLocations(user: any) {
         });
         dispatch({ type: 'GET_LOCATIONS', payload: counter });
         dispatch({ type: 'SET_USER_INFO', payload: { id: res.id, Locations: res.Locations } });
+        const favouriteBeers = new Set(res.favouriteBeers);
+        dispatch({ type: 'SAVE_FAVOURITES', payload: favouriteBeers });
         dispatch(changeLoading(false));
       })
       .catch(error => {
@@ -208,5 +211,12 @@ export function setDrunkIds(drunkIds: number[]): Action {
   return {
     type: 'SET_DRUNK_IDS',
     payload: drunkIds,
+  };
+}
+
+export function updateFavourites(favouriteBeers: Set<Object>) {
+  return {
+    type: 'SAVE_FAVOURITES',
+    payload: favouriteBeers,
   };
 }

@@ -1,6 +1,14 @@
-import React, { useEffect } from 'react';
-import { Text, View, StyleSheet, SafeAreaView } from 'react-native';
+import React, { useEffect, useState } from 'react';
 import { getBeerdex, getDrunkBeers, changeLoading, setDrunkIds } from '../redux/actions';
+import {
+  Text,
+  View,
+  StyleSheet,
+  SafeAreaView,
+  TouchableOpacity,
+  Image,
+  Dimensions,
+} from 'react-native';
 import { connect } from 'react-redux';
 import { State } from '../redux/reducers';
 import { Beer } from '../Models/Beer.model';
@@ -16,7 +24,11 @@ function Beerdex({
   beerdex,
   setLoading,
   populateDrunkIds,
+  navigation,
+  favouriteBeers,
 }: any) {
+  const [filterBeers, setFilterBeers] = useState(false);
+
   useEffect(() => {
     setLoading(true);
     populateBeerdex();
@@ -28,6 +40,10 @@ function Beerdex({
       setLoading(false);
     }
   }, [beerdex]);
+
+  const handleFilter = (selector: string) => {
+    selector ? setFilterBeers(true) : setFilterBeers(false);
+  };
 
   function orderDrunkBeers() {
     const uniqueBeers = Array.from(new Set(user.Locations.map((entry: any) => entry.beerId)));
@@ -54,24 +70,51 @@ function Beerdex({
             <Text>unique beer{user.drunkBeers.length !== 1 ? 's' : ''}</Text>
           </View>
         </View>
+        <View style={{ flexDirection: 'row' }}>
+          <TouchableOpacity style={styles.filterSelector} onPress={() => handleFilter('')}>
+            <Text style={{ fontSize: 20 }}>All</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.filterSelector} onPress={() => handleFilter('favs')}>
+            <Text style={{ fontSize: 20 }}>Favourite</Text>
+          </TouchableOpacity>
+        </View>
         <ScrollView>
           <View style={styles.logoContainer}>
             {user.drunkBeers && user.drunkBeers.length
-              ? user.drunkBeers.map(
-                  (entry: any, index: number) =>
-                    entry && (
-                      <BeerBadge style={styles.badge} hasDrunk={1} key={index} beer={entry} />
+              ? filterBeers
+                ? user.drunkBeers
+                    .filter((beer: Beer) => favouriteBeers.has(beer.beerId))
+                    .map(
+                      (entry: any, index: number) =>
+                        entry && (
+                          <BeerBadge style={styles.badge} hasDrunk={1} key={index} beer={entry} />
+                        )
                     )
-                )
+                : user.drunkBeers.map(
+                    (entry: any, index: number) =>
+                      entry && (
+                        <BeerBadge style={styles.badge} hasDrunk={1} key={index} beer={entry} />
+                      )
+                  )
               : null}
             {beerdex && beerdex.length
-              ? beerdex.map((beer: Beer, index: number) => {
-                  if (user.drunkBeers.indexOf(beer.beerId) === -1) {
-                    return (
-                      <BeerBadge style={styles.badge} hasDrunk={0.3} key={index} beer={beer} />
-                    );
-                  }
-                })
+              ? filterBeers
+                ? beerdex
+                    .filter((beer: Beer) => favouriteBeers.has(beer.beerId))
+                    .map((beer: Beer, index: number) => {
+                      if (user.drunkBeers.indexOf(beer.beerId) === -1) {
+                        return (
+                          <BeerBadge style={styles.badge} hasDrunk={0.3} key={index} beer={beer} />
+                        );
+                      }
+                    })
+                : beerdex.map((beer: Beer, index: number) => {
+                    if (user.drunkBeers.indexOf(beer.beerId) === -1) {
+                      return (
+                        <BeerBadge style={styles.badge} hasDrunk={0.3} key={index} beer={beer} />
+                      );
+                    }
+                  })
               : null}
           </View>
         </ScrollView>
@@ -84,6 +127,7 @@ function mapStateToProps(state: State) {
   return {
     user: state.user,
     beerdex: state.beerdex,
+    favouriteBeers: state.user.favouriteBeers,
   };
 }
 
@@ -151,5 +195,15 @@ const styles = StyleSheet.create({
   badge: {
     height: 200,
     width: 200,
+  },
+  filterSelector: {
+    width: '50%',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderBottomWidth: 1,
+    borderBottomColor: '#e2e2e2',
+    paddingVertical: 15,
+    borderRightColor: '#e2e2e2',
+    borderRightWidth: 1,
   },
 });

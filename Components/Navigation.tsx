@@ -19,7 +19,6 @@ const Navigation = () => {
         <RootStack.Screen name="Home" component={HomeScreen} />
         <RootStack.Screen name="Modal" component={Menu} />
         <RootStack.Screen name="Profile" component={Profile} />
-        <RootStack.Screen name="Favorites" component={Favorites} />
         <RootStack.Screen name="Beerdex" component={Beerdex} />
         <RootStack.Screen name="Achievements" component={Achievements} />
       </RootStack.Navigator>

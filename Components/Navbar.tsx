@@ -10,7 +10,6 @@ const Navbar = ({ location, lastBeer, takeScreenShot, setLoading, setPlacesNearb
   const [isShownAddBeer, setIsShownAddBeer] = useState(false);
   const toggleAddBeer = () => {
     setLoading(true);
-    console.log('location', location);
     setPlacesNearby(location.latitude, location.longitude);
     setLoading(false);
     setIsShownAddBeer(!isShownAddBeer);

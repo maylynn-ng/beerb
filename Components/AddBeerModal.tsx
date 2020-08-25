@@ -16,6 +16,7 @@ import { connect } from 'react-redux';
 import { ScrollView } from 'react-native-gesture-handler';
 import { Beer } from '../Models/Beer.model';
 import _ from 'lodash';
+import FavouriteBeer from './FavouriteBeer';
 
 const initialBeer: Beer = {
   beerId: 0,
@@ -159,14 +160,19 @@ function AddBeer({
                   style={beer.beerId === curBeer.beerId ? styles.beerHighlight : styles.beerItem}
                   onPress={() => setBeer(curBeer)}
                 >
-                  <Image
-                    source={{ uri: curBeer.beerLabel }}
-                    style={{ width: 30, height: 30, marginRight: 10, alignSelf: 'center' }}
-                  />
-                  <View>
-                    <Text style={styles.beerName}>{curBeer.beerName}</Text>
-                    <Text style={styles.beerBrewery}>{curBeer.breweryName}</Text>
+                  <View style={{ flexDirection: 'row' }}>
+                    <Image
+                      source={{ uri: curBeer.beerLabel }}
+                      style={{ width: 30, height: 30, marginRight: 10, alignSelf: 'center' }}
+                    />
+                    <View style={{ maxWidth: 165, overflow: 'hidden' }}>
+                      <View style={{ width: 300 }}>
+                        <Text style={styles.beerName}>{curBeer.beerName}</Text>
+                        <Text style={styles.beerBrewery}>{curBeer.breweryName}</Text>
+                      </View>
+                    </View>
                   </View>
+                  <FavouriteBeer beerId={curBeer.beerId} />
                 </TouchableOpacity>
               ))}
             </ScrollView>
@@ -260,6 +266,7 @@ const styles = StyleSheet.create({
   beerItem: {
     padding: 5,
     flexDirection: 'row',
+    justifyContent: 'space-between',
     width: 250,
   },
   beerHighlight: {
@@ -267,6 +274,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'gold',
     width: 250,
     flexDirection: 'row',
+    justifyContent: 'space-between',
   },
   beerName: {
     fontWeight: 'bold',
