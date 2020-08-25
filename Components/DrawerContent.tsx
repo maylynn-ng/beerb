@@ -75,7 +75,7 @@ function DrawerContent(props: any) {
       </DrawerContentScrollView>
       <View style={styles.bottomDrawerSection}>
         <DrawerItem
-          icon={() => <Image source={require('../assets/close.png')} style={styles.icon} />}
+          icon={() => <Image source={require('../assets/logout.png')} style={styles.icon} />}
           label="Sign Out"
           onPress={() => {
             store.dispatch({ type: 'LOGOUT', payload: user });

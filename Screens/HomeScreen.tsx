@@ -107,7 +107,7 @@ const HomeScreen = ({
       ToastAndroid.showWithGravity(
         "Your map has been saved and it's ready to be shared 🍺",
         ToastAndroid.SHORT,
-        ToastAndroid.CENTER
+        ToastAndroid.TOP
       );
       await savePicture(uri);
       Sharing.shareAsync(uri);

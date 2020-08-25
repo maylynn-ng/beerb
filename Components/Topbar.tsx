@@ -26,7 +26,7 @@ function Topbar({ navigation, user, currentBorough }: any) {
       )}
       {route.name === 'Home' && (
         <>
-          <Text style={styles.title}>{currentBorough.boroughName}</Text>
+          <Text style={[styles.title, { fontSize: 20 }]}>{currentBorough.boroughName}</Text>
           <View style={styles.currentView}>
             <Text style={styles.currentBoroughName}>
               {Object.keys(user.boroughCounter).length}/33
