@@ -77,7 +77,7 @@ const HomeScreen = ({
   useEffect(() => {
     if (user.sub) {
       user.Locations.length !== 0
-        ? setLastBeer(user.Locations[user.Locations.length - 1])
+        ? setLastBeer(user.Locations[0])
         : setLastBeer({ beerName: 'Get a beer', createdAt: new Date(), boroughName: 'you!' });
     }
   }, [user.Locations]);
@@ -147,6 +147,7 @@ const HomeScreen = ({
           {moment(lastBeer.createdAt).format('dddd, MMM Do YYYY')}
         </Text>
       </View>
+      {console.log(user.Locations)}
       <Navbar takeScreenShot={takeScreenShot} lastBeer={lastBeer} navigation={navigation} />
     </ViewShot>
   );

@@ -85,7 +85,7 @@ export default function reducer(state: State = initialState, action: Action): St
         user: { ...state.user, ...action.payload },
       };
     case 'ADD_ENTRY':
-      const newLocations = [...state.user.Locations, action.payload];
+      const newLocations = [action.payload, ...state.user.Locations];
       return {
         ...state,
         user: {
