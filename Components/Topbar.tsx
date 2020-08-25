@@ -21,8 +21,7 @@ function Topbar({ navigation, user, currentBorough }: any) {
       {route.name !== 'Home' && <Text style={styles.title}>{route.name}</Text>}
       {route.name === 'Beerdex' && (
         <View style={styles.currentView}>
-          <Text>You've had {user.drunkBeers.length}</Text>
-          <Text>unique beer{user.drunkBeers.length !== 1 ? 's' : ''}</Text>
+          <Text>Discovered: {user.drunkBeers.length}</Text>
         </View>
       )}
       {route.name === 'Home' && (

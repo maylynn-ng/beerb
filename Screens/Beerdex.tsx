@@ -1,14 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { getBeerdex, getDrunkBeers, changeLoading, setDrunkIds } from '../redux/actions';
-import {
-  Text,
-  View,
-  StyleSheet,
-  SafeAreaView,
-  TouchableOpacity,
-  Image,
-  Dimensions,
-} from 'react-native';
+import { Text, View, StyleSheet, SafeAreaView, TouchableOpacity, Dimensions } from 'react-native';
 import { connect } from 'react-redux';
 import { State } from '../redux/reducers';
 import { Beer } from '../Models/Beer.model';
@@ -56,40 +48,17 @@ function Beerdex({
     <>
       <Topbar navigation={navigation} user={user} />
       <SafeAreaView>
-        <View style={styles.screen}>
-          <ScrollView>
-            <View style={styles.logoContainer}>
-              {user.drunkBeers && user.drunkBeers.length
-                ? user.drunkBeers.map(
-                    (entry: any, index: number) =>
-                      entry && (
-                        <BeerBadge style={styles.badge} hasDrunk={1} key={index} beer={entry} />
-                      )
-                  )
-                : null}
-              {beerdex && beerdex.length
-                ? beerdex.map((beer: Beer, index: number) => {
-                    if (orderDrunkBeers().indexOf(beer.beerId) === -1) {
-                      return (
-                        <BeerBadge style={styles.badge} hasDrunk={0.3} key={index} beer={beer} />
-                      );
-                    }
-                  })
-                : null}
-            </View>
-          </ScrollView>
-        </View>
         <View style={{ flexDirection: 'row' }}>
           <TouchableOpacity style={styles.filterSelector} onPress={() => handleFilter('')}>
             <Text style={{ fontSize: 20 }}>All</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.filterSelector} onPress={() => handleFilter('favs')}>
-            <Text style={{ fontSize: 20 }}>Favourite</Text>
+            <Text style={{ fontSize: 20 }}>Favourites</Text>
           </TouchableOpacity>
         </View>
         <ScrollView>
           <View style={styles.logoContainer}>
-            {user.drunkBeers && user.drunkBeers.length
+            {user.uniqueDrunkIds && user.uniqueDrunkIds.length
               ? filterBeers
                 ? user.drunkBeers
                     .filter((beer: Beer) => favouriteBeers.has(beer.beerId))
@@ -111,14 +80,15 @@ function Beerdex({
                 ? beerdex
                     .filter((beer: Beer) => favouriteBeers.has(beer.beerId))
                     .map((beer: Beer, index: number) => {
-                      if (user.drunkBeers.indexOf(beer.beerId) === -1) {
+                      console.log(user.drunkBeers);
+                      if (user.uniqueDrunkIds.indexOf(beer.beerId) === -1) {
                         return (
                           <BeerBadge style={styles.badge} hasDrunk={0.3} key={index} beer={beer} />
                         );
                       }
                     })
                 : beerdex.map((beer: Beer, index: number) => {
-                    if (user.drunkBeers.indexOf(beer.beerId) === -1) {
+                    if (user.uniqueDrunkIds.indexOf(beer.beerId) === -1) {
                       return (
                         <BeerBadge style={styles.badge} hasDrunk={0.3} key={index} beer={beer} />
                       );
