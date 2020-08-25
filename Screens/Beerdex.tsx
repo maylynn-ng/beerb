@@ -47,7 +47,7 @@ function Beerdex({
   return (
     <>
       <Topbar navigation={navigation} user={user} />
-      <SafeAreaView>
+      <SafeAreaView style={styles.screen}>
         <View style={{ flexDirection: 'row' }}>
           <TouchableOpacity style={styles.filterSelector} onPress={() => handleFilter('')}>
             <Text style={{ fontSize: 20 }}>All</Text>
