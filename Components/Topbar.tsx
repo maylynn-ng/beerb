@@ -3,7 +3,7 @@ import { Image, StyleSheet, View, Text, TouchableOpacity } from 'react-native';
 import { Dimensions } from 'react-native';
 import { useRoute } from '@react-navigation/native';
 
-function Topbar({ navigation, user, currentBorough }: any) {
+function Topbar({ navigation, user, currentBorough, allBadges }: any) {
   const route = useRoute();
 
   return (
@@ -33,6 +33,13 @@ function Topbar({ navigation, user, currentBorough }: any) {
             </Text>
           </View>
         </>
+      )}
+      {route.name === 'Achievements' && (
+        <View style={styles.currentView}>
+          <Text style={styles.badgeCount}>
+            {user.badges.length}/{allBadges.length}
+          </Text>
+        </View>
       )}
     </View>
   );
@@ -89,5 +96,8 @@ const styles = StyleSheet.create({
   currentBoroughName: {
     fontSize: 25,
     marginLeft: 10,
+  },
+  badgeCount: {
+    fontSize: 24,
   },
 });

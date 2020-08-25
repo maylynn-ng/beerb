@@ -1,8 +1,10 @@
 import { Action } from '../../Models/Redux.model';
 import { Beer, DisplayBeer } from '../../Models/Beer.model';
 import { Location } from '../../Models/Locations.model';
+import { Badge } from '../../Models/Badge.model';
 
 export type State = {
+  allBadges: Badge[];
   beerdex: DisplayBeer[];
   boroughs: [];
   currentBorough: string;
@@ -14,6 +16,11 @@ export type State = {
   locationsNearby: [];
   searchTerm: string;
   user: {
+    badges: {
+      badgeName: string;
+      badgeText: string;
+      badgeImage: string;
+    }[];
     beerFreqs: [[]];
     beerSearchResults: Beer[];
     boroughCounter: {};
@@ -26,6 +33,7 @@ export type State = {
 };
 
 const initialState: State = {
+  allBadges: [],
   beerdex: [],
   boroughs: [],
   currentBorough: '',
@@ -37,6 +45,7 @@ const initialState: State = {
   locationsNearby: [],
   searchTerm: '',
   user: {
+    badges: [],
     beerFreqs: [[]],
     beerSearchResults: [],
     boroughCounter: {},
@@ -140,6 +149,16 @@ export default function reducer(state: State = initialState, action: Action): St
       return {
         ...state,
         user: { ...state.user, favouriteBeers: action.payload },
+      };
+    case 'ADD_BADGE':
+      return {
+        ...state,
+        user: { ...state.user, badges: [...state.user.badges, action.payload] },
+      };
+    case 'SET_ALL_BADGES':
+      return {
+        ...state,
+        allBadges: action.payload,
       };
     default:
       return state;
