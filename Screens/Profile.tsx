@@ -1,13 +1,5 @@
 import React, { useState } from 'react';
-import {
-  Image,
-  StyleSheet,
-  View,
-  Text,
-  ScrollView,
-  TouchableOpacity,
-  TouchableOpacityBase,
-} from 'react-native';
+import { Image, StyleSheet, View, Text, ScrollView, TouchableOpacity } from 'react-native';
 import { connect } from 'react-redux';
 import moment from 'moment';
 import Modal from 'react-native-modal';
@@ -65,16 +57,13 @@ function Profile({ user, beerFrequency, navigation }: any) {
             )}
           </View>
         </View>
-        <Text
+        <View
           style={{
-            backfaceVisibility: user.badges.length !== 0 ? 'visible' : 'hidden',
-            fontSize: 20,
-            alignSelf: 'flex-start',
-            paddingLeft: 15,
+            display: user.badges.length !== 0 ? 'visible' : 'hidden',
           }}
         >
-          My badges:
-        </Text>
+          <Text style={{ fontSize: 20, alignSelf: 'flex-start', paddingLeft: 15 }}>My badges:</Text>
+        </View>
         <View
           style={{
             flexDirection: 'row',

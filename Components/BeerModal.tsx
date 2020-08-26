@@ -1,19 +1,28 @@
 import React from 'react';
 import { View, Text, Image, StyleSheet, ScrollView } from 'react-native';
 import FavouriteBeer from './FavouriteBeer';
+import { connect } from 'react-redux';
+import store from '../redux/store';
 
 const BeerModal = ({ beer }: any) => {
+  const state = store.getState();
+  const { drunkBeers } = state.user;
+  const beerToShow = drunkBeers.filter(b => b.beerId === beer);
+  const beerObj: any = beerToShow[0];
+
   return (
     <View style={styles.container}>
       <View style={styles.labelAndName}>
-        {beer.beerLabel !== '' && <Image style={styles.label} source={{ uri: beer.beerLabel }} />}
-        <Text style={styles.beerName}>{beer.beerName.toUpperCase()}</Text>
-        <FavouriteBeer beerId={beer.beerId} />
+        {beerObj.beerLabel !== '' && (
+          <Image style={styles.label} source={{ uri: beer.beerLabel }} />
+        )}
+        <Text style={styles.beerName}>{beerObj.beerName.toUpperCase()}</Text>
+        <FavouriteBeer beerId={beerObj.beerId} />
       </View>
 
-      <Text style={{ textAlign: 'center' }}>{beer.beerStyle}</Text>
+      <Text style={{ textAlign: 'center' }}>{beerObj.beerStyle}</Text>
       <Text style={{ textAlign: 'center' }}>
-        ABV: {beer.beerAbv}% - IBU: {beer.beerIbu === 0 ? 'N/A' : beer.beerIbu}
+        ABV: {beerObj.beerAbv}% - IBU: {beerObj.beerIbu === 0 ? 'N/A' : beerObj.beerIbu}
       </Text>
       <Text style={styles.breweryInfo}>
         {beer.breweryName}, {beer.breweryCountry}
@@ -24,7 +33,7 @@ const BeerModal = ({ beer }: any) => {
     </View>
   );
 };
-
+export default connect(null, null)(BeerModal);
 const styles = StyleSheet.create({
   container: {
     backgroundColor: 'white',
@@ -59,5 +68,3 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
 });
-
-export default BeerModal;
