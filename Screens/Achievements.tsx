@@ -11,7 +11,7 @@ function Achievements({ badges, allBadges, navigation, user }: any) {
 
   useEffect(() => {
     setCurrentAward('');
-  }, []);
+  }, [navigation]);
 
   const badgeNames: string[] = badges.map((badge: Badge) => badge.badgeName);
 
