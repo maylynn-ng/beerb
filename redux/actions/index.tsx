@@ -173,7 +173,6 @@ export function getLocations(user: any) {
         dispatch({ type: 'SET_USER_INFO', payload: { id: res.id, Locations: res.Locations } });
         const favouriteBeers = new Set(res.favouriteBeers);
         dispatch({ type: 'SAVE_FAVOURITES', payload: favouriteBeers });
-        console.log('IN GET LOCATIONS', res);
         dispatch({ type: 'ADD_BADGE', payload: res.Badges });
         dispatch(changeLoading(false));
       })

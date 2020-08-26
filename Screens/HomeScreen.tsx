@@ -100,8 +100,6 @@ const HomeScreen = ({
 
   const screenShot = useRef();
 
-  console.log('HOME', user.badges);
-
   const takeScreenShot = async () => {
     try {
       await hasAndroidPermission();
