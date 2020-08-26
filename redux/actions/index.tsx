@@ -1,5 +1,6 @@
 import { Beer } from '../../Models/Beer.model';
 import { Borough } from '../../Models/Borough.model';
+import { Badge } from '../../Models/Badge.model';
 import { AppDispatch, Action } from '../../Models/Redux.model';
 import { ToastAndroid } from 'react-native';
 import { getDistance } from 'geolib';
@@ -218,5 +219,45 @@ export function updateFavourites(favouriteBeers: Set<Object>) {
   return {
     type: 'SAVE_FAVOURITES',
     payload: favouriteBeers,
+  };
+}
+
+export function addBadge(UserId: any, badge: Badge) {
+  return function (dispatch: AppDispatch) {
+    fetch(`${DB_LOCALHOST}/awardBadge`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ UserId, badge }),
+    })
+      .then(res => {
+        if (res.status >= 400) throw new Error("Sorry, can't award you this badge");
+        res.json();
+      })
+      .then(res =>
+        dispatch({
+          type: 'ADD_BADGE',
+          payload: res,
+        })
+      );
+  };
+}
+
+export function getBadges() {
+  return function (dispatch: AppDispatch) {
+    fetch(`${DB_LOCALHOST}/getBadges`)
+      .then(res => res.json())
+      .then(res => {
+        const result = res.map((badge: Badge) => {
+          return {
+            badgeName: badge.badgeName,
+            badgeText: badge.badgeText,
+            badgeImage: badge.badgeImage,
+          };
+        });
+        dispatch({
+          type: 'SET_ALL_BADGES',
+          payload: result,
+        });
+      });
   };
 }

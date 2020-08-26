@@ -21,6 +21,7 @@ import {
   getLocations,
   changeLoading,
   storeBeerFreqs,
+  getBadges,
 } from '../redux/actions';
 import Topbar from '../Components/Topbar';
 
@@ -45,6 +46,7 @@ const HomeScreen = ({
   user,
   setLoading,
   setBeerFrequency,
+  populateBadges,
 }: any) => {
   const [lastBeer, setLastBeer] = useState({});
 
@@ -67,6 +69,7 @@ const HomeScreen = ({
       // Triggers a new listener that will check if the location is updated.
       // On update, background-location-task will manage the changes in the TaskManager.
     })();
+    populateBadges();
   }, []);
 
   useEffect(() => {
@@ -196,6 +199,7 @@ function mapDispatch(dispatch: AppDispatch) {
     setLocations: (user: any) => dispatch(getLocations(user)),
     setLoading: (status: boolean) => dispatch(changeLoading(status)),
     setBeerFrequency: (freqs: [[]]) => dispatch(storeBeerFreqs(freqs)),
+    populateBadges: () => dispatch(getBadges()),
   };
 }
 
