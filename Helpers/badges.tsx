@@ -8,10 +8,7 @@ export function badgeCheck(
   addAchievement,
   allBadges
 ) {
-  if (
-    user.boroughCounter.hasOwnProperty(currentBorough.boroughName) &&
-    user.boroughCounter[currentBorough.boroughName] === 2
-  ) {
+  if (!user.boroughCounter.hasOwnProperty(currentBorough.boroughName)) {
     const [newBadge] = allBadges.filter((badge: Badge) => badge.badgeName === 'NEW_BOROUGH');
 
     setBadge(newBadge);
