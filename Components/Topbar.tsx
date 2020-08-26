@@ -29,7 +29,8 @@ function Topbar({ navigation, user, currentBorough, allBadges }: any) {
           <Text style={[styles.title, { fontSize: 20 }]}>{currentBorough.boroughName}</Text>
           <View style={styles.currentView}>
             <Text style={styles.currentBoroughName}>
-              {Object.keys(user.boroughCounter).length}/33
+              {Object.keys(user.boroughCounter).length}
+              <Text style={{ fontSize: 20, opacity: 0.6 }}>/33</Text>
             </Text>
           </View>
         </>
@@ -95,7 +96,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   currentBoroughName: {
-    fontSize: 25,
+    fontSize: 27,
     marginLeft: 10,
   },
   badgeCount: {

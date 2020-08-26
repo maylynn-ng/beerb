@@ -5,13 +5,16 @@ import { Badge } from '../Models/Badge.model';
 import Topbar from '../Components/Topbar';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
+const initialBadgeNames: string[] = [];
+const initialCurrentAward: Badge = {
+  badgeName: '',
+  badgeText: '',
+  badgeImage: '',
+};
+
 function Achievements({ badges, allBadges, navigation, user }: any) {
-  const [currentAward, setCurrentAward] = useState({
-    badgeName: '',
-    badgeText: '',
-    badgeImage: '',
-  });
-  const [badgeNames, setBadgeNames] = useState([]);
+  const [currentAward, setCurrentAward] = useState(initialCurrentAward);
+  const [badgeNames, setBadgeNames] = useState(initialBadgeNames);
 
   const generateNameArray = () =>
     badges.filter((badge: Badge) => badge !== undefined).map((badge: Badge) => badge.badgeName);

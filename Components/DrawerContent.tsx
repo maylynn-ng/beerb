@@ -24,7 +24,7 @@ function DrawerContent(props: any) {
               >
                 <Image
                   source={require('../assets/logo.png')}
-                  style={{ width: 100, height: 100, marginHorizontal: 70 }}
+                  style={{ width: 130, height: 100, marginHorizontal: 55, marginBottom: 50 }}
                 />
               </TouchableWithoutFeedback>
 
@@ -36,15 +36,14 @@ function DrawerContent(props: any) {
               >
                 <Image
                   source={{ uri: user.picture }}
-                  style={[
-                    styles.icon,
-                    {
-                      borderRadius: 15,
-                      alignSelf: 'center',
-                      marginRight: 10,
-                      left: -1,
-                    },
-                  ]}
+                  style={{
+                    borderRadius: 80,
+                    alignSelf: 'center',
+                    marginLeft: 0,
+                    marginRight: 10,
+                    width: 55,
+                    height: 55,
+                  }}
                 />
                 <View style={{ flexDirection: 'column' }}>
                   <Text style={styles.title}>{user.nickname}</Text>
@@ -129,7 +128,7 @@ const styles = StyleSheet.create({
     lineHeight: 14,
   },
   drawerSection: {
-    marginTop: 15,
+    marginTop: 35,
   },
   bottomDrawerSection: {
     marginBottom: 15,
@@ -145,5 +144,7 @@ const styles = StyleSheet.create({
   icon: {
     height: 30,
     width: 30,
+    marginRight: -9,
+    marginLeft: 13,
   },
 });

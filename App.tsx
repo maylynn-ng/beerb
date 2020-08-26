@@ -5,6 +5,8 @@ import { StyleSheet, SafeAreaView, Dimensions } from 'react-native';
 import store from './redux/store';
 import Login from './Components/Login';
 
+console.disableYellowBox = true;
+
 export default function App() {
   return (
     <Provider store={store}>
