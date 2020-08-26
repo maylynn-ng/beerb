@@ -13,6 +13,8 @@ function Achievements({ badges, allBadges, navigation, user }: any) {
     setCurrentAward('');
   }, []);
 
+  const badgeNames: string[] = badges.map((badge: Badge) => badge.badgeName);
+
   return (
     <View style={styles.mainContainer}>
       <Topbar
@@ -31,11 +33,7 @@ function Achievements({ badges, allBadges, navigation, user }: any) {
               }}
             >
               <Image
-                style={
-                  // [
-                  styles.badge
-                  // , { opacity: badges.contains(badge) ? 1 : 0.3 }]
-                }
+                style={[styles.badge, { opacity: badgeNames.includes(badge.badgeName) ? 1 : 0.3 }]}
                 source={{ uri: badge.badgeImage }}
               />
             </TouchableOpacity>

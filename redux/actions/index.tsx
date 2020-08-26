@@ -173,6 +173,8 @@ export function getLocations(user: any) {
         dispatch({ type: 'SET_USER_INFO', payload: { id: res.id, Locations: res.Locations } });
         const favouriteBeers = new Set(res.favouriteBeers);
         dispatch({ type: 'SAVE_FAVOURITES', payload: favouriteBeers });
+        console.log('IN GET LOCATIONS', res);
+        dispatch({ type: 'ADD_BADGE', payload: res.Badges });
         dispatch(changeLoading(false));
       })
       .catch(error => {
@@ -225,7 +227,7 @@ export function updateFavourites(favouriteBeers: Set<Object>) {
 export function addBadge(UserId: any, badge: Badge) {
   return function (dispatch: AppDispatch) {
     fetch(`${DB_LOCALHOST}/awardBadge`, {
-      method: 'PUT',
+      method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ UserId, badge }),
     })
@@ -236,9 +238,10 @@ export function addBadge(UserId: any, badge: Badge) {
       .then(res =>
         dispatch({
           type: 'ADD_BADGE',
-          payload: res,
+          payload: [res],
         })
-      );
+      )
+      .catch(error => console.log('Cannot, sorry: ', error));
   };
 }
 
