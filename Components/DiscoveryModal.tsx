@@ -39,7 +39,8 @@ const DiscoveryModal = ({ isShownDiscovery, toggleDiscovery, boroughs }: any) =>
     directionalOffsetThreshold: 80,
   };
 
-  const swipe = gestureState => {
+  const swipe = (direction: string) => {
+    startAnimation(direction);
     fetch(`${DB_LOCALHOST}/discover`)
       .then(res => res.json())
       .then(res => {
@@ -49,17 +50,41 @@ const DiscoveryModal = ({ isShownDiscovery, toggleDiscovery, boroughs }: any) =>
     setDiscoveryBorough(boroughs[randomIndex]);
   };
 
-  // const pan = useRef(new Animated.ValueXY()).current;
+  const [activated, setActivated] = useState(false);
+  const [upperAnimation, setUpperAnimation] = useState(new Animated.Value(0));
 
-  // const panResponder = PanResponder.create({
-  //   onStartShouldSetPanResponder: () => true,
-  //   onPanResponderMove: () => {
-  //     Animated.event([null, { dx: pan.x, dy: pan.y }], undefined);
-  //   },
-  //   onPanResponderRelease: () => {
-  //     Animated.spring(pan, { toValue: { x: 0, y: 0 } }).start();
-  //   },
-  // });
+  const startAnimation = (direction: string) => {
+    setActivated(!activated);
+
+    Animated.sequence([
+      Animated.timing(upperAnimation, {
+        useNativeDriver: true,
+        toValue: direction === 'r' ? 40 : -40,
+        duration: 0,
+      }),
+      Animated.timing(upperAnimation, {
+        useNativeDriver: true,
+        toValue: direction === 'r' ? -40 : 40,
+        duration: 0,
+      }),
+      Animated.spring(upperAnimation, {
+        useNativeDriver: true,
+        toValue: 0,
+        friction: 2,
+        tension: 140,
+      }),
+    ]).start();
+  };
+
+  const animatedStyles = {
+    upper: {
+      transform: [
+        {
+          translateX: upperAnimation,
+        },
+      ],
+    },
+  };
 
   return (
     isShownDiscovery && (
@@ -77,10 +102,13 @@ const DiscoveryModal = ({ isShownDiscovery, toggleDiscovery, boroughs }: any) =>
           toggleDiscovery();
         }}
       >
-        {/* <Animated.View style={pan.getLayout()} {...panResponder.panHandlers}> */}
-        <GestureRecognizer onSwipeRight={swipe} onSwipeLeft={swipe} config={config}>
+        <GestureRecognizer
+          onSwipeLeft={() => swipe('l')}
+          onSwipeRight={() => swipe('r')}
+          config={config}
+        >
           <TouchableWithoutFeedback>
-            <View style={styles.mainContainer}>
+            <Animated.View style={[styles.mainContainer, animatedStyles.upper]}>
               <Image source={{ uri: discoveryBeer.beerLabel }} style={styles.label} />
               <Text style={styles.highlightText}>Looking for a new experience? Try...</Text>
               <View>
@@ -94,11 +122,9 @@ const DiscoveryModal = ({ isShownDiscovery, toggleDiscovery, boroughs }: any) =>
                   </Text>
                 </TouchableOpacity>
               </View>
-            </View>
+            </Animated.View>
           </TouchableWithoutFeedback>
         </GestureRecognizer>
-        {/* </Animated.View> */}
-
         <Modal
           isVisible={isShownBeerModal}
           statusBarTranslucent={true}
