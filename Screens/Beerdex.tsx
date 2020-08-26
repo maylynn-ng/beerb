@@ -28,6 +28,10 @@ function Beerdex({
 
   useEffect(() => {
     setIsLoading(true);
+  }, []);
+
+  useEffect(() => {
+    setIsLoading(true);
     const newArray: Beer[] = [...drunkBeers];
     const newIdsArray: number[] = [];
     drunkBeers.forEach((beer: Beer) => newIdsArray.push(beer.beerId));
@@ -38,8 +42,11 @@ function Beerdex({
     });
     setBeerdexBeers(newArray);
     populateDrunkIds(newIdsArray);
-    setIsLoading(false);
   }, [null, drunkBeers]);
+
+  useEffect(() => {
+    if (beerdexBeers.length) setIsLoading(false);
+  }, [beerdexBeers]);
 
   const handleFilter = (selector: string) => {
     selector ? setFilterBeers(true) : setFilterBeers(false);
