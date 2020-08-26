@@ -9,7 +9,6 @@ const BeerModal = ({ beerId }: any) => {
   const { drunkBeers } = state.user;
   const beerToShow = drunkBeers.filter(b => b.beerId === beerId);
   const beerObj: any = beerToShow[0];
-  console.log('🍎', beerObj, beerId);
   return (
     <View style={styles.container}>
       <View style={styles.labelAndName}>
@@ -19,7 +18,6 @@ const BeerModal = ({ beerId }: any) => {
         <Text style={styles.beerName}>{beerObj.beerName.toUpperCase()}</Text>
         <FavouriteBeer beerId={beerObj.beerId} />
       </View>
-      {console.log('🍎', beerObj)}
       <Text style={{ textAlign: 'center' }}>{beerObj.beerStyle}</Text>
       <Text style={{ textAlign: 'center' }}>
         ABV: {beerObj.beerAbv}% - IBU: {beerObj.beerIbu === 0 ? 'N/A' : beerObj.beerIbu}
