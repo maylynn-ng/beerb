@@ -6,7 +6,8 @@ export function badgeCheck(
   setIsShowBadgeModal,
   currentBorough,
   addAchievement,
-  allBadges
+  allBadges,
+  toggleAddBeer
 ) {
   if (!user.boroughCounter.hasOwnProperty(currentBorough.boroughName)) {
     const [newBadge] = allBadges.filter((badge: Badge) => badge.badgeName === 'NEW_BOROUGH');
@@ -23,5 +24,7 @@ export function badgeCheck(
     setBadge(newBadge);
     setIsShowBadgeModal(true);
     addAchievement(user.id, newBadge);
+  } else {
+    toggleAddBeer();
   }
 }

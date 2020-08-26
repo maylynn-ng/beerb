@@ -48,6 +48,7 @@ const Login = ({ user, setUser, isLoading, setLoading }: any) => {
           'Authentication error',
           result.params.error_description || 'something went wrong'
         );
+        setLoading(false);
         return;
       }
       if (result.type === 'success') {
@@ -58,7 +59,6 @@ const Login = ({ user, setUser, isLoading, setLoading }: any) => {
         AsyncStorage.setItem('@session_token', JSON.stringify(decoded));
       }
     }
-    setLoading(false);
   }, [result]);
 
   useEffect(() => {

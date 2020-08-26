@@ -2,7 +2,7 @@ import React from 'react';
 import { Image, Text, StyleSheet, View, Share, TouchableOpacity, ToastAndroid } from 'react-native';
 import { connect } from 'react-redux';
 import Modal from 'react-native-modal';
-import { storeBorough, fetchPlacesNearby, storeLocation, getLocations } from '../redux/actions';
+import { storeBorough, fetchPlacesNearby, storeLocation } from '../redux/actions';
 
 function ShortProfile({
   isShownShortProfile,
@@ -130,7 +130,6 @@ function mapDispatch(dispatch: any) {
     setLocation: (location: object) => dispatch(storeLocation(location)),
     setBorough: (name: string) => dispatch(storeBorough(name)),
     setPlacesNearby: (lat: number, lng: number) => dispatch(fetchPlacesNearby(lat, lng)),
-    setLocations: (user: any) => dispatch(getLocations(user)),
   };
 }
 
