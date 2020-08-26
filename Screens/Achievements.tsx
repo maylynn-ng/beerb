@@ -7,13 +7,19 @@ import Topbar from '../Components/Topbar';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
 function Achievements({ badges, allBadges, navigation, user }: any) {
-  const [currentAward, setCurrentAward] = useState('');
+  const [currentAward, setCurrentAward] = useState({
+    badgeName: '',
+    badgeText: '',
+    badgeImage: '',
+  });
 
   useEffect(() => {
     setCurrentAward('');
-  }, [navigation]);
+  }, []);
 
-  const badgeNames: string[] = badges.map((badge: Badge) => badge.badgeName);
+  const badgeNames: string[] = badges
+    .filter((badge: Badge) => badge !== undefined)
+    .map((badge: Badge) => badge.badgeName);
 
   return (
     <View style={styles.mainContainer}>
@@ -23,13 +29,17 @@ function Achievements({ badges, allBadges, navigation, user }: any) {
         currentBorough="ACHIEVEMENTS"
         allBadges={allBadges}
       />
-      <Text style={styles.currentAward}>{currentAward}</Text>
+      <Text style={styles.currentAward}>
+        {badgeNames.includes(currentAward.badgeName) ? ' 🏆 ' : null}
+        {currentAward.badgeText}
+        {badgeNames.includes(currentAward.badgeName) ? ' 🏆 ' : null}
+      </Text>
       <View style={styles.container}>
         {allBadges.map((badge: Badge, index: number) => (
           <View key={index}>
             <TouchableOpacity
               onPress={() => {
-                setCurrentAward(badge.badgeText);
+                setCurrentAward(badge);
               }}
             >
               <Image
