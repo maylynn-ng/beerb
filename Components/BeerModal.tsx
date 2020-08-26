@@ -3,7 +3,7 @@ import { View, Text, Image, StyleSheet, ScrollView } from 'react-native';
 import { InitialBeer } from '../Models/Beer.model';
 import FavouriteBeer from './FavouriteBeer';
 
-const DB_LOCALHOST = process.env.EXPO_LOCALHOST;
+const DB_LOCALHOST = process.env.REACT_NATIVE_LOCALHOST;
 
 const BeerModal = ({ beer, noFetching }: any) => {
   const [thisBeer, setThisBeer] = useState(InitialBeer);
@@ -35,7 +35,7 @@ const BeerModal = ({ beer, noFetching }: any) => {
       <Text style={styles.breweryInfo}>
         {thisBeer.breweryName}, {thisBeer.breweryCountry}
       </Text>
-      <ScrollView>
+      <ScrollView style={{ marginVertical: 17 }}>
         <Text style={styles.beerDescription}>{thisBeer.beerDescription}</Text>
       </ScrollView>
     </View>
@@ -72,6 +72,7 @@ const styles = StyleSheet.create({
   beerDescription: {
     fontSize: 16,
     padding: 15,
+    paddingTop: 0,
     textAlign: 'center',
   },
 });

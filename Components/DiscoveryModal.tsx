@@ -14,7 +14,7 @@ import GestureRecognizer from 'react-native-swipe-gestures';
 import { InitialBeer } from '../Models/Beer.model';
 import BeerModal from '../Components/BeerModal';
 
-const DB_LOCALHOST = process.env.EXPO_LOCALHOST;
+const DB_LOCALHOST = process.env.REACT_NATIVE_LOCALHOST;
 
 const DiscoveryModal = ({ isShownDiscovery, toggleDiscovery, boroughs }: any) => {
   const [discoveryBeer, setDiscoveryBeer] = useState(InitialBeer);

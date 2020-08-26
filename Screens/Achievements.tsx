@@ -8,7 +8,6 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 
 function Achievements({ badges, allBadges, navigation, user }: any) {
   const [currentAward, setCurrentAward] = useState('');
-
   useEffect(() => {
     setCurrentAward('');
   }, [navigation]);

@@ -11,7 +11,7 @@ const CLIENT_SECRET = process.env.REACT_NATIVE_UNTAPPED_CLIENT_SECRET;
 const PLACES_NEARBY_URL = process.env.REACT_NATIVE_PLACES_NEARBY_URL;
 const PLACES_KEY = process.env.REACT_NATIVE_PLACES_KEY;
 const PLACES_NEARBY_PARAMS: string = '&radius=200&type=bar&keyword=pub&key=';
-const DB_LOCALHOST = process.env.EXPO_LOCALHOST;
+const DB_LOCALHOST = process.env.REACT_NATIVE_LOCALHOST;
 
 export function storeLocation(location: { latitude: number; longitude: number }): Action {
   return {
@@ -173,7 +173,7 @@ export function getLocations(user: any) {
         dispatch({ type: 'SET_USER_INFO', payload: { id: res.id, Locations: res.Locations } });
         const favouriteBeers = new Set(res.favouriteBeers);
         dispatch({ type: 'SAVE_FAVOURITES', payload: favouriteBeers });
-        console.log('IN GET LOCATIONS', res);
+        //console.log('IN GET LOCATIONS', res);
         dispatch({ type: 'ADD_BADGE', payload: res.Badges });
         dispatch(changeLoading(false));
       })

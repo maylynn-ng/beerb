@@ -10,6 +10,7 @@ export function badgeCheck(
 ) {
   if (!user.boroughCounter.hasOwnProperty(currentBorough.boroughName)) {
     const [newBadge] = allBadges.filter((badge: Badge) => badge.badgeName === 'NEW_BOROUGH');
+    console.log(newBadge);
 
     setBadge(newBadge);
     setIsShowBadgeModal(true);

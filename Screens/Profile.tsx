@@ -1,9 +1,18 @@
 import React, { useState } from 'react';
-import { Image, StyleSheet, View, Text, ScrollView, TouchableOpacity } from 'react-native';
+import {
+  Image,
+  StyleSheet,
+  View,
+  Text,
+  ScrollView,
+  TouchableOpacity,
+  TouchableOpacityBase,
+} from 'react-native';
 import { connect } from 'react-redux';
 import moment from 'moment';
 import Modal from 'react-native-modal';
 import BeerModal from '../Components/BeerModal';
+import Topbar from '../Components/Topbar';
 
 import {
   storeBorough,
@@ -12,7 +21,6 @@ import {
   getLocations,
   storeBeerFreqs,
 } from '../redux/actions';
-import Topbar from '../Components/Topbar';
 
 function Profile({ user, beerFrequency, navigation }: any) {
   const [displayModal, setDisplayModal] = useState(false);
@@ -63,6 +71,59 @@ function Profile({ user, beerFrequency, navigation }: any) {
               <Text style={{ fontWeight: 'bold' }}>No beers yet</Text>
             )}
           </View>
+        </View>
+        <Text
+          style={{
+            backfaceVisibility: user.badges.length !== 0 ? 'visible' : 'hidden',
+            fontSize: 20,
+            alignSelf: 'flex-start',
+            paddingLeft: 15,
+          }}
+        >
+          My badges:
+        </Text>
+        <View
+          style={{
+            flexDirection: 'row',
+            flexWrap: 'wrap',
+            margin: 10,
+            justifyContent: 'center',
+            alignItems: 'flex-start',
+            paddingHorizontal: 10,
+          }}
+        >
+          {user.badges.length !== 0 &&
+            user.badges.map(badge => (
+              <TouchableOpacity
+                style={{
+                  justifyContent: 'center',
+                  alignItems: 'flex-start',
+                  flex: 1,
+                  width: 30,
+                  height: 30,
+                  flexWrap: 'wrap',
+                }}
+              >
+                {/* <Image source={badge.badgeImage} style={{
+                    flex: 1,
+                    width: 30,
+                    height: 30,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }} /> */}
+                <Image
+                  source={require('../assets/user.png')}
+                  style={{
+                    flex: 1,
+                    width: 30,
+                    height: 30,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    flexWrap: 'wrap',
+                  }}
+                />
+              </TouchableOpacity>
+            ))}
         </View>
         <Text style={{ fontSize: 20, alignSelf: 'flex-start', paddingLeft: 15 }}>History:</Text>
         <ScrollView style={styles.scrollable}>
