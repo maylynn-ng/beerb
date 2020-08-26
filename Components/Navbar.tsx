@@ -1,5 +1,13 @@
 import React, { useState } from 'react';
-import { Dimensions, View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import {
+  Dimensions,
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  TouchableOpacity,
+  ToastAndroid,
+} from 'react-native';
 import AddBeer from './AddBeerModal';
 import { connect } from 'react-redux';
 import { fetchPlacesNearby, changeLoading } from '../redux/actions';
@@ -31,6 +39,7 @@ const Navbar = ({
   const [isShownDiscovery, setIsShownDiscovery] = useState(false);
   const toggleDiscovery = () => {
     setIsShownDiscovery(!isShownDiscovery);
+    !isShownDiscovery && ToastAndroid.show('Swipe to get a new discovery!', ToastAndroid.LONG);
   };
 
   return (
@@ -100,7 +109,8 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '10%',
     backgroundColor: 'gold',
-    zIndex: 1,
+    // zIndex: 1,
+    elevation: 50000000,
   },
   addBtn: {
     position: 'relative',

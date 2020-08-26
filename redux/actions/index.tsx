@@ -1,5 +1,6 @@
 import { Beer } from '../../Models/Beer.model';
 import { Borough } from '../../Models/Borough.model';
+import { Badge } from '../../Models/Badge.model';
 import { AppDispatch, Action } from '../../Models/Redux.model';
 import { ToastAndroid } from 'react-native';
 import { getDistance } from 'geolib';
@@ -172,6 +173,8 @@ export function getLocations(user: any) {
         dispatch({ type: 'SET_USER_INFO', payload: { id: res.id, Locations: res.Locations } });
         const favouriteBeers = new Set(res.favouriteBeers);
         dispatch({ type: 'SAVE_FAVOURITES', payload: favouriteBeers });
+        console.log('IN GET LOCATIONS', res);
+        dispatch({ type: 'ADD_BADGE', payload: res.Badges });
         dispatch(changeLoading(false));
       })
       .catch(error => {
@@ -218,5 +221,46 @@ export function updateFavourites(favouriteBeers: Set<Object>) {
   return {
     type: 'SAVE_FAVOURITES',
     payload: favouriteBeers,
+  };
+}
+
+export function addBadge(UserId: any, badge: Badge) {
+  return function (dispatch: AppDispatch) {
+    fetch(`${DB_LOCALHOST}/awardBadge`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ UserId, badge }),
+    })
+      .then(res => {
+        if (res.status >= 400) throw new Error("Sorry, can't award you this badge");
+        res.json();
+      })
+      .then(res =>
+        dispatch({
+          type: 'ADD_BADGE',
+          payload: [res],
+        })
+      )
+      .catch(error => console.log('Cannot, sorry: ', error));
+  };
+}
+
+export function getBadges() {
+  return function (dispatch: AppDispatch) {
+    fetch(`${DB_LOCALHOST}/getBadges`)
+      .then(res => res.json())
+      .then(res => {
+        const result = res.map((badge: Badge) => {
+          return {
+            badgeName: badge.badgeName,
+            badgeText: badge.badgeText,
+            badgeImage: badge.badgeImage,
+          };
+        });
+        dispatch({
+          type: 'SET_ALL_BADGES',
+          payload: result,
+        });
+      });
   };
 }
