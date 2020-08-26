@@ -31,9 +31,9 @@ function Beerdex({
     setIsLoading(true);
     const newArray: Beer[] = [...drunkBeers];
     const newIdsArray: number[] = [];
-    newArray.forEach((beer: Beer) => newIdsArray.push(beer.beerId));
+    drunkBeers.forEach((beer: Beer) => newIdsArray.push(beer.beerId));
     beerdex.forEach((beer: Beer) => {
-      if (!newArray.some((drunkBeer: Beer) => drunkBeer.beerId === beer.beerId)) {
+      if (!drunkBeers.some((drunkBeer: Beer) => drunkBeer.beerId === beer.beerId)) {
         newArray.push(beer);
       }
     });
