@@ -1,42 +1,25 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { View, Text, Image, StyleSheet, ScrollView } from 'react-native';
-import { InitialBeer } from '../Models/Beer.model';
 import FavouriteBeer from './FavouriteBeer';
 
-const DB_LOCALHOST = process.env.EXPO_LOCALHOST;
-
-const BeerModal = ({ beer, noFetching }: any) => {
-  const [thisBeer, setThisBeer] = useState(InitialBeer);
-
-  useEffect(() => {
-    if (noFetching) {
-      setThisBeer(beer);
-    } else {
-      fetch(`${DB_LOCALHOST}/searchBeer/${beer.beerId}`)
-        .then(res => res.json())
-        .then(res => setThisBeer(res));
-    }
-  }, []);
-
+const BeerModal = ({ beer }: any) => {
   return (
     <View style={styles.container}>
       <View style={styles.labelAndName}>
-        {thisBeer.beerLabel !== '' && (
-          <Image style={styles.label} source={{ uri: thisBeer.beerLabel }} />
-        )}
-        <Text style={styles.beerName}>{thisBeer.beerName.toUpperCase()}</Text>
-        <FavouriteBeer beerId={thisBeer.beerId} />
+        {beer.beerLabel !== '' && <Image style={styles.label} source={{ uri: beer.beerLabel }} />}
+        <Text style={styles.beerName}>{beer.beerName.toUpperCase()}</Text>
+        <FavouriteBeer beerId={beer.beerId} />
       </View>
 
-      <Text style={{ textAlign: 'center' }}>{thisBeer.beerStyle}</Text>
+      <Text style={{ textAlign: 'center' }}>{beer.beerStyle}</Text>
       <Text style={{ textAlign: 'center' }}>
-        ABV: {thisBeer.beerAbv}% - IBU: {thisBeer.beerIbu === 0 ? 'N/A' : thisBeer.beerIbu}
+        ABV: {beer.beerAbv}% - IBU: {beer.beerIbu === 0 ? 'N/A' : beer.beerIbu}
       </Text>
       <Text style={styles.breweryInfo}>
-        {thisBeer.breweryName}, {thisBeer.breweryCountry}
+        {beer.breweryName}, {beer.breweryCountry}
       </Text>
       <ScrollView>
-        <Text style={styles.beerDescription}>{thisBeer.beerDescription}</Text>
+        <Text style={styles.beerDescription}>{beer.beerDescription}</Text>
       </ScrollView>
     </View>
   );
