@@ -1,17 +1,16 @@
 import { Badge } from '../Models/Badge.model';
 
 export function badgeCheck(
-  user,
-  setBadge,
-  setIsShowBadgeModal,
-  currentBorough,
   addAchievement,
   allBadges,
-  toggleAddBeer
+  currentBorough,
+  setBadge,
+  setIsShowBadgeModal,
+  toggleAddBeer,
+  user
 ) {
   if (!user.boroughCounter.hasOwnProperty(currentBorough.boroughName)) {
     const [newBadge] = allBadges.filter((badge: Badge) => badge.badgeName === 'NEW_BOROUGH');
-    console.log(newBadge);
 
     setBadge(newBadge);
     setIsShowBadgeModal(true);

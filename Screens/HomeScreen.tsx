@@ -144,7 +144,6 @@ const HomeScreen = ({
   const handlePress = () => {
     setShowBeerModalInfo(!showBeerModalInfo);
   };
-  console.log(user.badges.length);
 
   return (
     <ViewShot ref={screenShot} style={styles.homeScreen}>
