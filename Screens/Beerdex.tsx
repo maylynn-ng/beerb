@@ -23,6 +23,7 @@ function Beerdex({
 }: any) {
   const [filterBeers, setFilterBeers] = useState(false);
   const [searchInBeerdex, setSearchInBeerdex] = useState('');
+
   useEffect(() => {
     setLoading(true);
     populateBeerdex();
@@ -50,10 +51,18 @@ function Beerdex({
       <Topbar navigation={navigation} user={user} />
       <SafeAreaView style={styles.screen}>
         <View style={{ flexDirection: 'row' }}>
-          <TouchableOpacity style={styles.filterSelector} onPress={() => handleFilter('')}>
+          <TouchableOpacity
+            style={[styles.filterSelector, filterBeers ? null : { backgroundColor: '#ffe566aa' }]}
+            onPress={() => handleFilter('')}
+            activeOpacity={1}
+          >
             <Text style={{ fontSize: 20 }}>All</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.filterSelector} onPress={() => handleFilter('favs')}>
+          <TouchableOpacity
+            style={[styles.filterSelector, filterBeers ? { backgroundColor: '#ffe566aa' } : null]}
+            onPress={() => handleFilter('favs')}
+            activeOpacity={1}
+          >
             <Text style={{ fontSize: 20 }}>Favourites</Text>
           </TouchableOpacity>
         </View>
@@ -82,7 +91,8 @@ function Beerdex({
                 ? user.drunkBeers
                     .filter(
                       (beer: Beer) =>
-                        favouriteBeers.has(beer.beerId) && beer.beerName.includes(searchInBeerdex)
+                        favouriteBeers.has(beer.beerId) &&
+                        beer.beerName.toLowerCase().includes(searchInBeerdex.toLowerCase())
                     )
                     .map(
                       (entry: any, index: number) =>
@@ -91,7 +101,9 @@ function Beerdex({
                         )
                     )
                 : user.drunkBeers
-                    .filter(beer => beer.beerName.includes(searchInBeerdex))
+                    .filter(beer =>
+                      beer.beerName.toLowerCase().includes(searchInBeerdex.toLowerCase())
+                    )
                     .map(
                       (entry: any, index: number) =>
                         entry && (
@@ -104,7 +116,8 @@ function Beerdex({
                 ? beerdex
                     .filter(
                       (beer: Beer) =>
-                        favouriteBeers.has(beer.beerId) && beer.beerName.includes(searchInBeerdex)
+                        favouriteBeers.has(beer.beerId) &&
+                        beer.beerName.toLowerCase().includes(searchInBeerdex.toLowerCase())
                     )
                     .map((beer: Beer, index: number) => {
                       if (user.uniqueDrunkIds.indexOf(beer.beerId) === -1) {
@@ -114,7 +127,9 @@ function Beerdex({
                       }
                     })
                 : beerdex
-                    .filter(beer => beer.beerName.includes(searchInBeerdex))
+                    .filter(beer =>
+                      beer.beerName.toLowerCase().includes(searchInBeerdex.toLowerCase())
+                    )
                     .map((beer: Beer, index: number) => {
                       if (user.uniqueDrunkIds.indexOf(beer.beerId) === -1) {
                         return (
