@@ -123,7 +123,7 @@ export default function reducer(state: State = initialState, action: Action): St
     case 'SET_DRUNK_BEERS':
       return {
         ...state,
-        user: { ...state.user, drunkBeers: action.payload },
+        user: { ...state.user, drunkBeers: [...state.user.drunkBeers, ...action.payload] },
       };
     case 'SET_BEERDEX':
       return {

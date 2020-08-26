@@ -84,10 +84,10 @@ function AddBeer({
         },
         beers: beerSearchResults,
       };
-
       badgeCheck(user, setBadge, setIsShowBadgeModal, currentBorough, addAchievement, allBadges);
 
       postNewEntry(newEntry);
+      toggleAddBeer();
     }
   };
 

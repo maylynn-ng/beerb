@@ -100,7 +100,7 @@ const HomeScreen = ({
 
   const screenShot = useRef();
 
-  console.log('HOME', user.badges);
+  console.log('HOME line 103', user.drunkBeers);
 
   const takeScreenShot = async () => {
     try {
