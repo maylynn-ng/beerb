@@ -37,7 +37,7 @@ const Navbar = ({
   };
 
   const [isShownDiscovery, setIsShownDiscovery] = useState(false);
-  const toggleDiscovery = () => {
+  const toggleDiscovery = (): void => {
     setIsShownDiscovery(!isShownDiscovery);
     !isShownDiscovery && ToastAndroid.show('Swipe to get a new discovery!', ToastAndroid.LONG);
   };

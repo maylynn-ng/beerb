@@ -26,8 +26,9 @@ import {
   getBadges,
 } from '../redux/actions';
 import Topbar from '../Components/Topbar';
+import { Borough } from '../Models/Borough.model';
 
-const simpleArrayOfBoroughs = boroughs.features.map(borough => {
+const simpleArrayOfBoroughs: Borough[] = boroughs.features.map(borough => {
   return {
     boroughName: borough.properties.name,
     boroughId: borough.id,

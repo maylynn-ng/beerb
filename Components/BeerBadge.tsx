@@ -3,8 +3,9 @@ import { View, Image, StyleSheet, Text } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import Modal from 'react-native-modal';
 import BeerModal from '../Components/BeerModal';
+import { Beer } from '../Models/Beer.model';
 
-const BeerBadge = ({ beer, hasDrunk }: any) => {
+const BeerBadge = ({ beer, hasDrunk }: { beer: Beer; hasDrunk: number }) => {
   const [displayModal, setDisplayModal] = useState(false);
   return (
     <View style={styles.container}>

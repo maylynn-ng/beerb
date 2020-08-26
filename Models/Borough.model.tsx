@@ -4,3 +4,9 @@ export interface Borough {
   boroughId: number;
   boroughCoords: Coordinates[];
 }
+
+export const InitialBorough: Borough = {
+  boroughName: '',
+  boroughId: 0,
+  boroughCoords: [{ latitude: 0, longitude: 0 }],
+};

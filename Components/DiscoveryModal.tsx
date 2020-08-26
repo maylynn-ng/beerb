@@ -10,26 +10,35 @@ import {
 } from 'react-native';
 import Modal from 'react-native-modal';
 import GestureRecognizer from 'react-native-swipe-gestures';
-import { InitialBeer } from '../Models/Beer.model';
+import { InitialBeer, Beer } from '../Models/Beer.model';
 import BeerModal from '../Components/BeerModal';
+import { DB_LOCALHOST } from '../redux/actions';
+import { Borough, InitialBorough } from '../Models/Borough.model';
 
-const DB_LOCALHOST = process.env.EXPO_LOCALHOST;
-
-const DiscoveryModal = ({ isShownDiscovery, toggleDiscovery, boroughs }: any) => {
+const DiscoveryModal = ({
+  isShownDiscovery,
+  toggleDiscovery,
+  boroughs,
+}: {
+  isShownDiscovery: boolean;
+  toggleDiscovery: any;
+  boroughs: Borough[];
+}): JSX.Element => {
   const [discoveryBeer, setDiscoveryBeer] = useState(InitialBeer);
-  const [discoveryBorough, setDiscoveryBorough] = useState({});
+  const [discoveryBorough, setDiscoveryBorough] = useState(InitialBorough);
   const [isShownBeerModal, setIsShownBeerModal] = useState(false);
+
   useEffect(() => {
     fetch(`${DB_LOCALHOST}/discover`)
       .then(res => res.json())
-      .then(res => {
+      .then((res: Beer) => {
         setDiscoveryBeer(res);
       });
-    const randomIndex = Math.floor(Math.random() * 33);
+    const randomIndex: number = Math.floor(Math.random() * 33);
     setDiscoveryBorough(boroughs[randomIndex]);
   }, []);
 
-  const handlePress = () => {
+  const handlePress = (): void => {
     setIsShownBeerModal(!isShownBeerModal);
   };
 
@@ -38,35 +47,35 @@ const DiscoveryModal = ({ isShownDiscovery, toggleDiscovery, boroughs }: any) =>
     directionalOffsetThreshold: 80,
   };
 
-  const swipe = (direction: string) => {
+  const swipe = (direction: string): void => {
     startAnimation(direction);
     fetch(`${DB_LOCALHOST}/discover`)
       .then(res => res.json())
       .then(res => {
         setDiscoveryBeer(res);
       });
-    const randomIndex = Math.floor(Math.random() * 33);
+    const randomIndex: number = Math.floor(Math.random() * 33);
     setDiscoveryBorough(boroughs[randomIndex]);
   };
 
   const [activated, setActivated] = useState(false);
-  const [upperAnimation, setUpperAnimation] = useState(new Animated.Value(0));
+  const [wiggleAnimation, setwiggleAnimation] = useState(new Animated.Value(0));
 
-  const startAnimation = (direction: string) => {
+  const startAnimation = (direction: string): void => {
     setActivated(!activated);
 
     Animated.sequence([
-      Animated.timing(upperAnimation, {
+      Animated.timing(wiggleAnimation, {
         useNativeDriver: true,
         toValue: direction === 'r' ? 40 : -40,
         duration: 0,
       }),
-      Animated.timing(upperAnimation, {
+      Animated.timing(wiggleAnimation, {
         useNativeDriver: true,
         toValue: direction === 'r' ? -40 : 40,
         duration: 0,
       }),
-      Animated.spring(upperAnimation, {
+      Animated.spring(wiggleAnimation, {
         useNativeDriver: true,
         toValue: 0,
         friction: 2,
@@ -76,65 +85,67 @@ const DiscoveryModal = ({ isShownDiscovery, toggleDiscovery, boroughs }: any) =>
   };
 
   const animatedStyles = {
-    upper: {
+    wiggle: {
       transform: [
         {
-          translateX: upperAnimation,
+          translateX: wiggleAnimation,
         },
       ],
     },
   };
 
   return (
-    isShownDiscovery && (
-      <Modal
-        style={{
-          justifyContent: 'center',
-          backgroundColor: '#000000aa',
-          margin: 0,
-          flex: 1,
-        }}
-        transparent={true}
-        visible={true}
-        statusBarTranslucent={true}
-        onBackdropPress={() => {
-          toggleDiscovery();
-        }}
-      >
-        <GestureRecognizer
-          onSwipeLeft={() => swipe('l')}
-          onSwipeRight={() => swipe('r')}
-          config={config}
-        >
-          <TouchableWithoutFeedback>
-            <Animated.View style={[styles.mainContainer, animatedStyles.upper]}>
-              <Image source={{ uri: discoveryBeer.beerLabel }} style={styles.label} />
-              <Text style={styles.highlightText}>Looking for a new experience? Try...</Text>
-              <View>
-                <TouchableOpacity style={styles.beer} onPress={() => handlePress()}>
-                  <Text style={{ fontSize: 20, fontWeight: 'bold', textAlign: 'center' }}>
-                    {discoveryBeer.beerName}
-                  </Text>
-                  <Text style={{ textAlign: 'center' }}>in</Text>
-                  <Text style={{ fontSize: 20, fontWeight: 'bold', textAlign: 'center' }}>
-                    {discoveryBorough.boroughName}
-                  </Text>
-                </TouchableOpacity>
-              </View>
-            </Animated.View>
-          </TouchableWithoutFeedback>
-        </GestureRecognizer>
+    <>
+      {isShownDiscovery && (
         <Modal
-          isVisible={isShownBeerModal}
+          style={{
+            justifyContent: 'center',
+            backgroundColor: '#000000aa',
+            margin: 0,
+            flex: 1,
+          }}
+          transparent={true}
+          visible={true}
           statusBarTranslucent={true}
           onBackdropPress={() => {
-            setIsShownBeerModal(false);
+            toggleDiscovery();
           }}
         >
-          <BeerModal beer={discoveryBeer} />
+          <GestureRecognizer
+            onSwipeLeft={() => swipe('l')}
+            onSwipeRight={() => swipe('r')}
+            config={config}
+          >
+            <TouchableWithoutFeedback>
+              <Animated.View style={[styles.mainContainer, animatedStyles.wiggle]}>
+                <Image source={{ uri: discoveryBeer.beerLabel }} style={styles.label} />
+                <Text style={styles.highlightText}>Looking for a new experience? Try...</Text>
+                <View>
+                  <TouchableOpacity style={styles.beer} onPress={() => handlePress()}>
+                    <Text style={{ fontSize: 20, fontWeight: 'bold', textAlign: 'center' }}>
+                      {discoveryBeer.beerName}
+                    </Text>
+                    <Text style={{ textAlign: 'center' }}>in</Text>
+                    <Text style={{ fontSize: 20, fontWeight: 'bold', textAlign: 'center' }}>
+                      {discoveryBorough.boroughName}
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+              </Animated.View>
+            </TouchableWithoutFeedback>
+          </GestureRecognizer>
+          <Modal
+            isVisible={isShownBeerModal}
+            statusBarTranslucent={true}
+            onBackdropPress={() => {
+              setIsShownBeerModal(false);
+            }}
+          >
+            <BeerModal beer={discoveryBeer} />
+          </Modal>
         </Modal>
-      </Modal>
-    )
+      )}
+    </>
   );
 };
 

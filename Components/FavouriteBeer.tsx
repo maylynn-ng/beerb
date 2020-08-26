@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Image, TouchableOpacity, ToastAndroid, StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
 import { updateFavourites } from '../redux/actions';
-const DB_LOCALHOST = process.env.EXPO_LOCALHOST;
+import { DB_LOCALHOST } from '../redux/actions';
 
 const FavouriteBeer = ({ beerId, favouriteBeers, UserId, setFavBeers }: any) => {
   const [isFav, setIsFav] = useState(false);
