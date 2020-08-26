@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { View, Text, StyleSheet, Dimensions, ToastAndroid, TouchableOpacity } from 'react-native';
+import { Text, StyleSheet, Dimensions, ToastAndroid, TouchableOpacity } from 'react-native';
 import { PermissionsAndroid } from 'react-native';
 import Modal from 'react-native-modal';
 import * as MediaLibrary from 'expo-media-library';
@@ -51,7 +51,6 @@ const HomeScreen = ({
   populateBadges,
 }: any) => {
   const [lastBeer, setLastBeer] = useState({});
-
   useEffect(() => {
     setLoading(true);
     // Loading status cleared on the getLocations action to make sure the api calls
@@ -144,7 +143,6 @@ const HomeScreen = ({
   const handlePress = () => {
     setShowBeerModalInfo(!showBeerModalInfo);
   };
-  console.log(user.badges.length);
 
   return (
     <ViewShot ref={screenShot} style={styles.homeScreen}>
@@ -162,7 +160,6 @@ const HomeScreen = ({
         <Text style={styles.lastBeerName}>
           {lastBeer.beerName} in {lastBeer.boroughName}
         </Text>
-
         <Text style={styles.lastBeerDate}>
           {moment(lastBeer.createdAt).format('dddd, MMM Do YYYY')}
         </Text>
@@ -187,7 +184,7 @@ const HomeScreen = ({
           statusBarTranslucent={true}
           onBackdropPress={() => setShowBeerModalInfo(false)}
         >
-          <BeerModal beer={lastBeer} />
+          <BeerModal beerId={lastBeer.beerId} />
         </Modal>
       )}
     </ViewShot>

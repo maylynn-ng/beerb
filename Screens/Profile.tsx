@@ -1,23 +1,16 @@
 import React, { useState } from 'react';
-import {
-  Image,
-  StyleSheet,
-  View,
-  Text,
-  ScrollView,
-  TouchableOpacity,
-  TouchableOpacityBase,
-} from 'react-native';
+import { Image, StyleSheet, View, Text, ScrollView, TouchableOpacity } from 'react-native';
 import { connect } from 'react-redux';
 import moment from 'moment';
 import Modal from 'react-native-modal';
 import BeerModal from '../Components/BeerModal';
 import { storeBorough, fetchPlacesNearby, storeLocation, storeBeerFreqs } from '../redux/actions';
 import Topbar from '../Components/Topbar';
+import { Badge } from '../Models/Badge.model';
 
 function Profile({ user, beerFrequency, navigation }: any) {
   const [displayModal, setDisplayModal] = useState(false);
-  const [modalBeer, setModalBeer] = useState({ beerId: 0 });
+  const [modalBeer, setModalBeer] = useState(0);
   const picture = () => {
     let src;
     user.picture ? (src = { uri: user.picture }) : (src = 'require("./assets/user.png")');
@@ -25,7 +18,7 @@ function Profile({ user, beerFrequency, navigation }: any) {
   };
 
   const handleTouch = (beerId: number) => {
-    setModalBeer({ beerId });
+    setModalBeer(beerId);
     setDisplayModal(true);
   };
 
@@ -89,8 +82,9 @@ function Profile({ user, beerFrequency, navigation }: any) {
               }}
             >
               {user.badges.length !== 0 &&
-                user.badges.map(badge => (
+                user.badges.map((badge: Badge, index: number) => (
                   <Image
+                    key={index}
                     source={{ uri: badge.badgeImage }}
                     style={{
                       width: 40,
@@ -135,7 +129,7 @@ function Profile({ user, beerFrequency, navigation }: any) {
             setDisplayModal(false);
           }}
         >
-          <BeerModal beer={modalBeer} />
+          <BeerModal beerId={modalBeer} />
         </Modal>
       </View>
     </>
