@@ -47,15 +47,21 @@ function Profile({ user, beerFrequency, navigation }: any) {
                 </Text>
               </View>
               <View style={styles.info}>
-                <Text style={styles.number}>{beerFrequency.length}</Text>
-                <Text style={styles.text}>{user.Locations.length === 1 ? 'BEER' : 'BEERS'}</Text>
+                <Text style={styles.number}>
+                  {beerFrequency[0].length ? beerFrequency.length : 0}
+                </Text>
+                <Text style={styles.text}>{beerFrequency[0].beerId ? 'BEER' : 'BEERS'}</Text>
               </View>
             </View>
             <Text style={{ paddingTop: 15 }}>My favourite:</Text>
-            <Text style={{ fontWeight: 'bold' }}>
-              {beerFrequency[0][0]} - {beerFrequency[0][1]} time
-              {beerFrequency[0][1] === 1 ? '' : 's'}
-            </Text>
+            {beerFrequency[0][0] ? (
+              <Text style={{ fontWeight: 'bold' }}>
+                {beerFrequency[0][0]} - {beerFrequency[0][1]} time
+                {beerFrequency[0][1] === 1 ? '' : 's'}
+              </Text>
+            ) : (
+              <Text style={{ fontWeight: 'bold' }}>No beers yet</Text>
+            )}
           </View>
         </View>
         <Text style={{ fontSize: 20, alignSelf: 'flex-start', paddingLeft: 15 }}>History:</Text>
