@@ -65,59 +65,42 @@ function Profile({ user, beerFrequency, navigation }: any) {
             )}
           </View>
         </View>
-        <Text
-          style={{
-            backfaceVisibility: user.badges.length !== 0 ? 'visible' : 'hidden',
-            fontSize: 20,
-            alignSelf: 'flex-start',
-            paddingLeft: 15,
-          }}
-        >
-          My badges:
-        </Text>
-        <View
-          style={{
-            flexDirection: 'row',
-            flexWrap: 'wrap',
-            margin: 10,
-            justifyContent: 'center',
-            alignItems: 'flex-start',
-            paddingHorizontal: 10,
-          }}
-        >
-          {user.badges.length !== 0 &&
-            user.badges.map(badge => (
-              <TouchableOpacity
-                style={{
-                  justifyContent: 'center',
-                  alignItems: 'flex-start',
-                  flex: 1,
-                  width: 30,
-                  height: 30,
-                  flexWrap: 'wrap',
-                }}
-              >
-                {/* <Image source={badge.badgeImage} style={{
-                    flex: 1,
-                    width: 30,
-                    height: 30,
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                  }} /> */}
-                <Image
-                  source={require('../assets/user.png')}
-                  style={{
-                    flex: 1,
-                    width: 30,
-                    height: 30,
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    flexWrap: 'wrap',
-                  }}
-                />
-              </TouchableOpacity>
-            ))}
-        </View>
+        {user.badges.length ? (
+          <>
+            <Text
+              style={{
+                backfaceVisibility: user.badges.length !== 0 ? 'visible' : 'hidden',
+                fontSize: 20,
+                alignSelf: 'flex-start',
+                paddingLeft: 15,
+              }}
+            >
+              My badges:
+            </Text>
+            <View
+              style={{
+                flexDirection: 'row',
+                flexWrap: 'wrap',
+                margin: 10,
+                justifyContent: 'flex-start',
+                alignItems: 'flex-start',
+                paddingHorizontal: 10,
+                alignSelf: 'flex-start',
+              }}
+            >
+              {user.badges.length !== 0 &&
+                user.badges.map(badge => (
+                  <Image
+                    source={{ uri: badge.badgeImage }}
+                    style={{
+                      width: 40,
+                      height: 40,
+                    }}
+                  />
+                ))}
+            </View>
+          </>
+        ) : null}
         <Text style={{ fontSize: 20, alignSelf: 'flex-start', paddingLeft: 15 }}>History:</Text>
         <ScrollView style={styles.scrollable}>
           {user && user.Locations && user.Locations.length ? (

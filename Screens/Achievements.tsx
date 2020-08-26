@@ -11,10 +11,14 @@ function Achievements({ badges, allBadges, navigation, user }: any) {
     badgeText: '',
     badgeImage: '',
   });
+  const [badgeNames, setBadgeNames] = useState([]);
 
-  const badgeNames: string[] = badges
-    .filter((badge: Badge) => badge !== undefined)
-    .map((badge: Badge) => badge.badgeName);
+  const generateNameArray = () =>
+    badges.filter((badge: Badge) => badge !== undefined).map((badge: Badge) => badge.badgeName);
+
+  useEffect(() => {
+    setBadgeNames(generateNameArray());
+  }, [badges]);
 
   return (
     <View style={styles.mainContainer}>

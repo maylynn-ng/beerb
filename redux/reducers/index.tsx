@@ -155,6 +155,11 @@ export default function reducer(state: State = initialState, action: Action): St
         ...state,
         user: { ...state.user, badges: [...state.user.badges, ...action.payload] },
       };
+    case 'SET_BADGES':
+      return {
+        ...state,
+        user: { ...state.user, badges: action.payload },
+      };
     case 'SET_ALL_BADGES':
       return {
         ...state,
