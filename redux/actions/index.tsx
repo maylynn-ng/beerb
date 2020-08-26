@@ -134,13 +134,19 @@ export function postEntry(newEntry: object) {
       .then(res => res.json())
       .then(data => {
         dispatch({ type: 'ADD_ENTRY', payload: data.newLocation });
-        dispatch({ type: 'SET_DRUNK_BEERS', payload: [data.selectedBeer] });
         ToastAndroid.show('Cheers!! 🍺', ToastAndroid.SHORT);
       })
       .catch(err => {
         ToastAndroid.show('Something went wrong...', ToastAndroid.SHORT);
         console.log('🌞', err);
       });
+  };
+}
+
+export function setDrunkBeers(beer: Beer) {
+  return {
+    type: 'SET_DRUNK_BEERS',
+    payload: [beer],
   };
 }
 
@@ -151,7 +157,7 @@ export function setUserInfo(user: object): Action {
   };
 }
 
-export function getLocations(user: any) {
+export function updateAllUserStates(user: any) {
   const { sub, name } = user;
   let counter: { [key: string]: any } = {};
   return (dispatch: AppDispatch) => {
@@ -183,6 +189,13 @@ export function getLocations(user: any) {
         console.log('SORRY: ', error);
         dispatch(changeLoading(false));
       });
+
+    fetch(`${DB_LOCALHOST}/beers`)
+      .then(res => res.json())
+      .then(res => {
+        dispatch({ type: 'SET_BEERDEX', payload: res });
+      })
+      .catch(error => console.error('Unable to reach Beerdex ', error));
   };
 }
 
