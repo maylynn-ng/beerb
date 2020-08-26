@@ -18,7 +18,7 @@ const BeerModal = ({ beer }: any) => {
       <Text style={styles.breweryInfo}>
         {beer.breweryName}, {beer.breweryCountry}
       </Text>
-      <ScrollView>
+      <ScrollView style={{ marginVertical: 17 }}>
         <Text style={styles.beerDescription}>{beer.beerDescription}</Text>
       </ScrollView>
     </View>
@@ -55,6 +55,7 @@ const styles = StyleSheet.create({
   beerDescription: {
     fontSize: 16,
     padding: 15,
+    paddingTop: 0,
     textAlign: 'center',
   },
 });

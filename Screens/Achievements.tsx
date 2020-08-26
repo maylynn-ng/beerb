@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Image, Text, View, StyleSheet } from 'react-native';
 import { Badge } from '../Models/Badge.model';
-import { AppDispatch } from '../Models/Redux.model';
 import Topbar from '../Components/Topbar';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
@@ -12,10 +11,6 @@ function Achievements({ badges, allBadges, navigation, user }: any) {
     badgeText: '',
     badgeImage: '',
   });
-
-  useEffect(() => {
-    setCurrentAward('');
-  }, []);
 
   const badgeNames: string[] = badges
     .filter((badge: Badge) => badge !== undefined)
@@ -61,12 +56,6 @@ function mapStateToProps(state: any) {
     user: state.user,
   };
 }
-
-// function mapDispatch(dispatch: AppDispatch) {
-//   return {
-//     populateBadges: () => dispatch(getBadges()),
-//   };
-// }
 
 export default connect(mapStateToProps)(Achievements);
 

@@ -1,8 +1,9 @@
 import React from 'react';
-import { View, Text, Image, StyleSheet } from 'react-native';
+import { View, Text, Image, StyleSheet, TouchableWithoutFeedbackComponent } from 'react-native';
 import { connect } from 'react-redux';
 import { DrawerContentScrollView, DrawerItem } from '@react-navigation/drawer';
 import store from '../redux/store';
+import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 
 function DrawerContent(props: any) {
   const state = store.getState();
@@ -16,11 +17,23 @@ function DrawerContent(props: any) {
         <View style={styles.drawerContent}>
           <View style={styles.userInfoSection}>
             <View style={{ marginTop: 15 }}>
-              <Image
-                source={require('../assets/logo.png')}
-                style={{ width: 100, height: 100, marginHorizontal: 70 }}
-              />
-              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+              <TouchableWithoutFeedback
+                onPress={() => {
+                  props.navigation.navigate('Home');
+                }}
+              >
+                <Image
+                  source={require('../assets/logo.png')}
+                  style={{ width: 100, height: 100, marginHorizontal: 70 }}
+                />
+              </TouchableWithoutFeedback>
+
+              <TouchableWithoutFeedback
+                style={{ flexDirection: 'row', alignItems: 'center' }}
+                onPress={() => {
+                  props.navigation.navigate('Profile');
+                }}
+              >
                 <Image
                   source={{ uri: user.picture }}
                   style={[
@@ -37,7 +50,7 @@ function DrawerContent(props: any) {
                   <Text style={styles.title}>{user.nickname}</Text>
                   <Text style={styles.caption}>{currentBorough.boroughName}</Text>
                 </View>
-              </View>
+              </TouchableWithoutFeedback>
             </View>
           </View>
 

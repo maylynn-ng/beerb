@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { View, Text, StyleSheet, Dimensions, ToastAndroid } from 'react-native';
+import { View, Text, StyleSheet, Dimensions, ToastAndroid, TouchableOpacity } from 'react-native';
 import { PermissionsAndroid } from 'react-native';
+import Modal from 'react-native-modal';
 import * as MediaLibrary from 'expo-media-library';
 import * as Sharing from 'expo-sharing';
 import { connect } from 'react-redux';
@@ -14,6 +15,7 @@ import { isPointInPolygon } from 'geolib';
 import Navbar from '../Components/Navbar';
 import boroughs from '../assets/london_sport.json';
 import { AppDispatch } from '../Models/Redux.model';
+import BeerModal from '../Components/BeerModal';
 
 import {
   storeBorough,
@@ -130,7 +132,6 @@ const HomeScreen = ({
 
   const savePicture = async (uri: string) => {
     try {
-      // await MediaLibrary.requestPermissionsAsync();
       const { granted } = await MediaLibrary.getPermissionsAsync();
       granted
         ? await MediaLibrary.saveToLibraryAsync(uri)
@@ -139,6 +140,11 @@ const HomeScreen = ({
       console.log('Error in catch - savePicture', e);
     }
   };
+  const [showBeerModalInfo, setShowBeerModalInfo] = useState(false);
+  const handlePress = () => {
+    setShowBeerModalInfo(!showBeerModalInfo);
+  };
+  console.log(user.badges.length);
 
   return (
     <ViewShot ref={screenShot} style={styles.homeScreen}>
@@ -149,23 +155,41 @@ const HomeScreen = ({
         location={location}
         user={user}
       />
-      <View style={styles.lastBeer}>
+      <TouchableOpacity style={styles.lastBeer} onPress={() => handlePress()}>
         {user.Locations.lengtgh !== 0 ? (
           <Text style={{ opacity: 0.6 }}>Your last beer was a :</Text>
         ) : null}
         <Text style={styles.lastBeerName}>
           {lastBeer.beerName} in {lastBeer.boroughName}
         </Text>
+
         <Text style={styles.lastBeerDate}>
           {moment(lastBeer.createdAt).format('dddd, MMM Do YYYY')}
         </Text>
-      </View>
+      </TouchableOpacity>
       <Navbar
         takeScreenShot={takeScreenShot}
         lastBeer={lastBeer}
         boroughs={simpleArrayOfBoroughs}
         navigation={navigation}
       />
+      {showBeerModalInfo && (
+        <Modal
+          style={{
+            justifyContent: 'center',
+            backgroundColor: '#000000aa',
+            margin: 0,
+            flex: 1,
+            padding: 15,
+          }}
+          transparent={true}
+          visible={true}
+          statusBarTranslucent={true}
+          onBackdropPress={() => setShowBeerModalInfo(false)}
+        >
+          <BeerModal beer={lastBeer} />
+        </Modal>
+      )}
     </ViewShot>
   );
 };
