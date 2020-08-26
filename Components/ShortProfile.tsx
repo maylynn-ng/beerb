@@ -73,8 +73,10 @@ function ShortProfile({
               </Text>
             </View>
             <View style={styles.info}>
-              <Text style={styles.number}>{beerFrequency.length}</Text>
-              <Text style={styles.text}>{beerFrequency.length === 1 ? 'BEER' : 'BEERS'}</Text>
+              <Text style={styles.number}>
+                {beerFrequency[0].length ? beerFrequency.length : 0}
+              </Text>
+              <Text style={styles.text}>{beerFrequency[0].beerId ? 'BEER' : 'BEERS'}</Text>
             </View>
           </View>
           <Text

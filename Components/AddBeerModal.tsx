@@ -11,17 +11,22 @@ import {
   Dimensions,
 } from 'react-native';
 import Modal from 'react-native-modal';
-import { fetchSearchBeers, postEntry } from '../redux/actions';
+import { fetchSearchBeers, postEntry, addBadge } from '../redux/actions';
 import { connect } from 'react-redux';
 import { ScrollView } from 'react-native-gesture-handler';
 import { Beer } from '../Models/Beer.model';
+import { Badge } from '../Models/Badge.model';
+import { NewEntry } from '../Models/NewEntry.model';
 import _ from 'lodash';
 import FavouriteBeer from './FavouriteBeer';
+import BadgeModal from './BadgeModal';
+import { badgeCheck } from '../Helpers/badges';
 
 const initialBeer: Beer = {
   beerId: 0,
   beerName: '',
   beerLabel: '',
+  beerAbv: 0,
   beerIbu: 0,
   beerDescription: '',
   beerStyle: '',
@@ -37,15 +42,19 @@ function AddBeer({
   toggleAddBeer,
   currentBorough,
   beerSearchResults,
+  addAchievement,
   setSearch,
   pubLocations,
   location,
   postNewEntry,
   user,
+  allBadges,
 }: any) {
   const [pub, setPub] = useState({});
   const [beer, setBeer] = useState(initialBeer);
   const [tempSearchTerm, setTempSearchTerm] = useState('');
+  const [badge, setBadge] = useState({});
+  const [isShowBadgeModal, setIsShowBadgeModal] = useState(false);
 
   const submitBeerNLoc = () => {
     let lat: number = 0;
@@ -61,7 +70,7 @@ function AddBeer({
         lng = location.longitude;
       }
 
-      const newEntry = {
+      const newEntry: NewEntry = {
         location: {
           beerName: beer.beerName,
           beerId: beer.beerId,
@@ -76,8 +85,9 @@ function AddBeer({
         beers: beerSearchResults,
       };
 
+      badgeCheck(user, setBadge, setIsShowBadgeModal, currentBorough, addAchievement, allBadges);
+
       postNewEntry(newEntry);
-      toggleAddBeer();
     }
   };
 
@@ -110,6 +120,15 @@ function AddBeer({
           toggleAddBeer();
         }}
       >
+        <Modal
+          isVisible={isShowBadgeModal}
+          onBackdropPress={() => {
+            setIsShowBadgeModal(false);
+            toggleAddBeer();
+          }}
+        >
+          <BadgeModal badge={badge} />
+        </Modal>
         <View style={styles.addBeerModal}>
           <View style={styles.lastBeer}>
             <Text style={styles.header}>Your location:</Text>
@@ -200,6 +219,7 @@ function mapStateToProps(state: any) {
     location: state.location,
     currentBorough: state.currentBorough,
     user: state.user,
+    allBadges: state.allBadges,
   };
 }
 
@@ -207,6 +227,7 @@ function mapDispatch(dispatch: any) {
   return {
     setSearch: (searchTerm: string) => dispatch(fetchSearchBeers(searchTerm)),
     postNewEntry: (newEntry: object) => dispatch(postEntry(newEntry)),
+    addAchievement: (userId: string, badge: Badge) => dispatch(addBadge(userId, badge)),
   };
 }
 
