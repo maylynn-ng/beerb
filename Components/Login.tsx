@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { View, Image, Text, TouchableOpacity, Platform, Alert } from 'react-native';
+import { Video } from 'expo-av';
 import { connect } from 'react-redux';
 
 import { setUserInfo, changeLoading } from '../redux/actions';
@@ -84,7 +85,15 @@ const Login = ({ user, setUser, isLoading, setLoading }: any) => {
             opacity: isLoading ? 0 : 1,
           }}
         >
-          <Image source={require('../assets/logo.png')} style={{ height: 250, width: 250 }} />
+          <Video
+            source={require('../assets/AniLogo.mp4')}
+            rate={0.7}
+            isMuted={true}
+            resizeMode="cover"
+            shouldPlay
+            isLooping={false}
+            style={{ height: 400, width: 400 }}
+          />
           <TouchableOpacity
             style={{
               backgroundColor: 'gold',
