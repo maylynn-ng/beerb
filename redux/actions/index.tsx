@@ -133,13 +133,20 @@ export function postEntry(newEntry: object) {
     })
       .then(res => res.json())
       .then(data => {
-        dispatch({ type: 'ADD_ENTRY', payload: data });
+        dispatch({ type: 'ADD_ENTRY', payload: data.newLocation });
         ToastAndroid.show('Cheers!! 🍺', ToastAndroid.SHORT);
       })
       .catch(err => {
         ToastAndroid.show('Something went wrong...', ToastAndroid.SHORT);
         console.log('🌞', err);
       });
+  };
+}
+
+export function setDrunkBeers(beer: Beer) {
+  return {
+    type: 'SET_DRUNK_BEERS',
+    payload: [beer],
   };
 }
 
@@ -150,15 +157,14 @@ export function setUserInfo(user: object): Action {
   };
 }
 
-export function getLocations(user: any) {
+export function updateAllUserStates(user: any) {
   const { sub, name } = user;
   let counter: { [key: string]: any } = {};
-  const fetchBody = { sub, name };
   return (dispatch: AppDispatch) => {
     fetch(`${DB_LOCALHOST}/locations`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(fetchBody),
+      body: JSON.stringify({ sub, name }),
     })
       .then(res => res.json())
       .then(res => {
@@ -173,8 +179,8 @@ export function getLocations(user: any) {
         dispatch({ type: 'SET_USER_INFO', payload: { id: res.id, Locations: res.Locations } });
         const favouriteBeers = new Set(res.favouriteBeers);
         dispatch({ type: 'SAVE_FAVOURITES', payload: favouriteBeers });
-        console.log('IN GET LOCATIONS', res);
         dispatch({ type: 'ADD_BADGE', payload: res.Badges });
+        dispatch({ type: 'SET_DRUNK_BEERS', payload: res.Beers });
         dispatch(changeLoading(false));
       })
       .catch(error => {
@@ -182,19 +188,13 @@ export function getLocations(user: any) {
         console.log('SORRY: ', error);
         dispatch(changeLoading(false));
       });
-  };
-}
 
-export function getDrunkBeers(beerIds: number[]) {
-  return async function (dispatch: AppDispatch) {
-    fetch(`${DB_LOCALHOST}/drunkbeers`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(beerIds),
-    })
+    fetch(`${DB_LOCALHOST}/beers`)
       .then(res => res.json())
-      .then(res => dispatch({ type: 'SET_DRUNK_BEERS', payload: res }))
-      .catch(error => console.error("You're drunk, go home: ", error));
+      .then(res => {
+        dispatch({ type: 'SET_BEERDEX', payload: res });
+      })
+      .catch(error => console.error('Unable to reach Beerdex ', error));
   };
 }
 

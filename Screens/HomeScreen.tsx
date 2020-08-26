@@ -18,7 +18,7 @@ import { AppDispatch } from '../Models/Redux.model';
 import {
   storeBorough,
   storeLocation,
-  getLocations,
+  updateAllUserStates,
   changeLoading,
   storeBeerFreqs,
   getBadges,
@@ -41,7 +41,7 @@ const simpleArrayOfBoroughs = boroughs.features.map(borough => {
 const HomeScreen = ({
   currentBorough,
   navigation,
-  setLocations,
+  setAllUserStates,
   location,
   user,
   setLoading,
@@ -74,7 +74,7 @@ const HomeScreen = ({
 
   useEffect(() => {
     if (user.sub) {
-      setLocations(user);
+      setAllUserStates(user);
     }
   }, [user.sub]);
 
@@ -99,8 +99,6 @@ const HomeScreen = ({
   }, [user.Locations]);
 
   const screenShot = useRef();
-
-  console.log('HOME', user.badges);
 
   const takeScreenShot = async () => {
     try {
@@ -198,7 +196,7 @@ function mapStateToProps(state: any) {
 
 function mapDispatch(dispatch: AppDispatch) {
   return {
-    setLocations: (user: any) => dispatch(getLocations(user)),
+    setAllUserStates: (user: any) => dispatch(updateAllUserStates(user)),
     setLoading: (status: boolean) => dispatch(changeLoading(status)),
     setBeerFrequency: (freqs: [[]]) => dispatch(storeBeerFreqs(freqs)),
     populateBadges: () => dispatch(getBadges()),

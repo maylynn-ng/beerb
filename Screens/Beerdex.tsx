@@ -1,50 +1,49 @@
 import React, { useEffect, useState } from 'react';
 import SearchBar from 'react-native-dynamic-search-bar';
-import { getBeerdex, getDrunkBeers, changeLoading, setDrunkIds } from '../redux/actions';
+import { getBeerdex, changeLoading, setDrunkIds } from '../redux/actions';
 import { Text, View, StyleSheet, SafeAreaView, TouchableOpacity, Dimensions } from 'react-native';
 import { connect } from 'react-redux';
 import { State } from '../redux/reducers';
 import { Beer } from '../Models/Beer.model';
 import { AppDispatch, Action } from '../Models/Redux.model';
-
 import BeerBadge from '../Components/BeerBadge';
 import { ScrollView } from 'react-native-gesture-handler';
 import Topbar from '../Components/Topbar';
 
+const initialState: Beer[] = [];
+
 function Beerdex({
   user,
-  populateBeerdex,
-  populateDrunkBeers,
+  drunkBeers,
   beerdex,
-  setLoading,
   populateDrunkIds,
   navigation,
   favouriteBeers,
+  uniqueDrunkIds,
+  setIsLoading,
 }: any) {
   const [filterBeers, setFilterBeers] = useState(false);
   const [searchInBeerdex, setSearchInBeerdex] = useState('');
+  const [beerdexBeers, setBeerdexBeers] = useState(initialState);
 
   useEffect(() => {
-    setLoading(true);
-    populateBeerdex();
-    orderDrunkBeers();
-  }, []);
-
-  useEffect(() => {
-    if (beerdex && beerdex.length) {
-      setLoading(false);
-    }
-  }, [beerdex]);
+    setIsLoading(true);
+    const newArray: Beer[] = [...drunkBeers];
+    const newIdsArray: number[] = [];
+    drunkBeers.forEach((beer: Beer) => newIdsArray.push(beer.beerId));
+    beerdex.forEach((beer: Beer) => {
+      if (!drunkBeers.some((drunkBeer: Beer) => drunkBeer.beerId === beer.beerId)) {
+        newArray.push(beer);
+      }
+    });
+    setBeerdexBeers(newArray);
+    populateDrunkIds(newIdsArray);
+    setIsLoading(false);
+  }, [null, drunkBeers]);
 
   const handleFilter = (selector: string) => {
     selector ? setFilterBeers(true) : setFilterBeers(false);
   };
-
-  function orderDrunkBeers() {
-    const uniqueBeers = Array.from(new Set(user.Locations.map((entry: any) => entry.beerId)));
-    populateDrunkIds(uniqueBeers);
-    populateDrunkBeers(uniqueBeers);
-  }
 
   return (
     <>
@@ -84,60 +83,63 @@ function Beerdex({
           cancelIconColor="#c6c6c6"
           fontSize={14}
         />
+
         <ScrollView>
           <View style={styles.logoContainer}>
-            {user.uniqueDrunkIds && user.uniqueDrunkIds.length
-              ? filterBeers
-                ? user.drunkBeers
-                    .filter(
-                      (beer: Beer) =>
-                        favouriteBeers.has(beer.beerId) &&
-                        beer.beerName.toLowerCase().includes(searchInBeerdex.toLowerCase())
-                    )
-                    .map(
-                      (entry: any, index: number) =>
-                        entry && (
-                          <BeerBadge style={styles.badge} hasDrunk={1} key={index} beer={entry} />
-                        )
-                    )
-                : user.drunkBeers
-                    .filter(beer =>
-                      beer.beerName.toLowerCase().includes(searchInBeerdex.toLowerCase())
-                    )
-                    .map(
-                      (entry: any, index: number) =>
-                        entry && (
-                          <BeerBadge style={styles.badge} hasDrunk={1} key={index} beer={entry} />
-                        )
-                    )
-              : null}
-            {beerdex && beerdex.length
-              ? filterBeers
-                ? beerdex
-                    .filter(
-                      (beer: Beer) =>
-                        favouriteBeers.has(beer.beerId) &&
-                        beer.beerName.toLowerCase().includes(searchInBeerdex.toLowerCase())
-                    )
-                    .map((beer: Beer, index: number) => {
-                      if (user.uniqueDrunkIds.indexOf(beer.beerId) === -1) {
-                        return (
-                          <BeerBadge style={styles.badge} hasDrunk={0.3} key={index} beer={beer} />
-                        );
-                      }
-                    })
-                : beerdex
-                    .filter(beer =>
-                      beer.beerName.toLowerCase().includes(searchInBeerdex.toLowerCase())
-                    )
-                    .map((beer: Beer, index: number) => {
-                      if (user.uniqueDrunkIds.indexOf(beer.beerId) === -1) {
-                        return (
-                          <BeerBadge style={styles.badge} hasDrunk={0.3} key={index} beer={beer} />
-                        );
-                      }
-                    })
-              : null}
+            {filterBeers
+              ? beerdexBeers
+                  .filter((beer: Beer) => {
+                    const searchString =
+                      '' +
+                      beer.beerName +
+                      ' ' +
+                      beer.breweryCountry +
+                      ' ' +
+                      beer.breweryName +
+                      ' ' +
+                      beer.beerStyle;
+                    return (
+                      favouriteBeers.has(beer.beerId) &&
+                      searchString.toLowerCase().includes(searchInBeerdex.toLowerCase())
+                    );
+                  })
+                  .map((entry: any, index: number) => {
+                    let hasDrunk: number = 1;
+                    if (!uniqueDrunkIds.includes(entry.beerId)) hasDrunk = 0.3;
+                    return (
+                      <BeerBadge
+                        style={styles.badge}
+                        hasDrunk={hasDrunk}
+                        key={index}
+                        beer={entry}
+                      />
+                    );
+                  })
+              : beerdexBeers
+                  .filter((beer: Beer) => {
+                    const searchString =
+                      '' +
+                      beer.beerName +
+                      ' ' +
+                      beer.breweryCountry +
+                      ' ' +
+                      beer.breweryName +
+                      ' ' +
+                      beer.beerStyle;
+                    return searchString.toLowerCase().includes(searchInBeerdex.toLowerCase());
+                  })
+                  .map((entry: any, index: number) => {
+                    let hasDrunk: number = 1;
+                    if (!uniqueDrunkIds.includes(entry.beerId)) hasDrunk = 0.3;
+                    return (
+                      <BeerBadge
+                        style={styles.badge}
+                        hasDrunk={hasDrunk}
+                        key={index}
+                        beer={entry}
+                      />
+                    );
+                  })}
           </View>
         </ScrollView>
       </SafeAreaView>
@@ -150,15 +152,15 @@ function mapStateToProps(state: State) {
     user: state.user,
     beerdex: state.beerdex,
     favouriteBeers: state.user.favouriteBeers,
+    drunkBeers: state.user.drunkBeers,
+    uniqueDrunkIds: state.user.uniqueDrunkIds,
   };
 }
 
 function mapDispatch(dispatch: AppDispatch) {
   return {
-    populateBeerdex: () => dispatch(getBeerdex()),
-    populateDrunkBeers: (beerIds: []) => dispatch(getDrunkBeers(beerIds)),
-    setLoading: (status: boolean): Action => dispatch(changeLoading(status)),
     populateDrunkIds: (drunkIds: number[]): Action => dispatch(setDrunkIds(drunkIds)),
+    setIsLoading: (status: boolean) => dispatch(changeLoading(status)),
   };
 }
 

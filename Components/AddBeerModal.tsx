@@ -11,7 +11,7 @@ import {
   Dimensions,
 } from 'react-native';
 import Modal from 'react-native-modal';
-import { fetchSearchBeers, postEntry, addBadge } from '../redux/actions';
+import { fetchSearchBeers, postEntry, addBadge, setDrunkBeers } from '../redux/actions';
 import { connect } from 'react-redux';
 import { ScrollView } from 'react-native-gesture-handler';
 import { Beer } from '../Models/Beer.model';
@@ -34,7 +34,6 @@ const initialBeer: Beer = {
   breweryCountry: '',
   breweryLabel: '',
   breweryUrl: '',
-  beerAbv: 0,
 };
 
 function AddBeer({
@@ -49,6 +48,8 @@ function AddBeer({
   postNewEntry,
   user,
   allBadges,
+  updateDrunkBeers,
+  drunkBeers,
 }: any) {
   const [pub, setPub] = useState({});
   const [beer, setBeer] = useState(initialBeer);
@@ -84,10 +85,20 @@ function AddBeer({
         },
         beers: beerSearchResults,
       };
-
-      badgeCheck(user, setBadge, setIsShowBadgeModal, currentBorough, addAchievement, allBadges);
+      badgeCheck(
+        user,
+        setBadge,
+        setIsShowBadgeModal,
+        currentBorough,
+        addAchievement,
+        allBadges,
+        toggleAddBeer
+      );
 
       postNewEntry(newEntry);
+      if (!drunkBeers.some((drunkBeer: Beer) => drunkBeer.beerId === beer.beerId)) {
+        updateDrunkBeers(beer);
+      }
     }
   };
 
@@ -220,6 +231,7 @@ function mapStateToProps(state: any) {
     currentBorough: state.currentBorough,
     user: state.user,
     allBadges: state.allBadges,
+    drunkBeers: state.user.drunkBeers,
   };
 }
 
@@ -228,6 +240,7 @@ function mapDispatch(dispatch: any) {
     setSearch: (searchTerm: string) => dispatch(fetchSearchBeers(searchTerm)),
     postNewEntry: (newEntry: object) => dispatch(postEntry(newEntry)),
     addAchievement: (userId: string, badge: Badge) => dispatch(addBadge(userId, badge)),
+    updateDrunkBeers: (beer: Beer) => dispatch(setDrunkBeers(beer)),
   };
 }
 

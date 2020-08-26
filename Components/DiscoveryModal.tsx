@@ -1,7 +1,6 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Animated,
-  PanResponder,
   View,
   StyleSheet,
   Text,
@@ -132,7 +131,7 @@ const DiscoveryModal = ({ isShownDiscovery, toggleDiscovery, boroughs }: any) =>
             setIsShownBeerModal(false);
           }}
         >
-          <BeerModal beer={discoveryBeer} noFetching={true} />
+          <BeerModal beer={discoveryBeer} />
         </Modal>
       </Modal>
     )
