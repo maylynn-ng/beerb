@@ -153,7 +153,7 @@ export default function reducer(state: State = initialState, action: Action): St
     case 'ADD_BADGE':
       return {
         ...state,
-        user: { ...state.user, badges: [...state.user.badges, action.payload] },
+        user: { ...state.user, badges: [...state.user.badges, ...action.payload] },
       };
     case 'SET_ALL_BADGES':
       return {
