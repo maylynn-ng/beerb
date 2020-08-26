@@ -14,27 +14,14 @@ import Modal from 'react-native-modal';
 import { fetchSearchBeers, postEntry, addBadge, setDrunkBeers } from '../redux/actions';
 import { connect } from 'react-redux';
 import { ScrollView } from 'react-native-gesture-handler';
-import { Beer } from '../Models/Beer.model';
-import { Badge } from '../Models/Badge.model';
+import { Beer, InitialBeer } from '../Models/Beer.model';
+import { Badge, InitialBadge } from '../Models/Badge.model';
 import { NewEntry } from '../Models/NewEntry.model';
 import _ from 'lodash';
 import FavouriteBeer from './FavouriteBeer';
 import BadgeModal from './BadgeModal';
 import { badgeCheck } from '../Helpers/badges';
-
-const initialBeer: Beer = {
-  beerId: 0,
-  beerName: '',
-  beerLabel: '',
-  beerAbv: 0,
-  beerIbu: 0,
-  beerDescription: '',
-  beerStyle: '',
-  breweryName: '',
-  breweryCountry: '',
-  breweryLabel: '',
-  breweryUrl: '',
-};
+import { Pub, InitialPub } from '../Models/Pub.model';
 
 function AddBeer({
   isShownAddBeer,
@@ -51,10 +38,10 @@ function AddBeer({
   updateDrunkBeers,
   drunkBeers,
 }: any) {
-  const [pub, setPub] = useState({});
-  const [beer, setBeer] = useState(initialBeer);
+  const [pub, setPub] = useState(InitialPub);
+  const [beer, setBeer] = useState(InitialBeer);
   const [tempSearchTerm, setTempSearchTerm] = useState('');
-  const [badge, setBadge] = useState({});
+  const [badge, setBadge] = useState(InitialBadge);
   const [isShowBadgeModal, setIsShowBadgeModal] = useState(false);
 
   const submitBeerNLoc = () => {
@@ -63,7 +50,7 @@ function AddBeer({
     if (beer.beerId === 0) {
       ToastAndroid.show('Select your beer!', ToastAndroid.SHORT);
     } else {
-      if (Object.keys(pub).length !== 0) {
+      if (pub.geometry.location.lat !== 0) {
         lat = pub.geometry.location.lat;
         lng = pub.geometry.location.lng;
       } else {
@@ -86,13 +73,13 @@ function AddBeer({
         beers: beerSearchResults,
       };
       badgeCheck(
-        user,
-        setBadge,
-        setIsShowBadgeModal,
-        currentBorough,
         addAchievement,
         allBadges,
-        toggleAddBeer
+        currentBorough,
+        setBadge,
+        setIsShowBadgeModal,
+        toggleAddBeer,
+        user
       );
 
       postNewEntry(newEntry);
@@ -156,13 +143,15 @@ function AddBeer({
                   label={pubLocations.length === 0 ? 'No pubs nearby' : 'Current Location'}
                   value={location}
                 />
-                {pubLocations.map(pub => (
-                  <Picker.Item
-                    key={pub.place_id}
-                    label={`${pub.name} - ${pub.vicinity}`}
-                    value={pub}
-                  />
-                ))}
+                {pubLocations.map(
+                  (pub: Pub): JSX.Element => (
+                    <Picker.Item
+                      key={pub.place_id}
+                      label={`${pub.name} - ${pub.vicinity}`}
+                      value={pub}
+                    />
+                  )
+                )}
               </Picker>
             </View>
             {pubLocations.length === 0 ? (
@@ -224,7 +213,6 @@ function AddBeer({
 
 function mapStateToProps(state: any) {
   return {
-    searchTerm: state.searchTerm,
     beerSearchResults: state.user.beerSearchResults,
     pubLocations: state.locationsNearby,
     location: state.location,
@@ -316,9 +304,5 @@ const styles = StyleSheet.create({
   },
   beerBrewery: {
     color: 'grey',
-  },
-  beerSelected: {
-    backgroundColor: 'grey',
-    padding: 8,
   },
 });

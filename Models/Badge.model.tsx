@@ -3,3 +3,9 @@ export type Badge = {
   badgeText: string;
   badgeImage: string;
 };
+
+export const InitialBadge: Badge = {
+  badgeName: '',
+  badgeText: '',
+  badgeImage: '',
+};

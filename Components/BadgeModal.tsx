@@ -1,17 +1,13 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Image, Text, View, StyleSheet } from 'react-native';
 import LottieView from 'lottie-react-native';
 import { Badge } from '../Models/Badge.model';
 import firework from '../Animations/firework.json';
 
-function BadgeModal({ badge }) {
-  const [showLottie, setShowLottie] = useState(true);
-
+function BadgeModal({ badge }: { badge: Badge }) {
   return (
     <View style={styles.screen}>
-      {showLottie && (
-        <LottieView style={styles.firework} source={firework} autoPlay={true} loop={true} />
-      )}
+      <LottieView style={styles.firework} source={firework} autoPlay={true} loop={true} />
       <View style={styles.container}>
         <Text style={styles.woo}>WOO!</Text>
         <Image style={styles.badge} source={{ uri: badge.badgeImage }} />
