@@ -2,7 +2,7 @@ import React from 'react';
 import { Image, Text, View, StyleSheet } from 'react-native';
 import { Badge } from '../Models/Badge.model';
 
-function BadgeModal({ badge }) {
+function BadgeModal({ badge }: any) {
   return (
     <View style={styles.screen}>
       <View style={styles.container}>
