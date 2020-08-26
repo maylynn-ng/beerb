@@ -6,7 +6,6 @@ import { connect } from 'react-redux';
 import { State } from '../redux/reducers';
 import { Beer } from '../Models/Beer.model';
 import { AppDispatch, Action } from '../Models/Redux.model';
-
 import BeerBadge from '../Components/BeerBadge';
 import { ScrollView } from 'react-native-gesture-handler';
 import Topbar from '../Components/Topbar';
@@ -84,6 +83,7 @@ function Beerdex({
           cancelIconColor="#c6c6c6"
           fontSize={14}
         />
+
         <ScrollView>
           <View style={styles.logoContainer}>
             {user.uniqueDrunkIds && user.uniqueDrunkIds.length

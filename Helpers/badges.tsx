@@ -16,7 +16,7 @@ export function badgeCheck(
     addAchievement(user.id, newBadge);
   } else if (
     user.boroughCounter.hasOwnProperty(currentBorough.boroughName) &&
-    user.boroughCounter[currentBorough.boroughName] === 4
+    user.boroughCounter[currentBorough.boroughName] === 5
   ) {
     const [newBadge] = allBadges.filter((badge: Badge) => badge.badgeName === 'FIVE_BEERS');
 
