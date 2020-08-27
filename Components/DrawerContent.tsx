@@ -1,25 +1,35 @@
 import React from 'react';
-import { View, Text, Image, StyleSheet, TouchableWithoutFeedbackComponent } from 'react-native';
+import { View, Text, Image, StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
 import { DrawerContentScrollView, DrawerItem } from '@react-navigation/drawer';
-import store from '../redux/store';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
+import { logoutUser } from '../redux/actions';
+import { AppDispatch, Action } from '../Models/Redux.model';
+import { Borough } from '../Models/Borough.model';
+import { State } from '../redux/reducers';
 
-function DrawerContent(props: any) {
-  const state = store.getState();
-
-  const { user } = state;
-  const { currentBorough } = state;
-
+function DrawerContent({
+  picture,
+  nickname,
+  currentBorough,
+  navigation,
+  logout,
+}: {
+  picture: string;
+  nickname: string;
+  currentBorough: Borough;
+  navigation: any;
+  logout: () => Action;
+}): JSX.Element {
   return (
     <View style={{ flex: 1 }}>
-      <DrawerContentScrollView {...props}>
+      <DrawerContentScrollView>
         <View style={styles.drawerContent}>
           <View style={styles.userInfoSection}>
             <View style={{ marginTop: 15 }}>
               <TouchableWithoutFeedback
                 onPress={() => {
-                  props.navigation.navigate('Home');
+                  navigation.navigate('Home');
                 }}
               >
                 <Image
@@ -31,11 +41,11 @@ function DrawerContent(props: any) {
               <TouchableWithoutFeedback
                 style={{ flexDirection: 'row', alignItems: 'center' }}
                 onPress={() => {
-                  props.navigation.navigate('Profile');
+                  navigation.navigate('Profile');
                 }}
               >
                 <Image
-                  source={{ uri: user.picture }}
+                  source={{ uri: picture }}
                   style={{
                     borderRadius: 80,
                     alignSelf: 'center',
@@ -46,7 +56,7 @@ function DrawerContent(props: any) {
                   }}
                 />
                 <View style={{ flexDirection: 'column' }}>
-                  <Text style={styles.title}>{user.nickname}</Text>
+                  <Text style={styles.title}>{nickname}</Text>
                   <Text style={styles.caption}>{currentBorough.boroughName}</Text>
                 </View>
               </TouchableWithoutFeedback>
@@ -58,28 +68,28 @@ function DrawerContent(props: any) {
               icon={() => <Image source={require('../assets/map3.png')} style={styles.icon} />}
               label="Home"
               onPress={() => {
-                props.navigation.navigate('Home');
+                navigation.navigate('Home');
               }}
             />
             <DrawerItem
               icon={() => <Image source={require('../assets/user.png')} style={styles.icon} />}
               label="Profile"
               onPress={() => {
-                props.navigation.navigate('Profile');
+                navigation.navigate('Profile');
               }}
             />
             <DrawerItem
               icon={() => <Image source={require('../assets/beer.png')} style={styles.icon} />}
               label="Beerdex"
               onPress={() => {
-                props.navigation.navigate('Beerdex');
+                navigation.navigate('Beerdex');
               }}
             />
             <DrawerItem
               icon={() => <Image source={require('../assets/medal.png')} style={styles.icon} />}
               label="Achievements"
               onPress={() => {
-                props.navigation.navigate('Achievements');
+                navigation.navigate('Achievements');
               }}
             />
           </View>
@@ -89,28 +99,31 @@ function DrawerContent(props: any) {
         <DrawerItem
           icon={() => <Image source={require('../assets/logout.png')} style={styles.icon} />}
           label="Sign Out"
-          onPress={() => {
-            store.dispatch({ type: 'LOGOUT', payload: user });
-          }}
+          onPress={() => logout()}
         />
       </View>
     </View>
   );
 }
 
-function mapStateToProps(state: any) {
+function mapStateToProps(state: State) {
   return {
     currentBorough: state.currentBorough,
-    searchTerm: state.searchTerm,
-    beerSearchResults: state.beerSearchResults,
-    user: state.user,
+    picture: state.user.picture,
+    nickname: state.user.nickname,
     location: state.location,
     beerFrequency: state.user.beerFreqs,
     boroughCounter: state.user.boroughCounter,
   };
 }
 
-export default connect(mapStateToProps, () => ({}))(DrawerContent);
+function mapDispatch(dispatch: AppDispatch) {
+  return {
+    logout: () => dispatch(logoutUser()),
+  };
+}
+
+export default connect(mapStateToProps, mapDispatch)(DrawerContent);
 
 const styles = StyleSheet.create({
   drawerContent: {
@@ -134,12 +147,6 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     borderTopColor: '#f4f4f4',
     borderTopWidth: 1,
-  },
-  preference: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    paddingVertical: 12,
-    paddingHorizontal: 16,
   },
   icon: {
     height: 30,

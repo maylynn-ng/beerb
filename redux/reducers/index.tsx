@@ -1,60 +1,32 @@
 import { Action } from '../../Models/Redux.model';
-import { Beer, DisplayBeer } from '../../Models/Beer.model';
-import { Location } from '../../Models/Locations.model';
+import { Beer } from '../../Models/Beer.model';
 import { Badge } from '../../Models/Badge.model';
+import { Borough, InitialBorough } from '../../Models/Borough.model';
+import { User, InitialUser } from '../../Models/User.model';
+import { Coordinates, InitialCoordinates } from '../../Models/Coordinates.model';
 
 export type State = {
   allBadges: Badge[];
-  beerdex: DisplayBeer[];
-  boroughs: [];
-  currentBorough: string;
-  location: {
-    latitude: number;
-    longitude: number;
-  };
+  beerdex: Beer[];
+  boroughs: Borough[];
+  currentBorough: Borough;
+  location: Coordinates;
   isLoading: boolean;
   locationsNearby: [];
   searchTerm: string;
-  user: {
-    badges: {
-      badgeName: string;
-      badgeText: string;
-      badgeImage: string;
-    }[];
-    beerFreqs: [[]];
-    beerSearchResults: Beer[];
-    boroughCounter: {};
-    drunkBeers: DisplayBeer[];
-    Locations: Location[];
-    favouriteBeers: Set<Object>;
-    sub: string;
-    uniqueDrunkIds: number[];
-  };
+  user: User;
 };
 
 const initialState: State = {
   allBadges: [],
   beerdex: [],
   boroughs: [],
-  currentBorough: '',
-  location: {
-    latitude: 51.507388,
-    longitude: -0.12789,
-  },
+  currentBorough: InitialBorough,
+  location: InitialCoordinates,
   isLoading: true,
   locationsNearby: [],
   searchTerm: '',
-  user: {
-    badges: [],
-    beerFreqs: [[]],
-    beerSearchResults: [],
-    boroughCounter: {},
-    drunkBeers: [],
-    favouriteBeers: new Set(),
-    Locations: [],
-    sub: '',
-    uniqueDrunkIds: [],
-  },
+  user: InitialUser,
 };
 
 export default function reducer(state: State = initialState, action: Action): State {

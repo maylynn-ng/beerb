@@ -1,13 +1,15 @@
 import { Badge } from '../Models/Badge.model';
+import { Borough } from '../Models/Borough.model';
+import { User } from '../Models/User.model';
 
 export function badgeCheck(
-  addAchievement,
-  allBadges,
-  currentBorough,
-  setBadge,
-  setIsShowBadgeModal,
-  toggleAddBeer,
-  user
+  addAchievement: (userId: number, badge: Badge) => void,
+  allBadges: Badge[],
+  currentBorough: Borough,
+  setBadge: React.Dispatch<React.SetStateAction<Badge>>,
+  setIsShowBadgeModal: React.Dispatch<React.SetStateAction<boolean>>,
+  toggleAddBeer: () => void,
+  user: User
 ) {
   if (!user.boroughCounter.hasOwnProperty(currentBorough.boroughName)) {
     const [newBadge] = allBadges.filter((badge: Badge) => badge.badgeName === 'NEW_BOROUGH');

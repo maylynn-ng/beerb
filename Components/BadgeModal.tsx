@@ -4,7 +4,7 @@ import LottieView from 'lottie-react-native';
 import { Badge } from '../Models/Badge.model';
 import firework from '../Animations/firework.json';
 
-function BadgeModal({ badge }: { badge: Badge }) {
+function BadgeModal({ badge }: { badge: Badge }): JSX.Element {
   return (
     <View style={styles.screen}>
       <LottieView style={styles.firework} source={firework} autoPlay={true} loop={true} />

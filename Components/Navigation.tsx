@@ -9,7 +9,7 @@ import Achievements from '../Screens/Achievements';
 import HomeScreen from '../Screens/HomeScreen';
 import DrawerContent from './DrawerContent';
 
-const Navigation = () => {
+const Navigation = (): JSX.Element => {
   const Drawer = createDrawerNavigator();
 
   return (

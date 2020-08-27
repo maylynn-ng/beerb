@@ -14,6 +14,11 @@ import { fetchPlacesNearby, changeLoading } from '../redux/actions';
 
 import ShortProfile from './ShortProfile';
 import DiscoveryModal from './DiscoveryModal';
+import { Location } from '../Models/Locations.model';
+import { AppDispatch, Action } from '../Models/Redux.model';
+import { State } from '../redux/reducers';
+import { Borough } from '../Models/Borough.model';
+import { Coordinates } from '../Models/Coordinates.model';
 
 const Navbar = ({
   location,
@@ -22,21 +27,29 @@ const Navbar = ({
   setLoading,
   setPlacesNearby,
   boroughs,
-}: any) => {
+}: {
+  location: Coordinates;
+  lastBeer: Location;
+  takeScreenShot: () => Promise<void>;
+  setLoading: (status: boolean) => Action;
+  setPlacesNearby: (lat: number, lng: number) => Action;
+  boroughs: Borough[];
+}): JSX.Element => {
   const [isShownAddBeer, setIsShownAddBeer] = useState(false);
-  const toggleAddBeer = () => {
+  const [isShownShortProfile, setIsShownShortProfile] = useState(false);
+  const [isShownDiscovery, setIsShownDiscovery] = useState(false);
+
+  const toggleAddBeer = (): void => {
     setLoading(true);
     setPlacesNearby(location.latitude, location.longitude);
     setLoading(false);
     setIsShownAddBeer(!isShownAddBeer);
   };
 
-  const [isShownShortProfile, setIsShownShortProfile] = useState(false);
-  const toggleShortProfile = () => {
+  const toggleShortProfile = (): void => {
     setIsShownShortProfile(!isShownShortProfile);
   };
 
-  const [isShownDiscovery, setIsShownDiscovery] = useState(false);
   const toggleDiscovery = (): void => {
     setIsShownDiscovery(!isShownDiscovery);
     !isShownDiscovery && ToastAndroid.show('Swipe to get a new discovery!', ToastAndroid.LONG);
@@ -84,13 +97,13 @@ const Navbar = ({
   );
 };
 
-function mapStateToProps(state: any) {
+function mapStateToProps(state: State) {
   return {
     location: state.location,
   };
 }
 
-function mapDispatch(dispatch: any) {
+function mapDispatch(dispatch: AppDispatch) {
   return {
     setPlacesNearby: (lat: number, lng: number) => dispatch(fetchPlacesNearby(lat, lng)),
     setLoading: (status: boolean) => dispatch(changeLoading(status)),

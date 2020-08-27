@@ -4,6 +4,8 @@ import { Badge } from '../../Models/Badge.model';
 import { AppDispatch, Action } from '../../Models/Redux.model';
 import { ToastAndroid } from 'react-native';
 import { getDistance } from 'geolib';
+import { Coordinates } from '../../Models/Coordinates.model';
+import { User } from '../../Models/User.model';
 
 const SEARCH_API_URL = process.env.REACT_NATIVE_UNTAPPED_SEARCH_URL;
 const CLIENT_ID = process.env.REACT_NATIVE_UNTAPPED_CLIENT_ID;
@@ -13,7 +15,7 @@ const PLACES_KEY = process.env.REACT_NATIVE_PLACES_KEY;
 const PLACES_NEARBY_PARAMS: string = '&radius=200&type=bar&keyword=pub&key=';
 export const DB_LOCALHOST = process.env.EXPO_LOCALHOST;
 
-export function storeLocation(location: { latitude: number; longitude: number }): Action {
+export function storeLocation(location: Coordinates): Action {
   return {
     type: 'STORE_LOCATION',
     payload: location,
@@ -48,10 +50,10 @@ export function setLocationsNearby(locations: []): Action {
   };
 }
 
-export function logoutUser(user: any): Action {
+export function logoutUser(): Action {
   return {
     type: 'LOGOUT',
-    payload: user,
+    payload: {},
   };
 }
 
@@ -62,7 +64,7 @@ export function changeLoading(status: boolean): Action {
   };
 }
 
-export function storeBeerFreqs(freqs: [[]]): Action {
+export function storeBeerFreqs(freqs: [string, number][]): Action {
   return {
     type: 'STORE_BEER_FREQS',
     payload: freqs,
@@ -157,7 +159,7 @@ export function setUserInfo(user: object): Action {
   };
 }
 
-export function updateAllUserStates(user: any) {
+export function updateAllUserStates(user: User) {
   const { sub, name } = user;
   let counter: { [key: string]: any } = {};
   return (dispatch: AppDispatch) => {
@@ -224,7 +226,7 @@ export function updateFavourites(favouriteBeers: Set<Object>) {
   };
 }
 
-export function addBadge(UserId: any, badge: Badge) {
+export function addBadge(UserId: number, badge: Badge) {
   return function (dispatch: AppDispatch) {
     fetch(`${DB_LOCALHOST}/awardBadge`, {
       method: 'POST',

@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { View, Image, Text, TouchableOpacity, Platform, Alert } from 'react-native';
+import { View, Text, TouchableOpacity, Platform, Alert } from 'react-native';
 import { Video } from 'expo-av';
 import { connect } from 'react-redux';
 
@@ -9,15 +9,29 @@ import jwtDecode from 'jwt-decode';
 import AsyncStorage from '@react-native-community/async-storage';
 import Navigation from '../Components/Navigation';
 import Loading from './Loading';
+import { AppDispatch, Action } from '../Models/Redux.model';
+import { State } from '../redux/reducers';
+import { User } from '../Models/User.model';
 
 const useProxy = Platform.select({ web: false, default: true });
 const redirectUri = AuthSession.makeRedirectUri({ useProxy });
 const auth0ClientId: any = process.env.REACT_NATIVE_AUTH0_CLIENT_ID;
 const authorizationEndpoint: any = process.env.REACT_NATIVE_AUTH_ENDPOINT;
 
-const Login = ({ user, setUser, isLoading, setLoading }: any) => {
+const Login = ({
+  user,
+  setUser,
+  isLoading,
+  setLoading,
+}: {
+  user: User;
+  setUser: (user: User) => Action;
+  isLoading: boolean;
+  setLoading: (status: boolean) => Action;
+}): JSX.Element => {
   useEffect(() => {
     try {
+      setLoading(true);
       AsyncStorage.getItem('@session_token').then(value => {
         if (value) {
           setUser(JSON.parse(value));
@@ -44,7 +58,7 @@ const Login = ({ user, setUser, isLoading, setLoading }: any) => {
 
   useEffect(() => {
     if (result) {
-      if (result.error) {
+      if (result.type === 'error') {
         Alert.alert(
           'Authentication error',
           result.params.error_description || 'something went wrong'
@@ -135,16 +149,16 @@ const Login = ({ user, setUser, isLoading, setLoading }: any) => {
   );
 };
 
-function mapStateToProps(state: any) {
+function mapStateToProps(state: State) {
   return {
     user: state.user,
     isLoading: state.isLoading,
   };
 }
 
-function mapDispatch(dispatch: any) {
+function mapDispatch(dispatch: AppDispatch) {
   return {
-    setUser: (user: object) => dispatch(setUserInfo(user)),
+    setUser: (user: User) => dispatch(setUserInfo(user)),
     setLoading: (status: boolean) => dispatch(changeLoading(status)),
   };
 }

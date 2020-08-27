@@ -22,6 +22,11 @@ import FavouriteBeer from './FavouriteBeer';
 import BadgeModal from './BadgeModal';
 import { badgeCheck } from '../Helpers/badges';
 import { Pub, InitialPub } from '../Models/Pub.model';
+import { Borough } from '../Models/Borough.model';
+import { State } from '../redux/reducers';
+import { AppDispatch } from '../Models/Redux.model';
+import { Coordinates } from '../Models/Coordinates.model';
+import { User } from '../Models/User.model';
 
 function AddBeer({
   isShownAddBeer,
@@ -37,7 +42,21 @@ function AddBeer({
   allBadges,
   updateDrunkBeers,
   drunkBeers,
-}: any) {
+}: {
+  isShownAddBeer: boolean;
+  toggleAddBeer: () => void;
+  currentBorough: Borough;
+  beerSearchResults: Beer[];
+  addAchievement: (userId: number, badge: Badge) => void;
+  setSearch: (searchTerm: string) => void;
+  pubLocations: any[];
+  location: Coordinates;
+  postNewEntry: (newEntry: NewEntry) => void;
+  user: User;
+  allBadges: Badge[];
+  updateDrunkBeers: (beer: Beer) => void;
+  drunkBeers: Beer[];
+}): JSX.Element {
   const [pub, setPub] = useState(InitialPub);
   const [beer, setBeer] = useState(InitialBeer);
   const [tempSearchTerm, setTempSearchTerm] = useState('');
@@ -100,118 +119,120 @@ function AddBeer({
   };
 
   return (
-    isShownAddBeer && (
-      <Modal
-        style={{
-          backgroundColor: '#000000aa',
-          margin: 0,
-          flex: 1,
-          height: Dimensions.get('screen').height,
-          width: '100%',
-          position: 'absolute',
-          top: 0,
-          left: 0,
-        }}
-        statusBarTranslucent={true}
-        visible={true}
-        onBackdropPress={() => {
-          toggleAddBeer();
-        }}
-      >
+    <>
+      {isShownAddBeer ? (
         <Modal
-          isVisible={isShowBadgeModal}
+          style={{
+            backgroundColor: '#000000aa',
+            margin: 0,
+            flex: 1,
+            height: Dimensions.get('screen').height,
+            width: '100%',
+            position: 'absolute',
+            top: 0,
+            left: 0,
+          }}
+          statusBarTranslucent={true}
+          visible={true}
           onBackdropPress={() => {
-            setIsShowBadgeModal(false);
             toggleAddBeer();
           }}
         >
-          <BadgeModal badge={badge} />
-        </Modal>
-        <View style={styles.addBeerModal}>
-          <View style={styles.lastBeer}>
-            <Text style={styles.header}>Your location:</Text>
-            <View style={styles.input}>
-              <Picker
-                selectedValue={location}
-                onValueChange={pub => setPub(pub)}
-                enabled={pubLocations.length === 0 ? false : true}
-                itemStyle={{
-                  fontSize: 5,
-                }}
-              >
-                <Picker.Item
-                  label={pubLocations.length === 0 ? 'No pubs nearby' : 'Current Location'}
-                  value={location}
-                />
-                {pubLocations.map(
-                  (pub: Pub): JSX.Element => (
-                    <Picker.Item
-                      key={pub.place_id}
-                      label={`${pub.name} - ${pub.vicinity}`}
-                      value={pub}
-                    />
-                  )
-                )}
-              </Picker>
-            </View>
-            {pubLocations.length === 0 ? (
-              <Text>Even if there are no pubs in your vicinity, you can still log a beer!</Text>
-            ) : null}
-            <Text style={styles.header}>Your beer:</Text>
-            <TextInput
-              style={styles.input2}
-              placeholder={'Search Beer'}
-              enablesReturnKeyAutomatically={true}
-              autoCapitalize="words"
-              onChangeText={onChange}
-              returnKeyLabel="done"
-              value={tempSearchTerm}
-            />
-            <ScrollView
-              style={{
-                flex: 1,
-                overflow: 'hidden',
-                flexWrap: 'wrap',
-              }}
-            >
-              {beerSearchResults.slice(0, 4).map((curBeer: any) => (
-                <TouchableOpacity
-                  key={curBeer.beerId}
-                  style={beer.beerId === curBeer.beerId ? styles.beerHighlight : styles.beerItem}
-                  onPress={() => setBeer(curBeer)}
-                >
-                  <View style={{ flexDirection: 'row' }}>
-                    <Image
-                      source={{ uri: curBeer.beerLabel }}
-                      style={{ width: 30, height: 30, marginRight: 10, alignSelf: 'center' }}
-                    />
-                    <View style={{ maxWidth: 165, overflow: 'hidden' }}>
-                      <View style={{ width: 300 }}>
-                        <Text style={styles.beerName}>{curBeer.beerName}</Text>
-                        <Text style={styles.beerBrewery}>{curBeer.breweryName}</Text>
-                      </View>
-                    </View>
-                  </View>
-                  <FavouriteBeer beerId={curBeer.beerId} />
-                </TouchableOpacity>
-              ))}
-            </ScrollView>
-          </View>
-          <TouchableOpacity
-            style={styles.create}
-            onPress={() => {
-              submitBeerNLoc();
+          <Modal
+            isVisible={isShowBadgeModal}
+            onBackdropPress={() => {
+              setIsShowBadgeModal(false);
+              toggleAddBeer();
             }}
           >
-            <Text style={styles.createText}>I choose my beer</Text>
-          </TouchableOpacity>
-        </View>
-      </Modal>
-    )
+            <BadgeModal badge={badge} />
+          </Modal>
+          <View style={styles.addBeerModal}>
+            <View style={styles.lastBeer}>
+              <Text style={styles.header}>Your location:</Text>
+              <View style={styles.input}>
+                <Picker
+                  selectedValue={location}
+                  onValueChange={pub => setPub(pub)}
+                  enabled={pubLocations.length === 0 ? false : true}
+                  itemStyle={{
+                    fontSize: 5,
+                  }}
+                >
+                  <Picker.Item
+                    label={pubLocations.length === 0 ? 'No pubs nearby' : 'Current Location'}
+                    value={location}
+                  />
+                  {pubLocations.map(
+                    (pub: Pub): JSX.Element => (
+                      <Picker.Item
+                        key={pub.place_id}
+                        label={`${pub.name} - ${pub.vicinity}`}
+                        value={pub}
+                      />
+                    )
+                  )}
+                </Picker>
+              </View>
+              {pubLocations.length === 0 ? (
+                <Text>Even if there are no pubs in your vicinity, you can still log a beer!</Text>
+              ) : null}
+              <Text style={styles.header}>Your beer:</Text>
+              <TextInput
+                style={styles.input2}
+                placeholder={'Search Beer'}
+                enablesReturnKeyAutomatically={true}
+                autoCapitalize="words"
+                onChangeText={onChange}
+                returnKeyLabel="done"
+                value={tempSearchTerm}
+              />
+              <ScrollView
+                style={{
+                  flex: 1,
+                  overflow: 'hidden',
+                  flexWrap: 'wrap',
+                }}
+              >
+                {beerSearchResults.slice(0, 4).map((curBeer: any) => (
+                  <TouchableOpacity
+                    key={curBeer.beerId}
+                    style={beer.beerId === curBeer.beerId ? styles.beerHighlight : styles.beerItem}
+                    onPress={() => setBeer(curBeer)}
+                  >
+                    <View style={{ flexDirection: 'row' }}>
+                      <Image
+                        source={{ uri: curBeer.beerLabel }}
+                        style={{ width: 30, height: 30, marginRight: 10, alignSelf: 'center' }}
+                      />
+                      <View style={{ maxWidth: 165, overflow: 'hidden' }}>
+                        <View style={{ width: 300 }}>
+                          <Text style={styles.beerName}>{curBeer.beerName}</Text>
+                          <Text style={styles.beerBrewery}>{curBeer.breweryName}</Text>
+                        </View>
+                      </View>
+                    </View>
+                    <FavouriteBeer beerId={curBeer.beerId} />
+                  </TouchableOpacity>
+                ))}
+              </ScrollView>
+            </View>
+            <TouchableOpacity
+              style={styles.create}
+              onPress={() => {
+                submitBeerNLoc();
+              }}
+            >
+              <Text style={styles.createText}>I choose my beer</Text>
+            </TouchableOpacity>
+          </View>
+        </Modal>
+      ) : null}
+    </>
   );
 }
 
-function mapStateToProps(state: any) {
+function mapStateToProps(state: State) {
   return {
     beerSearchResults: state.user.beerSearchResults,
     pubLocations: state.locationsNearby,
@@ -223,11 +244,11 @@ function mapStateToProps(state: any) {
   };
 }
 
-function mapDispatch(dispatch: any) {
+function mapDispatch(dispatch: AppDispatch) {
   return {
     setSearch: (searchTerm: string) => dispatch(fetchSearchBeers(searchTerm)),
-    postNewEntry: (newEntry: object) => dispatch(postEntry(newEntry)),
-    addAchievement: (userId: string, badge: Badge) => dispatch(addBadge(userId, badge)),
+    postNewEntry: (newEntry: NewEntry) => dispatch(postEntry(newEntry)),
+    addAchievement: (userId: number, badge: Badge) => dispatch(addBadge(userId, badge)),
     updateDrunkBeers: (beer: Beer) => dispatch(setDrunkBeers(beer)),
   };
 }

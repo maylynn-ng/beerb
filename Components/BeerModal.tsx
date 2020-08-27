@@ -1,43 +1,42 @@
 import React from 'react';
 import { View, Text, Image, StyleSheet, ScrollView } from 'react-native';
 import FavouriteBeer from './FavouriteBeer';
-import { connect } from 'react-redux';
 import { Beer } from '../Models/Beer.model';
-import { State } from '../redux/reducers';
 
-const BeerModal = ({ beerId, drunkBeers }: { beerId: number; drunkBeers: Beer[] }) => {
-  const showcasedBeer = drunkBeers.filter(b => b.beerId === beerId)[0];
+const BeerModal = ({ beer }: { beer: Beer }): JSX.Element => {
   return (
-    <View style={styles.container}>
-      <View style={styles.labelAndName}>
-        {showcasedBeer.beerLabel !== '' && (
-          <Image style={styles.label} source={{ uri: showcasedBeer.beerLabel }} />
-        )}
-        <Text style={styles.beerName}>{showcasedBeer.beerName.toUpperCase()}</Text>
-        <FavouriteBeer beerId={showcasedBeer.beerId} />
-      </View>
-      <Text style={{ textAlign: 'center' }}>{showcasedBeer.beerStyle}</Text>
-      <Text style={{ textAlign: 'center' }}>
-        ABV: {showcasedBeer.beerAbv}% - IBU:{' '}
-        {showcasedBeer.beerIbu === 0 ? 'N/A' : showcasedBeer.beerIbu}
-      </Text>
-      <Text style={styles.breweryInfo}>
-        {showcasedBeer.breweryName}, {showcasedBeer.breweryCountry}
-      </Text>
-      <ScrollView style={{ marginVertical: 17 }}>
-        <Text style={styles.beerDescription}>{showcasedBeer.beerDescription}</Text>
-      </ScrollView>
-    </View>
+    <>
+      {beer.beerName !== '' ? (
+        <View style={styles.container}>
+          {console.log(beer)}
+          <View style={styles.labelAndName}>
+            {beer.beerLabel !== '' && (
+              <Image style={styles.label} source={{ uri: beer.beerLabel }} />
+            )}
+            <Text style={styles.beerName}>{beer.beerName.toUpperCase()}</Text>
+            <FavouriteBeer beerId={beer.beerId} />
+          </View>
+          <Text style={{ textAlign: 'center' }}>{beer.beerStyle}</Text>
+          <Text style={{ textAlign: 'center' }}>
+            ABV: {beer.beerAbv}% - IBU: {beer.beerIbu === 0 ? 'N/A' : beer.beerIbu}
+          </Text>
+          <Text style={styles.breweryInfo}>
+            {beer.breweryName}, {beer.breweryCountry}
+          </Text>
+          <ScrollView style={{ marginVertical: 17 }}>
+            <Text style={styles.beerDescription}>{beer.beerDescription}</Text>
+          </ScrollView>
+        </View>
+      ) : (
+        <View style={styles.container}>
+          <Text>Beer error</Text>
+        </View>
+      )}
+    </>
   );
 };
 
-const mapStatesToProps = (state: State) => {
-  return {
-    drunkBeers: state.user.drunkBeers,
-  };
-};
-
-export default connect(mapStatesToProps, null)(BeerModal);
+export default BeerModal;
 
 const styles = StyleSheet.create({
   container: {

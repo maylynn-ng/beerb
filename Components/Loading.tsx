@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Dimensions } from 'react-native';
 import { Video } from 'expo-av';
 
-const Loading = () => {
+const Loading = (): JSX.Element => {
   return (
     <View
       style={{

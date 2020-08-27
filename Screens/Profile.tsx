@@ -7,10 +7,11 @@ import BeerModal from '../Components/BeerModal';
 import { storeBorough, fetchPlacesNearby, storeLocation, storeBeerFreqs } from '../redux/actions';
 import Topbar from '../Components/Topbar';
 import { Badge } from '../Models/Badge.model';
+import { InitialBeer, Beer } from '../Models/Beer.model';
 
 function Profile({ user, beerFrequency, navigation }: any) {
   const [displayModal, setDisplayModal] = useState(false);
-  const [modalBeer, setModalBeer] = useState(0);
+  const [modalBeer, setModalBeer] = useState(InitialBeer);
   const picture = () => {
     let src;
     user.picture ? (src = { uri: user.picture }) : (src = 'require("./assets/user.png")');
@@ -18,7 +19,8 @@ function Profile({ user, beerFrequency, navigation }: any) {
   };
 
   const handleTouch = (beerId: number) => {
-    setModalBeer(beerId);
+    const beer: Beer = user.drunkBeers.filter((b: Beer) => b.beerId === beerId)[0];
+    setModalBeer(beer);
     setDisplayModal(true);
   };
 
@@ -129,7 +131,7 @@ function Profile({ user, beerFrequency, navigation }: any) {
             setDisplayModal(false);
           }}
         >
-          <BeerModal beerId={modalBeer} />
+          <BeerModal beer={modalBeer} />
         </Modal>
       </View>
     </>
@@ -152,7 +154,7 @@ function mapDispatch(dispatch: any) {
     setLocation: (location: object) => dispatch(storeLocation(location)),
     setBorough: (name: string) => dispatch(storeBorough(name)),
     setPlacesNearby: (lat: number, lng: number) => dispatch(fetchPlacesNearby(lat, lng)),
-    setBeerFrequency: (freqs: [[]]) => dispatch(storeBeerFreqs(freqs)),
+    setBeerFrequency: (freqs: [string, number][]) => dispatch(storeBeerFreqs(freqs)),
   };
 }
 

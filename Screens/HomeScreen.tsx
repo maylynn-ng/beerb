@@ -27,6 +27,8 @@ import {
 } from '../redux/actions';
 import Topbar from '../Components/Topbar';
 import { Borough } from '../Models/Borough.model';
+import { Beer } from '../Models/Beer.model';
+import { User } from '../Models/User.model';
 
 const simpleArrayOfBoroughs: Borough[] = boroughs.features.map(borough => {
   return {
@@ -91,7 +93,7 @@ const HomeScreen = ({
   useEffect(() => {
     let locs = [...user.Locations];
     if (locs.length !== 0) {
-      let frequencies = locs.reduce((acc, cur) => {
+      let frequencies: { [key: string]: number } = locs.reduce((acc, cur) => {
         acc[cur.beerName] = (acc[cur.beerName] || 0) + 1;
         return acc;
       }, {});
@@ -145,6 +147,10 @@ const HomeScreen = ({
     setShowBeerModalInfo(!showBeerModalInfo);
   };
 
+  const getLastBeer = (beerId: number): Beer => {
+    return user.drunkBeers.filter(b => b.beerId === beerId)[0];
+  };
+
   return (
     <ViewShot ref={screenShot} style={styles.homeScreen}>
       <Topbar navigation={navigation} user={user} currentBorough={currentBorough} />
@@ -185,7 +191,7 @@ const HomeScreen = ({
           statusBarTranslucent={true}
           onBackdropPress={() => setShowBeerModalInfo(false)}
         >
-          <BeerModal beerId={lastBeer.beerId} />
+          <BeerModal beer={getLastBeer(lastBeer.beerId)} />
         </Modal>
       )}
     </ViewShot>
@@ -218,7 +224,7 @@ function mapStateToProps(state: any) {
 
 function mapDispatch(dispatch: AppDispatch) {
   return {
-    setAllUserStates: (user: any) => dispatch(updateAllUserStates(user)),
+    setAllUserStates: (user: User) => dispatch(updateAllUserStates(user)),
     setLoading: (status: boolean) => dispatch(changeLoading(status)),
     setBeerFrequency: (freqs: [[]]) => dispatch(storeBeerFreqs(freqs)),
     populateBadges: () => dispatch(getBadges()),

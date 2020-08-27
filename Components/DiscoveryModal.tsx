@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   Image,
   TouchableWithoutFeedback,
+  ToastAndroid,
 } from 'react-native';
 import Modal from 'react-native-modal';
 import GestureRecognizer from 'react-native-swipe-gestures';
@@ -21,19 +22,32 @@ const DiscoveryModal = ({
   boroughs,
 }: {
   isShownDiscovery: boolean;
-  toggleDiscovery: any;
+  toggleDiscovery: () => void;
   boroughs: Borough[];
 }): JSX.Element => {
   const [discoveryBeer, setDiscoveryBeer] = useState(InitialBeer);
   const [discoveryBorough, setDiscoveryBorough] = useState(InitialBorough);
   const [isShownBeerModal, setIsShownBeerModal] = useState(false);
+  const [activated, setActivated] = useState(false);
+  const [wiggleAnimation, setwiggleAnimation] = useState(new Animated.Value(0));
 
-  useEffect(() => {
+  const fetchBeer = (): void => {
     fetch(`${DB_LOCALHOST}/discover`)
+      .then(res => {
+        if (res.status >= 400) throw new Error('🔴 Error fetching new discovery beer');
+        return res;
+      })
       .then(res => res.json())
       .then((res: Beer) => {
         setDiscoveryBeer(res);
+      })
+      .catch(err => {
+        ToastAndroid.show('Our server is drunk, no new beers to discover', ToastAndroid.SHORT);
       });
+  };
+
+  useEffect(() => {
+    fetchBeer();
     const randomIndex: number = Math.floor(Math.random() * 33);
     setDiscoveryBorough(boroughs[randomIndex]);
   }, []);
@@ -49,17 +63,10 @@ const DiscoveryModal = ({
 
   const swipe = (direction: string): void => {
     startAnimation(direction);
-    fetch(`${DB_LOCALHOST}/discover`)
-      .then(res => res.json())
-      .then(res => {
-        setDiscoveryBeer(res);
-      });
+    fetchBeer();
     const randomIndex: number = Math.floor(Math.random() * 33);
     setDiscoveryBorough(boroughs[randomIndex]);
   };
-
-  const [activated, setActivated] = useState(false);
-  const [wiggleAnimation, setwiggleAnimation] = useState(new Animated.Value(0));
 
   const startAnimation = (direction: string): void => {
     setActivated(!activated);

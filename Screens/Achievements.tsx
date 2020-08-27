@@ -1,36 +1,35 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Image, Text, View, StyleSheet } from 'react-native';
-import { Badge } from '../Models/Badge.model';
+import { Badge, InitialBadge } from '../Models/Badge.model';
 import Topbar from '../Components/Topbar';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import { User } from '../Models/User.model';
 
 const initialBadgeNames: string[] = [];
-const initialCurrentAward: Badge = {
-  badgeName: '',
-  badgeText: '',
-  badgeImage: '',
-};
 
-function Achievements({ badges, allBadges, navigation, user }: any) {
-  const [currentAward, setCurrentAward] = useState(initialCurrentAward);
+function Achievements({
+  allBadges,
+  navigation,
+  user,
+}: {
+  allBadges: Badge[];
+  navigation: any;
+  user: User;
+}): JSX.Element {
+  const [currentAward, setCurrentAward] = useState(InitialBadge);
   const [badgeNames, setBadgeNames] = useState(initialBadgeNames);
 
-  const generateNameArray = () =>
-    badges.filter((badge: Badge) => badge !== undefined).map((badge: Badge) => badge.badgeName);
-
   useEffect(() => {
-    setBadgeNames(generateNameArray());
-  }, [badges]);
+    const badgeNames = user.badges
+      .filter((badge: Badge) => badge !== undefined)
+      .map((badge: Badge) => badge.badgeName);
+    setBadgeNames(badgeNames);
+  }, [user.badges]);
 
   return (
     <View style={styles.mainContainer}>
-      <Topbar
-        navigation={navigation}
-        user={user}
-        currentBorough="ACHIEVEMENTS"
-        allBadges={allBadges}
-      />
+      <Topbar navigation={navigation} user={user} allBadges={allBadges} />
       <Text style={styles.currentAward}>
         {badgeNames.includes(currentAward.badgeName) ? ' 🏆 ' : null}
         {currentAward.badgeText}
@@ -58,13 +57,12 @@ function Achievements({ badges, allBadges, navigation, user }: any) {
 
 function mapStateToProps(state: any) {
   return {
-    badges: state.user.badges,
     allBadges: state.allBadges,
     user: state.user,
   };
 }
 
-export default connect(mapStateToProps)(Achievements);
+export default connect(mapStateToProps, null)(Achievements);
 
 const styles = StyleSheet.create({
   mainContainer: {
@@ -90,9 +88,5 @@ const styles = StyleSheet.create({
   badge: {
     height: 100,
     width: 100,
-  },
-  text: {
-    color: 'gray',
-    fontSize: 10,
   },
 });

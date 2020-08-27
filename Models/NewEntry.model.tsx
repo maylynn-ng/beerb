@@ -1,16 +1,7 @@
 import { Beer } from './Beer.model';
+import { Location } from './Locations.model';
 
 export type NewEntry = {
-  location: {
-    beerName: string;
-    beerId: number;
-    placeName: string;
-    placeId: string;
-    boroughName: string;
-    boroughId: number;
-    longitude: number;
-    latitude: number;
-    UserId: string;
-  };
+  location: Location;
   beers: Beer[];
 };

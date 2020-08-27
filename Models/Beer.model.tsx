@@ -12,7 +12,7 @@ export type Beer = {
   breweryUrl: string;
 };
 
-export const InitialBeer = {
+export const InitialBeer: Beer = {
   beerId: 0,
   beerName: '',
   beerLabel: '',
@@ -24,10 +24,4 @@ export const InitialBeer = {
   breweryCountry: '',
   breweryLabel: '',
   breweryUrl: '',
-};
-
-export type DisplayBeer = {
-  beerId: number;
-  beerName: string;
-  beerLabel: string;
 };

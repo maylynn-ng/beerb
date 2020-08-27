@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import SearchBar from 'react-native-dynamic-search-bar';
-import { getBeerdex, changeLoading, setDrunkIds } from '../redux/actions';
+import { changeLoading, setDrunkIds } from '../redux/actions';
 import { Text, View, StyleSheet, SafeAreaView, TouchableOpacity, Dimensions } from 'react-native';
 import { connect } from 'react-redux';
 import { State } from '../redux/reducers';

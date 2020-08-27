@@ -15,7 +15,7 @@ export const InitialPub: Pub = {
   name: '',
   place_id: '',
   geometry: {
-    location: { lat: 0, lng: 0 },
+    location: { lat: 51.507388, lng: -0.12789 },
   },
   business_status: '',
 };

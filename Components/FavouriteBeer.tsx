@@ -3,8 +3,20 @@ import { Image, TouchableOpacity, ToastAndroid, StyleSheet } from 'react-native'
 import { connect } from 'react-redux';
 import { updateFavourites } from '../redux/actions';
 import { DB_LOCALHOST } from '../redux/actions';
+import { AppDispatch, Action } from '../Models/Redux.model';
+import { State } from '../redux/reducers';
 
-const FavouriteBeer = ({ beerId, favouriteBeers, UserId, setFavBeers }: any) => {
+const FavouriteBeer = ({
+  beerId,
+  favouriteBeers,
+  UserId,
+  setFavBeers,
+}: {
+  beerId: string;
+  favouriteBeers: Set<Object>;
+  UserId: number;
+  setFavBeers: (favBeers: Set<Object>) => Action;
+}): JSX.Element => {
   const [isFav, setIsFav] = useState(false);
 
   useEffect(() => {
@@ -45,14 +57,14 @@ const FavouriteBeer = ({ beerId, favouriteBeers, UserId, setFavBeers }: any) => 
   );
 };
 
-function addStateToProps(state: any) {
+function addStateToProps(state: State) {
   return {
     favouriteBeers: state.user.favouriteBeers,
     UserId: state.user.id,
   };
 }
 
-function mapDispatch(dispatch: any) {
+function mapDispatch(dispatch: AppDispatch) {
   return {
     setFavBeers: (favBeers: Set<Object>) => dispatch(updateFavourites(favBeers)),
   };

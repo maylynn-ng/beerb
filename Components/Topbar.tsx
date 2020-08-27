@@ -2,8 +2,21 @@ import React from 'react';
 import { Image, StyleSheet, View, Text, TouchableOpacity } from 'react-native';
 import { Dimensions } from 'react-native';
 import { useRoute } from '@react-navigation/native';
+import { User } from '../Models/User.model';
+import { Borough } from '../Models/Borough.model';
+import { Badge } from '../Models/Badge.model';
 
-function Topbar({ navigation, user, currentBorough, allBadges }: any) {
+function Topbar({
+  navigation,
+  user,
+  currentBorough,
+  allBadges,
+}: {
+  navigation: any;
+  user: User;
+  currentBorough?: Borough;
+  allBadges?: Badge[];
+}): JSX.Element {
   const route = useRoute();
 
   return (
@@ -26,7 +39,9 @@ function Topbar({ navigation, user, currentBorough, allBadges }: any) {
       )}
       {route.name === 'Home' && (
         <>
-          <Text style={[styles.title, { fontSize: 20 }]}>{currentBorough.boroughName}</Text>
+          <Text style={[styles.title, { fontSize: 20 }]}>
+            {currentBorough && currentBorough.boroughName}
+          </Text>
           <View style={styles.currentView}>
             <Text style={styles.currentBoroughName}>
               {Object.keys(user.boroughCounter).length}
@@ -35,7 +50,7 @@ function Topbar({ navigation, user, currentBorough, allBadges }: any) {
           </View>
         </>
       )}
-      {route.name === 'Achievements' && (
+      {route.name === 'Achievements' && allBadges && (
         <View style={styles.currentView}>
           <Text style={styles.badgeCount}>
             {user.badges.length}/{allBadges.length}
@@ -76,12 +91,6 @@ const styles = StyleSheet.create({
     backgroundColor: 'gold',
     elevation: 10,
     width: Dimensions.get('screen').width,
-  },
-  logoContainer: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'center',
-    marginHorizontal: 5,
   },
   currentView: {
     width: 'auto',

@@ -5,7 +5,7 @@ import Modal from 'react-native-modal';
 import BeerModal from '../Components/BeerModal';
 import { Beer } from '../Models/Beer.model';
 
-const BeerBadge = ({ beer, hasDrunk }: { beer: Beer; hasDrunk: number }) => {
+const BeerBadge = ({ beer, hasDrunk }: { beer: Beer; hasDrunk: number }): JSX.Element => {
   const [displayModal, setDisplayModal] = useState(false);
   return (
     <View style={styles.container}>

@@ -1,4 +1,5 @@
-import { Coordinates } from './Coordinates.model';
+import { Coordinates, InitialCoordinates } from './Coordinates.model';
+
 export interface Borough {
   boroughName: string;
   boroughId: number;
@@ -8,5 +9,5 @@ export interface Borough {
 export const InitialBorough: Borough = {
   boroughName: '',
   boroughId: 0,
-  boroughCoords: [{ latitude: 0, longitude: 0 }],
+  boroughCoords: [InitialCoordinates],
 };
