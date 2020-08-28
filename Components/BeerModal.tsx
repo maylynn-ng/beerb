@@ -1,28 +1,48 @@
 import React from 'react';
-import { View, Text, Image, StyleSheet } from 'react-native';
+import { View, Text, Image, StyleSheet, ScrollView } from 'react-native';
+import FavouriteBeer from './FavouriteBeer';
+import { Beer } from '../Models/Beer.model';
 
-const BeerModal = ({ beer }: any) => {
+const BeerModal = ({ beer }: { beer: Beer }): JSX.Element => {
   return (
-    <View style={styles.container}>
-      <View style={styles.labelAndName}>
-        <Image style={styles.label} source={{ uri: beer.beerLabel }} />
-        <Text style={styles.beerName}>{beer.beerName.toUpperCase()}</Text>
-      </View>
-      <Text style={styles.breweryInfo}>
-        {beer.breweryName}, {beer.breweryCountry}
-      </Text>
-      <View>
-        <Text style={styles.beerDescription}>{beer.beerDescription}</Text>
-      </View>
-    </View>
+    <>
+      {beer.beerName !== '' ? (
+        <View style={styles.container}>
+          {console.log(beer)}
+          <View style={styles.labelAndName}>
+            {beer.beerLabel !== '' && (
+              <Image style={styles.label} source={{ uri: beer.beerLabel }} />
+            )}
+            <Text style={styles.beerName}>{beer.beerName.toUpperCase()}</Text>
+            <FavouriteBeer beerId={beer.beerId} />
+          </View>
+          <Text style={{ textAlign: 'center' }}>{beer.beerStyle}</Text>
+          <Text style={{ textAlign: 'center' }}>
+            ABV: {beer.beerAbv}% - IBU: {beer.beerIbu === 0 ? 'N/A' : beer.beerIbu}
+          </Text>
+          <Text style={styles.breweryInfo}>
+            {beer.breweryName}, {beer.breweryCountry}
+          </Text>
+          <ScrollView style={{ marginVertical: 17 }}>
+            <Text style={styles.beerDescription}>{beer.beerDescription}</Text>
+          </ScrollView>
+        </View>
+      ) : (
+        <View style={styles.container}>
+          <Text>Beer error</Text>
+        </View>
+      )}
+    </>
   );
 };
+
+export default BeerModal;
 
 const styles = StyleSheet.create({
   container: {
     backgroundColor: 'white',
     height: '70%',
-    borderRadius: 5,
+    borderRadius: 15,
     padding: 5,
   },
   labelAndName: {
@@ -30,11 +50,12 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   label: {
-    height: 100,
-    width: 100,
+    height: 95,
+    width: 95,
+    marginRight: 5,
   },
   beerName: {
-    fontSize: 26,
+    fontSize: 24,
     textAlign: 'center',
     alignSelf: 'center',
     width: '60%',
@@ -47,8 +68,7 @@ const styles = StyleSheet.create({
   beerDescription: {
     fontSize: 16,
     padding: 15,
+    paddingTop: 0,
     textAlign: 'center',
   },
 });
-
-export default BeerModal;

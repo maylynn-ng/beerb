@@ -1,28 +1,38 @@
 import React from 'react';
 
 import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
+import { createDrawerNavigator } from '@react-navigation/drawer';
 
-import Menu from '../Screens/Menu';
 import Profile from '../Screens/Profile';
-import Favorites from '../Screens/Favorites';
 import Beerdex from '../Screens/Beerdex';
 import Achievements from '../Screens/Achievements';
 import HomeScreen from '../Screens/HomeScreen';
+import DrawerContent from './DrawerContent';
 
-const Navigation = () => {
-  const RootStack = createStackNavigator();
+const Navigation = (): JSX.Element => {
+  const Drawer = createDrawerNavigator();
 
   return (
     <NavigationContainer>
-      <RootStack.Navigator screenOptions={{ headerShown: false }}>
-        <RootStack.Screen name="Home" component={HomeScreen} />
-        <RootStack.Screen name="Modal" component={Menu} />
-        <RootStack.Screen name="Profile" component={Profile} />
-        <RootStack.Screen name="Favorites" component={Favorites} />
-        <RootStack.Screen name="Beerdex" component={Beerdex} />
-        <RootStack.Screen name="Achievements" component={Achievements} />
-      </RootStack.Navigator>
+      <Drawer.Navigator
+        drawerContent={props => <DrawerContent {...props} />}
+        initialRouteName="Home"
+        drawerContentOptions={{
+          activeTintColor: 'black',
+          activeBackgroundColor: 'gold',
+          itemStyle: { marginVertical: 5 },
+          inactiveTintColor: 'black',
+        }}
+        drawerType="slide"
+        drawerStyle={{
+          backgroundColor: 'whitesmoke',
+        }}
+      >
+        <Drawer.Screen name="Home" component={HomeScreen} />
+        <Drawer.Screen name="Profile" component={Profile} />
+        <Drawer.Screen name="Beerdex" component={Beerdex} />
+        <Drawer.Screen name="Achievements" component={Achievements} />
+      </Drawer.Navigator>
     </NavigationContainer>
   );
 };

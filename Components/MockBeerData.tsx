@@ -2,8 +2,8 @@ import { Beer } from '../Models/Beer.model';
 
 export const mockData: Beer[] = [
   {
+    beerAbv: 5,
     beerId: 3784,
-    haveHad: false,
     beerName: 'Bud Light',
     beerLabel: 'https://untappd.akamaized.net/site/beer_logos/beer-3784_0e2c3_sm.jpeg',
     beerIbu: 6,
@@ -16,8 +16,8 @@ export const mockData: Beer[] = [
     breweryUrl: 'http://www.anheuser-busch.com',
   },
   {
+    beerAbv: 5,
     beerId: 16649,
-    haveHad: false,
     beerName: 'Traditional Lager',
     beerLabel: 'https://untappd.akamaized.net/site/beer_logos/beer-16649_c244e_sm.jpeg',
     beerIbu: 16,

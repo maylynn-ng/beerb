@@ -4,18 +4,46 @@ import MapView, { Polygon, Marker } from 'react-native-maps';
 import { getCenterOfBounds } from 'geolib';
 import { Borough } from '../Models/Borough.model';
 import mapStyle from '../assets/mapStyle.js';
+import { Location } from '../Models/Locations.model';
+import { Coordinates } from '../Models/Coordinates.model';
+import { User } from '../Models/User.model';
 
-const Map = ({ boroughs, boroughCounter, location, user }: any) => {
-  const initialRegion = {
-    latitude: 51.36, //51.509993,
-    longitude: -0.104298,
-    latitudeDelta: 0.8,
-    longitudeDelta: 0.8,
-  };
+const initialRegion = {
+  latitude: 51.36, //51.509993,
+  longitude: -0.104298,
+  latitudeDelta: 0.8,
+  longitudeDelta: 0.8,
+};
 
+const colors = [
+  '#615e5cbb',
+  '#4d3c2cbb',
+  '#603218bb',
+  '#804642bb',
+  '#984b31bb',
+  '#ca6730bb',
+  '#d7805abb',
+  '#e99252bb',
+  '#ffa847bb',
+  '#ffd400bb',
+  '#ffd400',
+];
+
+const Map = ({
+  boroughs,
+  boroughCounter,
+  location,
+  user,
+}: {
+  boroughs: Borough[];
+  boroughCounter: { [key: string]: number };
+  location: Coordinates;
+  user: User;
+}): JSX.Element => {
   const [region, setRegion] = useState(initialRegion);
+  const [showMarkers, setShowMarkers] = useState(false);
 
-  const handlePress = (borough: Borough) => {
+  const handlePress = (borough: Borough): void => {
     const centerOfBorough = getCenterOfBounds(borough.boroughCoords);
     const { longitude, latitude } = centerOfBorough;
     setRegion({
@@ -26,24 +54,9 @@ const Map = ({ boroughs, boroughCounter, location, user }: any) => {
     });
   };
 
-  const [showMarkers, setShowMarkers] = useState(false);
-  const toggleMarkers = () => {
+  const toggleMarkers = (): void => {
     setShowMarkers(!showMarkers);
   };
-
-  const colors = [
-    '#615e5cbb',
-    '#4d3c2cbb',
-    '#603218bb',
-    '#804642bb',
-    '#984b31bb',
-    '#ca6730bb',
-    '#d7805abb',
-    '#e99252bb',
-    '#ffa847bb',
-    '#ffd400bb',
-    '#ffd400',
-  ];
 
   const color10 = (counter: number): number => (counter >= 10 ? 10 : counter);
 
@@ -70,7 +83,7 @@ const Map = ({ boroughs, boroughCounter, location, user }: any) => {
               coordinates={borough.boroughCoords}
               strokeWidth={2}
               strokeColor="whitesmoke"
-              fillColor={colors[color10([boroughCounter[borough.boroughName]])] || colors[0]}
+              fillColor={colors[color10(boroughCounter[borough.boroughName])] || colors[0]}
               tappable={true}
               onPress={() => {
                 handlePress(borough);
@@ -79,7 +92,7 @@ const Map = ({ boroughs, boroughCounter, location, user }: any) => {
           );
         })}
         {showMarkers &&
-          user.Locations.map((loc: object, index: number) => {
+          user.Locations.map((loc: Location, index: number) => {
             return (
               <Marker
                 key={index}

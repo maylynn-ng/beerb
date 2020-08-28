@@ -1,18 +1,11 @@
 import 'react-native-gesture-handler';
 import React from 'react';
 import { Provider } from 'react-redux';
-import { createStore, applyMiddleware } from 'redux';
-import { StyleSheet, Platform, StatusBar as StatBar, View, SafeAreaView } from 'react-native';
-
-import reducer from './redux/reducers';
-import ReduxThunk from 'redux-thunk';
+import { StyleSheet, SafeAreaView, Dimensions, LogBox } from 'react-native';
+import store from './redux/store';
 import Login from './Components/Login';
 
-const store = createStore(reducer, applyMiddleware(ReduxThunk));
-
-// store.subscribe(() => {
-//   console.log('💮💮💮💮💮💮', store.getState());
-// });
+LogBox.ignoreAllLogs(true);
 
 export default function App() {
   return (
@@ -27,8 +20,10 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    paddingTop: 25,
+    backgroundColor: 'gold',
     alignItems: 'center',
     justifyContent: 'center',
+    height: Dimensions.get('screen').height,
   },
 });

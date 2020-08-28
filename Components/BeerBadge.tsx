@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import { View, Image, StyleSheet } from 'react-native';
+import { View, Image, StyleSheet, Text } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import Modal from 'react-native-modal';
 import BeerModal from '../Components/BeerModal';
+import { Beer } from '../Models/Beer.model';
 
-const BeerBadge = ({ beer }: any) => {
+const BeerBadge = ({ beer, hasDrunk }: { beer: Beer; hasDrunk: number }): JSX.Element => {
   const [displayModal, setDisplayModal] = useState(false);
-
   return (
     <View style={styles.container}>
       <TouchableOpacity
@@ -15,15 +15,13 @@ const BeerBadge = ({ beer }: any) => {
         }}
       >
         <View>
-          {beer.haveHad ? (
-            <Image style={styles.image} source={{ uri: beer.beerLabel }} />
-          ) : (
-            <Image style={styles.grayImage} source={{ uri: beer.beerLabel }} />
-          )}
+          <Image style={[styles.image, { opacity: hasDrunk }]} source={{ uri: beer.beerLabel }} />
+          <Text style={styles.badgeTitle}>{beer.beerName}</Text>
         </View>
       </TouchableOpacity>
       <Modal
         isVisible={displayModal}
+        statusBarTranslucent={true}
         onBackdropPress={() => {
           setDisplayModal(false);
         }}
@@ -38,18 +36,17 @@ const styles = StyleSheet.create({
   container: {
     marginVertical: 10,
     marginHorizontal: 10,
+    padding: 5,
+  },
+  badgeTitle: {
+    fontSize: 13,
+    maxWidth: 80,
+    textAlign: 'center',
+    marginTop: 5,
   },
   image: {
     height: 80,
     width: 80,
-  },
-  grayImage: {
-    height: 80,
-    width: 80,
-    opacity: 0.3,
-  },
-  badge: {
-    shadowColor: 'gray',
   },
 });
 

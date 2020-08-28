@@ -1,40 +1,32 @@
-import { Action } from '../actions';
-import { Beer, TrendingBeer } from '../../Models/Beer.model';
+import { Action } from '../../Models/Redux.model';
+import { Beer } from '../../Models/Beer.model';
+import { Badge } from '../../Models/Badge.model';
+import { Borough, InitialBorough } from '../../Models/Borough.model';
+import { User, InitialUser } from '../../Models/User.model';
+import { Coordinates, InitialCoordinates } from '../../Models/Coordinates.model';
 
 export type State = {
-  boroughs: [];
-  beerSearchResults: Beer[];
-  currentBorough: string;
-  searchTerm: string;
-  trendingBeers: TrendingBeer[];
+  allBadges: Badge[];
+  beerdex: Beer[];
+  boroughs: Borough[];
+  currentBorough: Borough;
+  location: Coordinates;
+  isLoading: boolean;
   locationsNearby: [];
-  user: {
-    Locations: any[];
-    boroughCounter: {};
-    drunkBeers: Beer[];
-  };
-  location: {
-    latitude: number;
-    longitude: number;
-  };
+  searchTerm: string;
+  user: User;
 };
 
 const initialState: State = {
+  allBadges: [],
+  beerdex: [],
   boroughs: [],
-  beerSearchResults: [],
-  currentBorough: '',
-  searchTerm: '',
-  trendingBeers: [],
+  currentBorough: InitialBorough,
+  location: InitialCoordinates,
+  isLoading: true,
   locationsNearby: [],
-  user: {
-    Locations: [],
-    boroughCounter: {},
-    drunkBeers: [],
-  },
-  location: {
-    latitude: 51.507388,
-    longitude: -0.12789,
-  },
+  searchTerm: '',
+  user: InitialUser,
 };
 
 export default function reducer(state: State = initialState, action: Action): State {
@@ -53,17 +45,15 @@ export default function reducer(state: State = initialState, action: Action): St
     case 'SET_SEARCH_BEER_RESULTS':
       return {
         ...state,
-        beerSearchResults: action.payload,
+        user: {
+          ...state.user,
+          beerSearchResults: action.payload,
+        },
       };
     case 'SET_SEARCH_TERM':
       return {
         ...state,
         searchTerm: action.payload,
-      };
-    case 'SET_TRENDING_BEER_RESULTS':
-      return {
-        ...state,
-        trendingBeers: action.payload,
       };
     case 'SET_LOCATIONS_NEARBY':
       return {
@@ -76,7 +66,7 @@ export default function reducer(state: State = initialState, action: Action): St
         user: { ...state.user, ...action.payload },
       };
     case 'ADD_ENTRY':
-      const newLocations = [...state.user.Locations, action.payload];
+      const newLocations = [action.payload, ...state.user.Locations];
       return {
         ...state,
         user: {
@@ -102,10 +92,50 @@ export default function reducer(state: State = initialState, action: Action): St
       };
     case 'LOGOUT':
       return initialState;
-    case 'SET_DRUNK_RESULTS':
+    case 'SET_DRUNK_BEERS':
       return {
         ...state,
-        user: { ...state.user, drunkBeers: [...state.user.drunkBeers, action.payload] },
+        user: { ...state.user, drunkBeers: [...state.user.drunkBeers, ...action.payload] },
+      };
+    case 'SET_BEERDEX':
+      return {
+        ...state,
+        beerdex: action.payload,
+      };
+    case 'SET_LOADING':
+      return {
+        ...state,
+        isLoading: action.payload,
+      };
+    case 'STORE_BEER_FREQS':
+      return {
+        ...state,
+        user: { ...state.user, beerFreqs: action.payload },
+      };
+    case 'SET_DRUNK_IDS':
+      return {
+        ...state,
+        user: { ...state.user, uniqueDrunkIds: action.payload },
+      };
+    case 'SAVE_FAVOURITES':
+      return {
+        ...state,
+        user: { ...state.user, favouriteBeers: action.payload },
+      };
+    case 'ADD_BADGE':
+      return {
+        ...state,
+        user: { ...state.user, badges: [...state.user.badges, ...action.payload] },
+      };
+    case 'SET_BADGES':
+      return {
+        ...state,
+        user: { ...state.user, badges: action.payload },
+      };
+    case 'SET_ALL_BADGES':
+      return {
+        ...state,
+        allBadges: action.payload,
       };
     default:
       return state;

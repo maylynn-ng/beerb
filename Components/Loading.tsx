@@ -1,28 +1,32 @@
-import React, { useRef } from 'react';
-import { StyleSheet } from 'react-native';
-LottieView = require('lottie-react-native');
+import React from 'react';
+import { View, Dimensions } from 'react-native';
+import { Video } from 'expo-av';
 
-import loadingBottles from '../Animations/sixPackLoading.json';
-
-const Loading = () => {
-  const loadingBottlesAnimation = useRef(null);
+const Loading = (): JSX.Element => {
   return (
-    <LottieView
-      style={styles.loading}
-      ref={loadingBottlesAnimation}
-      autoPlay={true}
-      loop={true}
-      source={loadingBottles}
-    />
+    <View
+      style={{
+        position: 'absolute',
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: Dimensions.get('window').height,
+        width: Dimensions.get('screen').width,
+        zIndex: 5,
+        backgroundColor: 'white',
+      }}
+    >
+      <Video
+        source={require('../assets/LoadingVideos/19713-six-pack-beer.mp4')}
+        rate={1.0}
+        isMuted={true}
+        resizeMode="cover"
+        shouldPlay
+        isLooping
+        style={{ width: 300, height: 300 }}
+      />
+    </View>
   );
 };
-
-const styles = StyleSheet.create({
-  loading: {
-    height: 300,
-    width: 300,
-    alignSelf: 'center',
-  },
-});
 
 export default Loading;

@@ -1,11 +1,58 @@
 import React, { useState } from 'react';
-import { Dimensions, View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import {
+  Dimensions,
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  TouchableOpacity,
+  ToastAndroid,
+} from 'react-native';
 import AddBeer from './AddBeerModal';
+import { connect } from 'react-redux';
+import { fetchPlacesNearby, changeLoading } from '../redux/actions';
 
-const Navbar = ({ navigation, location }: any) => {
+import ShortProfile from './ShortProfile';
+import DiscoveryModal from './DiscoveryModal';
+import { Location } from '../Models/Locations.model';
+import { AppDispatch, Action } from '../Models/Redux.model';
+import { State } from '../redux/reducers';
+import { Borough } from '../Models/Borough.model';
+import { Coordinates } from '../Models/Coordinates.model';
+
+const Navbar = ({
+  location,
+  lastBeer,
+  takeScreenShot,
+  setLoading,
+  setPlacesNearby,
+  boroughs,
+}: {
+  location: Coordinates;
+  lastBeer: Location;
+  takeScreenShot: () => Promise<void>;
+  setLoading: (status: boolean) => Action;
+  setPlacesNearby: (lat: number, lng: number) => Action;
+  boroughs: Borough[];
+}): JSX.Element => {
   const [isShownAddBeer, setIsShownAddBeer] = useState(false);
-  const toggleAddBeer = () => {
+  const [isShownShortProfile, setIsShownShortProfile] = useState(false);
+  const [isShownDiscovery, setIsShownDiscovery] = useState(false);
+
+  const toggleAddBeer = (): void => {
+    setLoading(true);
+    setPlacesNearby(location.latitude, location.longitude);
+    setLoading(false);
     setIsShownAddBeer(!isShownAddBeer);
+  };
+
+  const toggleShortProfile = (): void => {
+    setIsShownShortProfile(!isShownShortProfile);
+  };
+
+  const toggleDiscovery = (): void => {
+    setIsShownDiscovery(!isShownDiscovery);
+    !isShownDiscovery && ToastAndroid.show('Swipe to get a new discovery!', ToastAndroid.LONG);
   };
 
   return (
@@ -13,11 +60,17 @@ const Navbar = ({ navigation, location }: any) => {
       <TouchableOpacity
         style={styles.navbarBtn}
         onPress={() => {
-          navigation.navigate('Profile');
+          toggleShortProfile();
         }}
       >
         <Image source={require('../assets/user.png')} style={styles.navbarPic} />
       </TouchableOpacity>
+      <ShortProfile
+        isShownShortProfile={isShownShortProfile}
+        toggleShortProfile={toggleShortProfile}
+        lastBeer={lastBeer}
+        takeScreenShot={takeScreenShot}
+      />
       <TouchableOpacity
         style={styles.addBtn}
         onPress={() => {
@@ -30,16 +83,34 @@ const Navbar = ({ navigation, location }: any) => {
       <TouchableOpacity
         style={styles.navbarBtn}
         onPress={() => {
-          console.info('link to random beer/location');
+          toggleDiscovery();
         }}
       >
         <Image source={require('../assets/discover.png')} style={styles.navbarPic} />
       </TouchableOpacity>
+      <DiscoveryModal
+        isShownDiscovery={isShownDiscovery}
+        toggleDiscovery={toggleDiscovery}
+        boroughs={boroughs}
+      />
     </View>
   );
 };
 
-export default Navbar;
+function mapStateToProps(state: State) {
+  return {
+    location: state.location,
+  };
+}
+
+function mapDispatch(dispatch: AppDispatch) {
+  return {
+    setPlacesNearby: (lat: number, lng: number) => dispatch(fetchPlacesNearby(lat, lng)),
+    setLoading: (status: boolean) => dispatch(changeLoading(status)),
+  };
+}
+
+export default connect(mapStateToProps, mapDispatch)(Navbar);
 
 const windowHeight = Dimensions.get('window').height;
 const styles = StyleSheet.create({
@@ -51,7 +122,8 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '10%',
     backgroundColor: 'gold',
-    zIndex: 1,
+    // zIndex: 1,
+    elevation: 50000000,
   },
   addBtn: {
     position: 'relative',
