@@ -9,8 +9,9 @@ import { AppDispatch, Action } from '../Models/Redux.model';
 import BeerBadge from '../Components/BeerBadge';
 import { ScrollView } from 'react-native-gesture-handler';
 import Topbar from '../Components/Topbar';
+import { User } from '../Models/User.model';
 
-const initialState: Beer[] = [];
+const initialBeerdexBeers: Beer[] = [];
 
 function Beerdex({
   user,
@@ -21,10 +22,19 @@ function Beerdex({
   favouriteBeers,
   uniqueDrunkIds,
   setIsLoading,
-}: any) {
+}: {
+  user: User;
+  drunkBeers: Beer[];
+  beerdex: Beer[];
+  populateDrunkIds: (drunkIds: number[]) => Action;
+  navigation: any;
+  favouriteBeers: Set<Object>;
+  uniqueDrunkIds: number[];
+  setIsLoading: (status: boolean) => Action;
+}): JSX.Element {
   const [filterBeers, setFilterBeers] = useState(false);
   const [searchInBeerdex, setSearchInBeerdex] = useState('');
-  const [beerdexBeers, setBeerdexBeers] = useState(initialState);
+  const [beerdexBeers, setBeerdexBeers] = useState(initialBeerdexBeers);
 
   useEffect(() => {
     setIsLoading(true);
@@ -48,7 +58,7 @@ function Beerdex({
     if (beerdexBeers.length) setIsLoading(false);
   }, [beerdexBeers]);
 
-  const handleFilter = (selector: string) => {
+  const handleFilter = (selector: string): void => {
     selector ? setFilterBeers(true) : setFilterBeers(false);
   };
 
@@ -74,7 +84,7 @@ function Beerdex({
         </View>
         <SearchBar
           placeholder="Search for a beer..."
-          onChangeText={value => setSearchInBeerdex(value)}
+          onChangeText={(value: string) => setSearchInBeerdex(value)}
           onPressToFocus={true}
           value={searchInBeerdex}
           onPressCancel={() => setSearchInBeerdex('')}
@@ -113,14 +123,7 @@ function Beerdex({
                   .map((entry: any, index: number) => {
                     let hasDrunk: number = 1;
                     if (!uniqueDrunkIds.includes(entry.beerId)) hasDrunk = 0.3;
-                    return (
-                      <BeerBadge
-                        style={styles.badge}
-                        hasDrunk={hasDrunk}
-                        key={index}
-                        beer={entry}
-                      />
-                    );
+                    return <BeerBadge hasDrunk={hasDrunk} key={index} beer={entry} />;
                   })
               : beerdexBeers
                   .filter((beer: Beer) => {
@@ -138,14 +141,7 @@ function Beerdex({
                   .map((entry: any, index: number) => {
                     let hasDrunk: number = 1;
                     if (!uniqueDrunkIds.includes(entry.beerId)) hasDrunk = 0.3;
-                    return (
-                      <BeerBadge
-                        style={styles.badge}
-                        hasDrunk={hasDrunk}
-                        key={index}
-                        beer={entry}
-                      />
-                    );
+                    return <BeerBadge hasDrunk={hasDrunk} key={index} beer={entry} />;
                   })}
           </View>
         </ScrollView>
@@ -167,7 +163,7 @@ function mapStateToProps(state: State) {
 function mapDispatch(dispatch: AppDispatch) {
   return {
     populateDrunkIds: (drunkIds: number[]): Action => dispatch(setDrunkIds(drunkIds)),
-    setIsLoading: (status: boolean) => dispatch(changeLoading(status)),
+    setIsLoading: (status: boolean): Action => dispatch(changeLoading(status)),
   };
 }
 
@@ -179,54 +175,12 @@ const styles = StyleSheet.create({
     width: '100%',
     backgroundColor: 'white',
   },
-  menuContainer: {
-    width: '50%',
-    height: 40,
-  },
-  burgerMenu: {
-    width: 30,
-    height: 30,
-  },
-  burgerMenuTouch: {
-    flex: 1,
-    width: 30,
-    height: 40,
-    justifyContent: 'center',
-    marginHorizontal: 10,
-    zIndex: 2,
-  },
-  topBar: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingVertical: 8,
-    height: 'auto',
-    paddingHorizontal: 10,
-    backgroundColor: 'gold',
-    elevation: 10,
-  },
   logoContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'center',
     marginHorizontal: 5,
     marginBottom: 60,
-  },
-  currentView: {
-    width: 'auto',
-    height: 25,
-    justifyContent: 'center',
-  },
-  title: {
-    opacity: 0.6,
-    fontSize: 25,
-    position: 'absolute',
-    width: Dimensions.get('screen').width,
-    textAlign: 'center',
-  },
-  badge: {
-    height: 200,
-    width: 200,
   },
   filterSelector: {
     width: '50%',
