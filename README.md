@@ -6,8 +6,6 @@
 
 <span align="center">![ForTheBadge built-with-love](https://ForTheBadge.com/images/badges/built-with-love.svg) [![forthebadge](https://forthebadge.com/images/badges/built-for-android.svg)](https://forthebadge.com) [![forthebadge](https://forthebadge.com/images/badges/ages-18.svg)](https://forthebadge.com)</span>
 
-### Back-end: [BeerB backend](https://github.com/maylynn-ng/beerbServer)
-
 <p align="center">
  <img src="./readmeFiles/BEERB.gif" alt="beerb logo" style="zoom:50%;" >
 </p>
@@ -34,9 +32,10 @@ Checkout a video demo of the app on [YouTube](https://www.youtube.com/watch?v=wZ
 
 ## Table of contents
 
-[Tech Stack](#tech-stack)
-[Running BeerB](#running-beerb)
-[Developers Team](#developers-team)
+[BeerB backend](https://github.com/maylynn-ng/beerbServer)  
+[Tech Stack](#tech-stack)  
+[Running BeerB](#running-beerb)  
+[Developers Team](#developers-team)  
 [License](#license)
 
 ## Tech Stack
@@ -51,7 +50,7 @@ Checkout a video demo of the app on [YouTube](https://www.youtube.com/watch?v=wZ
 :beer: [Sequelize](https://sequelize.org/)  
 :beer: [Heroku](https://www.heroku.com/)  
 :beer: [Lottie](https://airbnb.io/lottie/#/)  
-:beer: [Untappd API](https://untappd.com/home)
+:beer: [Untappd API](https://untappd.com/home)  
 :beer: [Google Places API](https://cloud.google.com/maps-platform/places)
 
 ## Running BeerB
