@@ -71,8 +71,8 @@ export function storeBeerFreqs(freqs: [string, number][]): Action {
   };
 }
 
-export function fetchSearchBeers(searchTerm: string) {
-  return function (dispatch: AppDispatch) {
+export function fetchSearchBeers(searchTerm: string): (dispatch: AppDispatch) => void {
+  return function (dispatch: AppDispatch): void {
     dispatch(setSearchTerm(searchTerm));
     if (searchTerm === '') {
       dispatch({ type: 'SET_SEARCH_BEER_RESULTS', payload: [] });
