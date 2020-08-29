@@ -28,7 +28,7 @@ Once you're logged in (through Facebook or creating a profile), start logging be
 
 ## TLDR:
 
-Checkout a video demo of the app on [youtube](https://www.youtube.com/watch?v=wZ4gDSbOGk4):
+Checkout a video demo of the app on [YouTube](https://www.youtube.com/watch?v=wZ4gDSbOGk4):
 
 [![Watch the video](https://img.youtube.com/vi/wZ4gDSbOGk4/hqdefault.jpg)](https://youtu.be/wZ4gDSbOGk4)
 
@@ -41,29 +41,29 @@ Checkout a video demo of the app on [youtube](https://www.youtube.com/watch?v=wZ
 
 ## Tech Stack
 
-:beer: React Native
-:beer: Typescript
-:beer: Expo
-:beer: Redux
-:beer: Auth0
-:beer: Express
-:beer: PostgreSQL
-:beer: Sequelize
-:beer: Heroku
-:beer: Lottie
-:beer: Untappd API
+:beer: React Native  
+:beer: Typescript  
+:beer: Expo  
+:beer: Redux  
+:beer: Auth0  
+:beer: Express  
+:beer: PostgreSQL  
+:beer: Sequelize  
+:beer: Heroku  
+:beer: Lottie  
+:beer: Untappd API  
 :beer: Google Places API
 
 ## Running BeerB
 
-- Fork & clone this repo
-- Run npm i in beerb directory
-- Run expo start
+- Fork & clone this repo  
+  Run `npm i` in beerb directory  
+  Run `expo start`
 
-- Fork & clone the [server repo](https://github.com/maylynn-ng/beerbServer)
-- Make sure you have postgreSQL installed on your machine [mac](https://www.postgresql.org/download/macosx/) || [windows](https://www.postgresql.org/download/windows/)
-- Run npm i in beerbServer directory
-- Run npm start in beerbServer directory
+- Fork & clone the [server repo](https://github.com/maylynn-ng/beerbServer)  
+  Make sure you have postgreSQL installed on your machine [mac](https://www.postgresql.org/download/macosx/) || [windows](https://www.postgresql.org/download/windows/)  
+  Run `npm i` in beerbServer directory  
+  Run `npm start` in beerbServer directory
 
 Android Simulator:
 
@@ -76,7 +76,7 @@ On your android device
 - Open expo on your phone
 - Scan the QR code in the CLI
 
-Let it bundle & start exploring!
+:beers: Let it bundle & start exploring! :beers:
 
 ## Observations
 
@@ -95,6 +95,6 @@ Let it bundle & start exploring!
 
 ## Developers Team
 
-- Bernat Duran Pons [Github](https://github.com/Ishdril) [LinkedIn](https://www.linkedin.com/in/bernat-duran-pons-1a6a2657/)
-- Marijana Del Bianco [Github](https://github.com/mjdelbianco) [LinkedIn](https://www.linkedin.com/in/mjdelbianco/)
-- Maylynn Ng [Github](https://github.com/maylynn-ng) [LinkedIn](https://www.linkedin.com/in/maylynn-ng/)
+Bernat Duran Pons [Github](https://github.com/Ishdril) [LinkedIn](https://www.linkedin.com/in/bernat-duran-pons-1a6a2657/)  
+Marijana Del Bianco [Github](https://github.com/mjdelbianco) [LinkedIn](https://www.linkedin.com/in/mjdelbianco/)  
+Maylynn Ng [Github](https://github.com/maylynn-ng) [LinkedIn](https://www.linkedin.com/in/maylynn-ng/)
