@@ -3,9 +3,8 @@
 > Frontend client files for the BeerB app.
 
 [![GitHub license](https://img.shields.io/github/license/maylynn-ng/beerb)](https://github.com/maylynn-ng/beerb/blob/develop/LICENSE)[![GitHub release](https://img.shields.io/github/release/maylynn-ng/beerb)](https://github.com/maylynn-ng/beerb/releases/tag/0.9.0)[![GitHub contributors](https://img.shields.io/github/contributors/maylynn-ng/beerb)](https://github.com/maylynn-ng/beerb/graphs/contributors)[![GitHub issues](https://img.shields.io/github/issues/maylynn-ng/beerb)](https://GitHub.com/maylynn-ng/beerb/issues)
-[![forthebadge](https://forthebadge.com/images/badges/ages-18.svg)](https://forthebadge.com)
 
-<span align="center">![ForTheBadge built-with-love](https://ForTheBadge.com/images/badges/built-with-love.svg) [![forthebadge](https://forthebadge.com/images/badges/built-for-android.svg)](https://forthebadge.com)</span>
+<span align="center">![ForTheBadge built-with-love](https://ForTheBadge.com/images/badges/built-with-love.svg) [![forthebadge](https://forthebadge.com/images/badges/built-for-android.svg)](https://forthebadge.com) [![forthebadge](https://forthebadge.com/images/badges/ages-18.svg)](https://forthebadge.com)</span>
 
 ### Back-end: [BeerB backend](https://github.com/maylynn-ng/beerbServer)
 
