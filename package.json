@@ -1,8 +1,23 @@
 {
-  "name": "client",
+  "name": "beerb",
   "version": "1.0.0",
-  "description": "",
+  "description": "mobile app to explore London's boroughs and discover new beers",
   "main": "node_modules/expo/AppEntry.js",
+  "keywords": [
+    "react",
+    "react-native",
+    "expo",
+    "beer",
+    "london",
+    "social",
+    "explore",
+    "adventure",
+    "travel",
+    "map",
+    "drinking"
+  ],
+  "author": "Maylynn Ng, Marijana Del Bianco, Bernat Duran",
+  "license": "MIT",
   "scripts": {
     "start": "expo start",
     "android": "expo start --android",
