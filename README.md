@@ -1,4 +1,7 @@
 # BeerB - BeerB in every Borough
+<!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
+[![All Contributors](https://img.shields.io/badge/all_contributors-1-orange.svg?style=flat-square)](#contributors-)
+<!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 > Frontend client files for the BeerB app.
 
@@ -106,3 +109,22 @@ On your android device
 😬 Bernat Duran Pons - [Github](https://github.com/Ishdril) - [LinkedIn](https://www.linkedin.com/in/bernat-duran)  
 😬 Marijana Del Bianco - [Github](https://github.com/mjdelbianco) - [LinkedIn](https://www.linkedin.com/in/mjdelbianco/)  
 😬 Maylynn Ng - [Github](https://github.com/maylynn-ng) - [LinkedIn](https://www.linkedin.com/in/maylynn-ng/)
+
+## Contributors ✨
+
+Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
+
+<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+<!-- prettier-ignore-start -->
+<!-- markdownlint-disable -->
+<table>
+  <tr>
+    <td align="center"><a href="http://mjdelbianco.github.io"><img src="https://avatars3.githubusercontent.com/u/63902373?v=4" width="100px;" alt=""/><br /><sub><b>Marijana Del Bianco</b></sub></a><br /><a href="#infra-mjdelbianco" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a> <a href="https://github.com/maylynn-ng/beerb/commits?author=mjdelbianco" title="Tests">⚠️</a> <a href="https://github.com/maylynn-ng/beerb/commits?author=mjdelbianco" title="Code">💻</a></td>
+  </tr>
+</table>
+
+<!-- markdownlint-enable -->
+<!-- prettier-ignore-end -->
+<!-- ALL-CONTRIBUTORS-LIST:END -->
+
+This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
