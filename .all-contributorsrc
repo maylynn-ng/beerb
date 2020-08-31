@@ -24,6 +24,16 @@
         "infra",
         "code"
       ]
+    },
+    {
+      "login": "maylynn-ng",
+      "name": "Maylynn",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/62358728?v=4",
+      "profile": "https://www.linkedin.com/in/maylynn-ng/",
+      "contributions": [
+        "infra",
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
