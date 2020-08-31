@@ -1,6 +1,6 @@
 # BeerB - BeerB in every Borough
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-1-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-2-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 > Frontend client files for the BeerB app.
@@ -119,11 +119,8 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 <!-- markdownlint-disable -->
 <table>
   <tr>
-
-    <td align="center"><a href="http://www.linkedin.com/in/bernat-duran"><img src="https://avatars2.githubusercontent.com/u/65671552?v=4" width="100px;" alt=""/><br /><sub><b>Bernat Duran</b></sub></a><br /><a href="#infra-Ishdril" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a> <a href="https://github.com/maylynn-ng/beerb/commits?author=Ishdril" title="Tests">⚠️</a> <a href="https://github.com/maylynn-ng/beerb/commits?author=Ishdril" title="Code">💻</a></td>
-
-    <td align="center"><a href="http://mjdelbianco.github.io"><img src="https://avatars3.githubusercontent.com/u/63902373?v=4" width="100px;" alt=""/><br /><sub><b>Marijana Del Bianco</b></sub></a><br /><a href="#infra-mjdelbianco" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a> <a href="https://github.com/maylynn-ng/beerb/commits?author=mjdelbianco" title="Tests">⚠️</a> <a href="https://github.com/maylynn-ng/beerb/commits?author=mjdelbianco" title="Code">💻</a></td>
-
+    <td align="center"><a href="http://www.linkedin.com/in/bernat-duran"><img src="https://avatars2.githubusercontent.com/u/65671552?v=4" width="100px;" alt=""/><br /><sub><b>Bernat Duran</b></sub></a><br /><a href="#infra-Ishdril" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a> <a href="https://github.com/maylynn-ng/beerb/commits?author=Ishdril" title="Code">💻</a></td>
+    <td align="center"><a href="http://mjdelbianco.github.io"><img src="https://avatars3.githubusercontent.com/u/63902373?v=4" width="100px;" alt=""/><br /><sub><b>Marijana Del Bianco</b></sub></a><br /><a href="#infra-mjdelbianco" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a> <a href="https://github.com/maylynn-ng/beerb/commits?author=mjdelbianco" title="Code">💻</a></td>
   </tr>
 </table>
 
