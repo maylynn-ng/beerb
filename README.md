@@ -42,7 +42,7 @@ Checkout a video demo of the app on [YouTube](https://www.youtube.com/watch?v=wZ
 [Running BeerB](#running-beerb)  
 [Observations](#observations)  
 [Developers Team](#developers-team)  
-[Contributors](#contributors)
+[Contributors](#contributors-✨)
 
 
 ## Tech Stack
