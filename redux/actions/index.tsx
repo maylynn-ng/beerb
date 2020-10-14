@@ -235,7 +235,7 @@ export function addBadge(UserId: number, badge: Badge) {
     })
       .then(res => {
         if (res.status >= 400) throw new Error("Sorry, can't award you this badge");
-        res.json();
+        return res.json();
       })
       .then(res =>
         dispatch({
