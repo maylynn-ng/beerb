@@ -235,14 +235,15 @@ export function addBadge(UserId: number, badge: Badge) {
     })
       .then(res => {
         if (res.status >= 400) throw new Error("Sorry, can't award you this badge");
-        res.json();
+        return res.json();
       })
-      .then(res =>
+      .then(res => {
+        console.log(res);
         dispatch({
           type: 'ADD_BADGE',
           payload: [res],
         })
-      )
+      })
       .catch(error => console.log('Cannot, sorry: ', error));
   };
 }
