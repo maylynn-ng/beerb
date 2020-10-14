@@ -237,13 +237,12 @@ export function addBadge(UserId: number, badge: Badge) {
         if (res.status >= 400) throw new Error("Sorry, can't award you this badge");
         return res.json();
       })
-      .then(res => {
-        console.log(res);
+      .then(res =>
         dispatch({
           type: 'ADD_BADGE',
           payload: [res],
         })
-      })
+      )
       .catch(error => console.log('Cannot, sorry: ', error));
   };
 }
