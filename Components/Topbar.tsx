@@ -20,9 +20,10 @@ function Topbar({
   const route = useRoute();
 
   return (
-    <View style={styles.topBar}>
+    <View style={styles.topBar} testID="Topbar">
       <View style={styles.menuContainer}>
         <TouchableOpacity
+          testID="BurgerMenu"
           style={styles.burgerMenuTouch}
           onPress={() => {
             navigation.openDrawer();

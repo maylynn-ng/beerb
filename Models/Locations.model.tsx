@@ -7,4 +7,5 @@ export type Location = {
   boroughId: number;
   longitude: number;
   latitude: number;
+  UserId: number;
 };
